@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SKU Pre/Post Analysis — Key Findings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,300;1,9..144,400&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root {
+  --ink: #0e0d0b;
+  --ink2: #3a3630;
+  --ink3: #7a7268;
+  --paper: #f5f1eb;
+  --paper2: #edeae3;
+  --rule: #d8d2c8;
+  --red: #b83228;
+  --red-lt: #f5e8e6;
+  --green: #2a6645;
+  --green-lt: #e6f0ea;
+  --amber: #8a5a10;
+  --amber-lt: #f5efe3;
+  --blue: #1e4a82;
+  --blue-lt: #e6ecf5;
+  --cat-milk: #2563a8;
+  --cat-ccw: #c45a1a;
+  --cat-fnv: #2a7a52;
+  --cat-mp: #6b3fa0;
+  --cat-staples: #b07218;
+  --cat-ghee: #b02840;
+  --cat-snacks: #1a8a7a;
+  --cat-all: #444;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ── HEADER ── */
+.site-header {
+  background: var(--ink);
+  padding: 0 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 52px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  overflow-x: auto;
+  flex: 1;
+}
+
+.site-nav a {
+  color: rgba(255,255,255,.5);
+  text-decoration: none;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: 0 1rem;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  transition: all .15s;
+}
+
+.site-nav a:hover { color: #fff; border-color: rgba(255,255,255,.3); }
+
+.header-title {
+  font-family: 'Fraunces', serif;
+  font-size: 13px;
+  font-weight: 300;
+  color: rgba(255,255,255,.6);
+  white-space: nowrap;
+  margin-left: 2rem;
+}
+
+/* ── COVER ── */
+.cover {
+  padding: 5rem 3rem 4rem;
+  border-bottom: 1px solid var(--rule);
+  max-width: 900px;
+}
+
+.cover-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--ink3);
+  margin-bottom: 1.5rem;
+}
+
+.cover h1 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -.03em;
+  margin-bottom: 1.25rem;
+}
+
+.cover h1 em {
+  font-style: italic;
+  font-weight: 300;
+  color: var(--ink3);
+}
+
+.cover-meta {
+  display: flex;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+}
+
+.cover-meta-item {
+  font-size: 11px;
+  color: var(--ink3);
+  font-family: 'DM Mono', monospace;
+  letter-spacing: .05em;
+}
+
+.cover-meta-item strong {
+  display: block;
+  font-size: 12px;
+  color: var(--ink);
+  font-weight: 500;
+  margin-top: .2rem;
+  letter-spacing: 0;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.cover-caveat {
+  margin-top: 1.5rem;
+  padding: .85rem 1.1rem;
+  border-left: 3px solid var(--amber);
+  background: var(--amber-lt);
+  font-size: 12px;
+  color: var(--amber);
+  line-height: 1.6;
+  max-width: 760px;
+}
+
+/* ── LAYOUT ── */
+.page { max-width: 1000px; margin: 0 auto; padding: 0 3rem; }
+
+/* ── SECTION ── */
+.section { padding: 3.5rem 0 2rem; border-bottom: 1px solid var(--rule); }
+.section:last-of-type { border-bottom: none; padding-bottom: 5rem; }
+
+.section-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: .25em;
+  text-transform: uppercase;
+  color: var(--ink3);
+  margin-bottom: 1rem;
+}
+
+h2 {
+  font-family: 'Fraunces', serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  margin-bottom: 1.5rem;
+}
+
+/* ── FINDINGS TABLE ── */
+.findings-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: .5rem;
+  font-size: 12.5px;
+}
+
+.findings-table th {
+  text-align: left;
+  padding: .5rem .75rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--ink3);
+  border-bottom: 2px solid var(--ink);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.findings-table td {
+  vertical-align: top;
+  padding: 1rem .75rem;
+  border-bottom: 1px solid var(--rule);
+  line-height: 1.6;
+}
+
+.findings-table tr:last-child td { border-bottom: 2px solid var(--ink); }
+
+.findings-table td:nth-child(1) {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--ink3);
+  white-space: pre-line;
+  width: 90px;
+}
+
+.findings-table td:nth-child(2) {
+  width: 70px;
+}
+
+.cat-tag {
+  display: inline-block;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: .2rem .5rem;
+  border-radius: 2px;
+}
+
+.cat-Snacks  { color: var(--cat-snacks);  background: #e5f5f2; }
+.cat-Milk    { color: var(--cat-milk);    background: #e5eef8; }
+.cat-MP      { color: var(--cat-mp);      background: #f0eaf8; }
+.cat-CCW     { color: var(--cat-ccw);     background: #f8ece5; }
+.cat-Ghee    { color: var(--cat-ghee);    background: #f8e5e9; }
+.cat-FnV     { color: var(--cat-fnv);     background: #e5f3ec; }
+.cat-Staples { color: var(--cat-staples); background: #f5efe0; }
+.cat-All     { color: var(--cat-all);     background: var(--paper2); }
+
+.findings-table td:nth-child(3) {
+  color: var(--ink2);
+  max-width: 400px;
+}
+
+.findings-table td:nth-child(4) {
+  color: var(--ink2);
+  max-width: 320px;
+}
+
+.finding-text { white-space: pre-line; }
+
+.bullet-block { margin-top: .4rem; }
+.bullet-block p { margin: .2rem 0; font-size: 12px; }
+
+/* ── CALLOUTS ── */
+.callout {
+  padding: .6rem .85rem;
+  border-left: 3px solid;
+  font-size: 11.5px;
+  margin: .5rem 0;
+  line-height: 1.55;
+}
+.callout-red    { border-color: var(--red);   background: var(--red-lt);   color: #7a1e18; }
+.callout-green  { border-color: var(--green); background: var(--green-lt); color: #1a4a30; }
+.callout-amber  { border-color: var(--amber); background: var(--amber-lt); color: var(--amber); }
+.callout-blue   { border-color: var(--blue);  background: var(--blue-lt);  color: var(--blue); }
+.callout strong { font-weight: 600; }
+
+/* ── STAT STRIP ── */
+.stat-strip {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+  margin: 2rem 0;
+}
+
+.stat-cell {
+  background: var(--paper);
+  padding: .85rem 1rem;
+}
+
+.stat-cat {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  margin-bottom: .35rem;
+}
+
+.stat-val {
+  font-family: 'Fraunces', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: .2rem;
+}
+
+.stat-label { font-size: 10px; color: var(--ink3); }
+.stat-badge { font-size: 9px; font-weight: 600; margin-top: .3rem; padding: .15rem .4rem; border-radius: 2px; display: inline-block; }
+.badge-up   { background: var(--green-lt); color: var(--green); }
+.badge-dn   { background: var(--red-lt);   color: var(--red); }
+.badge-warn { background: var(--amber-lt); color: var(--amber); }
+.badge-ok   { background: var(--blue-lt);  color: var(--blue); }
+
+/* ── TIMELINE ── */
+.timeline { position: relative; padding-left: 1.75rem; margin: 1.5rem 0; }
+.timeline::before { content:''; position:absolute; left:.5rem; top:0; bottom:0; width:1px; background:var(--rule); }
+
+.tl-item { position: relative; margin-bottom: 1.5rem; }
+.tl-dot  { position:absolute; left:-1.25rem; top:.35rem; width:10px; height:10px; border-radius:50%; border:2px solid var(--paper); }
+.tl-dot.red    { background: var(--red); }
+.tl-dot.green  { background: var(--green); }
+.tl-dot.amber  { background: var(--amber); }
+
+.tl-date  { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:.1em; color:var(--ink3); margin-bottom:.3rem; text-transform:uppercase; }
+.tl-title { font-weight:600; font-size:13px; margin-bottom:.4rem; }
+.tl-body  { font-size:12px; color:var(--ink2); line-height:1.65; }
+
+/* ── RETENTION TABLE ── */
+.ret-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  margin: 1rem 0;
+}
+.ret-table th {
+  text-align: right;
+  padding: .4rem .6rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink3);
+  border-bottom: 2px solid var(--ink);
+  font-weight: 500;
+}
+.ret-table th:first-child { text-align: left; }
+.ret-table td {
+  padding: .45rem .6rem;
+  border-bottom: 1px solid var(--rule);
+  text-align: right;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+}
+.ret-table td:first-child { text-align: left; font-family: 'DM Sans', sans-serif; font-weight: 500; }
+.ret-table tr:last-child td { border-bottom: 2px solid var(--ink); }
+.ret-table .baseline td { font-weight: 600; }
+.warn-cell { color: var(--red); font-weight: 700; }
+.neg { color: var(--red); font-weight: 600; }
+.pos { color: var(--green); font-weight: 600; }
+
+/* ── GRID ── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 1.5rem 0; }
+.card { border: 1px solid var(--rule); padding: 1.25rem 1.5rem; }
+.card h4 { font-family: 'Fraunces', serif; font-size: 1rem; font-weight: 700; margin-bottom: .75rem; }
+.card p { font-size: 12px; color: var(--ink2); line-height: 1.65; margin-bottom: .5rem; }
+.card p:last-child { margin-bottom: 0; }
+
+/* ── CURRENT STATE GRID ── */
+.current-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+  margin: 1.5rem 0;
+}
+
+.current-cell {
+  background: var(--paper);
+  padding: 1rem;
+}
+
+.cc-cat {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  margin-bottom: .4rem;
+}
+
+.cc-delta {
+  font-family: 'Fraunces', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: .2rem;
+}
+
+.cc-label { font-size: 10px; color: var(--ink3); margin-bottom: .3rem; }
+.cc-vs { font-size: 10px; font-family: 'DM Mono', monospace; }
+.cc-vs.above { color: var(--green); }
+.cc-vs.below { color: var(--red); }
+.cc-vs.at    { color: var(--ink3); }
+
+@media(max-width:768px){
+  .cover{padding:3rem 1.5rem 2.5rem}
+  .page{padding:0 1.5rem}
+  .site-header{padding:0 1rem}
+  .two-col{grid-template-columns:1fr}
+  .stat-strip{grid-template-columns:repeat(4,1fr)}
+  .findings-table{display:block;overflow-x:auto}
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <nav class="site-nav">
+    <a href="#findings">Findings</a>
+    <a href="#ccw">CCW</a>
+    <a href="#fnv">FnV</a>
+    <a href="#mp">MP</a>
+    <a href="#ghee">Ghee</a>
+    <a href="#snacks">Snacks</a>
+    <a href="#staples">Staples</a>
+    <a href="#milk">Milk</a>
+    <a href="#current">Current State</a>
+  </nav>
+  <span class="header-title">SKU Pre/Post Analysis · ≤D7</span>
+</header>
+
+<div class="cover page">
+  <div class="cover-eyebrow">Category Retention · SKU-Level Pre/Post Analysis</div>
+  <h1>What moved the<br><em>retention delta</em><br>— and why</h1>
+  <div class="cover-meta">
+    <div class="cover-meta-item">PERIOD<strong>Aug 13 2025 – Jan 13 2026</strong></div>
+    <div class="cover-meta-item">TOUCHPOINTS<strong>13 across 7 categories</strong></div>
+    <div class="cover-meta-item">AGE BUCKET<strong>≤D7 from created date</strong></div>
+    <div class="cover-meta-item">RETENTION METRIC<strong>D60–90 platform retention</strong></div>
+  </div>
+  <div class="cover-caveat">
+    <strong>Data note:</strong> SKU pricing and volume data uses the ≤D7 age bucket filter — transactions from users within their first 7 days of account creation. Pricing (MRP/SP/discount) is set at SKU level and fully accurate. All customer counts are new-user specific. Where ≤D7 data changes the root cause conclusion vs all-user data, it is flagged explicitly.
+  </div>
+</div>
+
+<div class="page">
+
+<!-- FINDINGS TABLE -->
+<div class="section" id="findings">
+  <div class="section-eyebrow">01 — All Touchpoints</div>
+  <h2>Key Findings</h2>
+
+  <table class="findings-table">
+    <thead>
+      <tr>
+        <th>Touchpoint</th>
+        <th>Category</th>
+        <th>Root Cause</th>
+        <th>Action Item</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <tr>
+        <td>Sep 15</td>
+        <td><span class="cat-tag cat-Snacks">Snacks</span></td>
+        <td>Disney Makhana line removed (101→82 SKUs). ≤D7 customer count barely changed (−0.6%, −67 users). Mix shifted to non-branded items. SP fell −₹2.9. Discount improved +2.8pp. Buyer share confirmed at 0.8% — very small pool (1,729 ≤D7 buyers).</td>
+        <td>Disney removal was intentional. Low buyer share (0.8%) means even small placement improvements move the needle — place 1–2 Snacks SKUs in the first-week user journey.</td>
+      </tr>
+
+      <tr>
+        <td>Sep 15</td>
+        <td><span class="cat-tag cat-Milk">Milk</span></td>
+        <td>High-protein variants surged: HP Cow Milk +10K customers, HP Paneer +3,187 at SP −₹13. Overall Milk: −2.2% customers (−2,488 ≤D7 users). SP nearly flat. 114,019 ≤D7 Milk buyers — dominant early category. Buyer share fell from 18.2% (Aug) to 15.4% (Jan) — reach declining even as per-buyer retention holds at 21.7%.</td>
+        <td>HP Milk adoption is offer-driven. Sustaining delta needs non-offer adoption. Track if HP Milk buyers have different D60-90 retention from core Milk buyers. Investigate first-week Milk discovery — funnel narrowing is separate from loyalty.</td>
+      </tr>
+
+      <tr>
+        <td>Sep 15</td>
+        <td><span class="cat-tag cat-MP">MP</span></td>
+        <td>Discount pulled back −1.4pp. Customer count −4.1% (−143 ≤D7 users). Yogurt/Dahi SP up ₹7–8 (Mango, Strawberry, Blueberry variants). Margin normalisation on flavoured yogurt. Small ≤D7 pool: 3,448 users.</td>
+        <td>Test re-subsidising top 3 MP SKUs for ≤D7 cohorts only. Even 200–300 extra buyers per cohort would be meaningful given the small pool size.</td>
+      </tr>
+
+      <tr>
+        <td>Sep 15</td>
+        <td><span class="cat-tag cat-CCW">CCW</span></td>
+        <td>Customer count −20.9% (−2,922 ≤D7 users). SP jumped +₹14 (+17.8%) for new users — platform is showing new users a higher price tier than returning users. Discount fell −11.5pp. Same 6 SKUs.<br><br>Seasonality disproved: Mar 2026 ≤D7 customers are 37.6% below Sep 2025 despite both being peak summer. New-user discount gap is −15.0pp (Mar vs Sep). D28 delta appears to improve (−2.83pp→+3.18pp) but is cohort self-selection — casual buyers dropped out. Buyer share never recovered: 1.1% now vs 2.6% peak.</td>
+        <td><strong>Two separate actions:</strong> (1) Recover buyer share — reinstate Sep 2025 discount levels for ≤D7 cohorts in summer 2026. The −15pp new-user discount gap is the single most actionable lever. Test Apr–May 2026. (2) Quality signal — self-maintaining, no action needed.<br><br>Investigate why new users are being shown a higher price tier than returning users on CCW.</td>
+      </tr>
+
+      <tr>
+        <td>Oct 10</td>
+        <td><span class="cat-tag cat-Ghee">Ghee</span></td>
+        <td>Customer count −4.9% (−305 ≤D7 users). SP rose +₹40.7 for new users (+5.3%) — notably higher than the all-user movement (+₹11). Post-festive cooldown on core Desi Danedar 850ml.</td>
+        <td>Monitor if Ghee buyer count recovers in Q1 2026. If not, investigate: (1) whether new-user pricing is intentionally higher post-Oct 10, and (2) whether festive-cohort Ghee buyers have structurally different retention profiles.</td>
+      </tr>
+
+      <tr>
+        <td>Oct 9</td>
+        <td><span class="cat-tag cat-FnV">FnV</span></td>
+        <td>Customer count −16.2% (−10,110 ≤D7 users). <strong>CRITICAL: SP barely moved (+₹0.1)</strong> for new users. Aug 13–Oct 28 baseline confirms SP was ₹22.0 throughout — unchanged post-Oct 9. Discount fell −1.6pp. 52 SKUs dropped, 45 new. Top losers: Tomato −20.7K, Potato −10.9K, Bhindi −7.3K.<br><br>Retention impact: FnV D28 buyer platform retention (D60-90) fell 9.4pp absolute (30.0%→20.6%, Nov→Feb). FnV re-buy rate low throughout (2.6–4.7%) — FnV attracts engaged users but does not create FnV habits.</td>
+        <td><strong>Root cause is placement/visibility — NOT pricing.</strong> All-user data incorrectly suggested price-driven drop (SP +₹1.2). ≤D7 data shows SP was flat for new users. Investigate what changed in new-user discovery flows on Oct 9 (homepage, category ranking, notifications).<br><br>To sustain D28 retention signal, re-subsidise top 5 daily F&V items (Tomato, Potato, Onion, Bhindi, Coriander) for ≤D28 cohorts. Monitor platform ret% in Mar–Apr 2026.</td>
+      </tr>
+
+      <tr>
+        <td>Oct-end</td>
+        <td><span class="cat-tag cat-MP">MP</span></td>
+        <td>Disney MP SKUs delisted (4 Badam Milk variants). ≤D7 customers GREW +5.0% (+688) despite SP rising +₹10.6 (+21.2%). Discount fell −12.2pp. MP demand from new users is price-inelastic. Mix shifted toward Paneer/Batter.</td>
+        <td>Disney delistings appear intentional. Core SKUs unaffected. No reversal needed. MP new-user demand is inelastic — confirms MP as the strongest organic activation category.</td>
+      </tr>
+
+      <tr>
+        <td>Nov 21 + Nov 28</td>
+        <td><span class="cat-tag cat-Ghee">Ghee</span></td>
+        <td>Two consecutive combo pushes on Desi Danedar 850ml x2:<br>• Nov 21: ≤D7 customers +8.8% (+671). SP −₹65.6 (−7.1%).<br>• Nov 28: ≤D7 customers +27.0% (+2,215). SP −₹79.8 (−9.6%). Pull even stronger for new users (+27% vs +17.7% all-user).<br><br>Both times: more buyers, lower-quality cohort. Buyer retention fell, non-buyer stable → delta narrowed. D28 delta collapsed from ~5.3% to ~2% across the period.</td>
+        <td><strong>Stop running Desi Danedar 850ml x2 combo for users ≤D7.</strong> Every combo push is followed by a retention delta collapse 4–8 weeks later — this is now a confirmed pattern. Let first-time buyers discover Ghee through single-unit 850ml.</td>
+      </tr>
+
+      <tr>
+        <td>Nov 10 + Nov 17</td>
+        <td><span class="cat-tag cat-MP">MP</span></td>
+        <td><strong>Drop (Nov 10):</strong> D7 delta fell −1.4pp (6.47pp→5.06pp). Buyer ret fell 28.2%→25.5%. Non-buyer also fell — broader cohort quality dip, not MP-specific. Buyer share fell 5.7%→5.2%.<br><br><strong>Rebound (Nov 17):</strong> Delta recovered to 6.52pp. Non-buyer fell more than buyer → delta widened. No SKU, pricing, or offer action identified. ≤D7 customers grew +11.4% organically.<br><br>6 total inflections Aug–Jan. Winters hypothesis disproved — no seasonal dip. Buyer share decline (5.25% Aug → 4.6% Jan) is structural.</td>
+        <td>Rebound was organic — no active lever. Monitor HP Dahi (launched late Nov). MP D7 delta (5.4pp late period vs 5.5pp early) remains the most stable high-signal category. Monitor if buyer share falls below 4.0%.</td>
+      </tr>
+
+      <tr>
+        <td>Nov 28</td>
+        <td><span class="cat-tag cat-Snacks">Snacks</span></td>
+        <td>Customers +16.4% (≤D7: +441, 2,685→3,126). SP fell −₹3.3 (−5.7%). Methi Khakra SP −₹15, new Potato Chips Combo launched. Offer-driven expansion.<br><br>Delta narrowing verified correct (buyer − non-buyer, not reversed): Buyer ret fell −4.3pp (28.5%→24.3%). Non-buyer ret fell −2.1pp (21.6%→19.5%). Buyer fell more → delta narrowed. Not a computation error — offer attracted lower-retention buyers.</td>
+        <td>Snacks D28 delta (+11.9pp) remains highest of any category. D7 delta compressed to 3.8pp from 7.15pp peak. Target Snacks promotions at D3–D5 (after initial platform habit forms), not at D0–D1.</td>
+      </tr>
+
+      <tr>
+        <td>Dec 1</td>
+        <td><span class="cat-tag cat-Staples">Staples</span></td>
+        <td>Customers +10.4% (≤D7: +1,882). Toor Dal 450gm SP +₹19 (+31%) — lost 2,539 customers. Coriander Powder −1,913 customers. Sugar and Oils gained (seasonal). Buyer share fell 3.41%→3.12% (−0.28pp).<br><br>Retention: Both buyer ret (−0.86pp) and non-buyer ret (−1.41pp) declined post-Dec 1. Non-buyer fell more → signed delta improved slightly (−1.35pp→−0.79pp). D7 delta remains negative throughout (−0.67pp early → −0.35pp late).</td>
+        <td>Toor Dal SP hike is commodity-driven. If reverting is possible, reinstate ≤D7 subsidy — pulses drive daily purchase habit. Both buyer and non-buyer declined equally → broad cohort quality decline, not Staples-specific. Do not use Staples at D7 as an activation signal. Evaluate at D21+.</td>
+      </tr>
+
+      <tr>
+        <td>CCW D28<br>rebound</td>
+        <td><span class="cat-tag cat-CCW">CCW</span></td>
+        <td>D28 delta improved from −2.83pp (early) to +3.18pp (late). Yet ≤D7 customers continued falling −24.1% (5,705→4,331, Oct→Nov). No SKU, pricing, or offer change.<br><br>Rebound = cohort self-selection only. Casual buyers dropped out; committed CCW buyers remained. Buyer share: 1.1% now vs 2.6% peak. Quality improving, reach shrinking — two separate phenomena.</td>
+        <td>Do not attribute D28 delta improvement to any strategy. Buyer share and D28 quality require separate actions. Quality: self-maintaining. Buyer share: requires active placement/discount intervention for ≤D7 users.</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<!-- CCW -->
+<div class="section" id="ccw">
+  <div class="section-eyebrow">02 — Coconut Water</div>
+  <h2>CCW: Three questions, three answers</h2>
+
+  <div class="two-col">
+    <div class="card">
+      <h4>Does buying CCW by D7 create positive retention?</h4>
+      <p><strong>D7: No.</strong> Avg signed delta = −1.55pp. CCW buyers at D7 retain worse than non-buyers (19.6% vs 21.2%). D7 CCW buying is not a retention signal.</p>
+      <p><strong>D28: Yes, and improving.</strong> D28 signed delta went from −2.83pp (early) to +3.18pp (late). CCW needs ~28 days before the buyer quality becomes visible.</p>
+    </div>
+    <div class="card">
+      <h4>Is the Sep 15 drop seasonal?</h4>
+      <p><strong>Disproved.</strong> Mar 2026 ≤D7 customers are 37.6% below Sep 2025 despite both being peak summer. New-user discount was −15pp lower in March vs September — the platform suppressed recovery by cutting new-user discounts in the season they were needed most.</p>
+      <p>Country CW 1pc: 8,498 (Sep 2025) → 5,547 (Mar 2026) = −34.7% for new users.</p>
+    </div>
+  </div>
+
+  <div class="callout callout-red">
+    <strong>The D28 delta rebound is not a success story.</strong> Customers fell −24.1% (Oct→Nov) with zero platform action. The improving quality signal is cohort self-selection — only the most committed CCW buyers remained. Buyer share never recovered. Quality and reach are moving in opposite directions and need separate interventions.
+  </div>
+</div>
+
+<!-- FNV -->
+<div class="section" id="fnv">
+  <div class="section-eyebrow">03 — Fruits & Vegetables</div>
+  <h2>FnV: Root cause was placement, not price</h2>
+
+  <div class="callout callout-amber">
+    <strong>Critical revision from ≤D7 data.</strong> All-user analysis suggested the Oct 9 drop was price-driven (SP +₹1.2). For ≤D7 users, SP was essentially flat (+₹0.1). The Aug 13–Oct 28 baseline confirms SP averaged ₹22.0 throughout — unchanged on Oct 9. New users did not experience a price hike. They experienced reduced visibility or placement.
+  </div>
+
+  <p>FnV D28 buyer platform retention (D60-90) has been declining steadily since the offer removal:</p>
+
+  <table class="ret-table">
+    <thead>
+      <tr><th>Period</th><th>FnV D28 Buyers</th><th>Platform Retained</th><th>Platform Ret%</th><th>FnV Re-bought</th><th>FnV Re-buy%</th><th>vs Baseline</th></tr>
+    </thead>
+    <tbody>
+      <tr class="baseline"><td>Nov 1–14 2025 (baseline)</td><td>68,422</td><td>20,498</td><td><strong>30.0%</strong></td><td>3,174</td><td>4.6%</td><td>—</td></tr>
+      <tr><td>Nov 15–30 2025</td><td>65,855</td><td>18,629</td><td>28.3%</td><td>3,116</td><td>4.7%</td><td class="neg">−1.7pp</td></tr>
+      <tr><td>Dec 1–15 2025</td><td>69,873</td><td>17,978</td><td>25.7%</td><td>3,022</td><td>4.3%</td><td class="neg">−4.3pp</td></tr>
+      <tr><td>Dec 16–31 2025</td><td>57,338</td><td>13,447</td><td>23.5%</td><td>2,367</td><td>4.1%</td><td class="neg">−6.5pp</td></tr>
+      <tr><td>Jan 1–31 2026</td><td>107,341</td><td>26,671</td><td>24.8%</td><td>4,451</td><td>4.1%</td><td class="neg">−5.1pp</td></tr>
+      <tr><td>Feb 1–24 2026</td><td>76,308</td><td>15,730</td><td class="warn-cell">20.6%</td><td>1,960</td><td>2.6%</td><td class="neg">−9.4pp</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-size:12px;color:var(--ink3);margin-top:.5rem">FnV re-buy rate is consistently low (2.6–4.7%). FnV attracts already-engaged users but does not create FnV habits. The D28 delta is a selection signal, not a causation signal.</p>
+</div>
+
+<!-- MP -->
+<div class="section" id="mp">
+  <div class="section-eyebrow">04 — Milk Products</div>
+  <h2>MP: Most stable signal, structural reach decline</h2>
+
+  <p>MP is the only category whose D7 delta has remained essentially unchanged across the full period (5.5pp Aug → 5.4pp Jan). Six inflections were identified but the signal recovered each time.</p>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot amber"></div>
+      <div class="tl-date">Oct-end 2025</div>
+      <div class="tl-title">Disney SKU delisting (Drop 1)</div>
+      <div class="tl-body">4 Badam Milk variants removed. ≤D7 customers GREW +5.0% despite SP rising +₹10.6. New users are price-inelastic for MP. No reversal needed.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot red"></div>
+      <div class="tl-date">Nov 10 2025</div>
+      <div class="tl-title">Broader cohort quality dip (Drop 2)</div>
+      <div class="tl-body">D7 delta fell −1.4pp (6.47pp→5.06pp). Both buyer and non-buyer ret fell — not MP-specific. Buyer share fell 5.7%→5.2%. No pricing or SKU event identified.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot green"></div>
+      <div class="tl-date">Nov 17 2025</div>
+      <div class="tl-title">Organic rebound</div>
+      <div class="tl-body">Delta recovered to 6.52pp. Non-buyer fell more than buyer → delta widened. ≤D7 customers grew +11.4% organically. No active lever identified.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot red"></div>
+      <div class="tl-date">Dec 1 2025</div>
+      <div class="tl-title">Structural decline continues</div>
+      <div class="tl-body">Buyer share fell to 4.82% — new low. HP Ghar Jaisa Dahi launched (30g protein). Nov-end analysis confirms no pricing event — mix shift only (Taaza Paneer 180gm +2,754 customers).</div>
+    </div>
+  </div>
+
+  <div class="callout callout-blue">
+    <strong>Winters hypothesis disproved.</strong> Dec–Jan MP volumes held flat. Buyer share decline (5.25% → 4.6%) is structural and gradual — driven by Oct Disney delisting and gradual SP increases, not seasonality. Monitor if buyer share falls below 4.0%.
+  </div>
+</div>
+
+<!-- GHEE -->
+<div class="section" id="ghee">
+  <div class="section-eyebrow">05 — Ghee</div>
+  <h2>Ghee: Combo promotions are destroying buyer quality</h2>
+
+  <div class="callout callout-red">
+    <strong>Confirmed pattern across two consecutive events.</strong> Every time the 850ml x2 combo runs, ≤D7 buyer count surges, SP drops sharply, and D28 retention delta collapses 4–8 weeks later. This is no longer a one-off — it is a structural mechanism.
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <h4>Nov 21 combo push</h4>
+      <p>≤D7 customers: +8.8% (+671)</p>
+      <p>SP: −₹65.6 (−7.1%)</p>
+      <p>D28 delta result: 5.3% → ~2% collapse</p>
+      <p>Buyer ret fell, non-buyer stable → delta narrowed because buyer quality degraded.</p>
+    </div>
+    <div class="card">
+      <h4>Nov 28 combo push</h4>
+      <p>≤D7 customers: +27.0% (+2,215)</p>
+      <p>SP: −₹79.8 (−9.6%)</p>
+      <p>Pull even stronger for new users (+27% vs +17.7% all-user)</p>
+      <p>Combo disproportionately targets/attracts new users via deep discount.</p>
+    </div>
+  </div>
+  <p style="font-size:12px;color:var(--ink2);margin-top:.5rem">Oct 10 drop (−4.9%) was separate — post-festive demand cooldown. No pricing action, no combo. SP rose +₹40.7 for new users though — investigate whether new-user Ghee pricing tier is intentionally higher.</p>
+</div>
+
+<!-- SNACKS -->
+<div class="section" id="snacks">
+  <div class="section-eyebrow">06 — Snacks</div>
+  <h2>Snacks: Highest signal, most vulnerable to offer dilution</h2>
+
+  <div class="two-col">
+    <div class="card">
+      <h4>Objective 1 — Does buying Snacks create positive retention?</h4>
+      <p><strong>Yes — highest of any category at D28.</strong> D28 delta = +11.9pp (buyer 32.3% vs non-buyer 20.4%). D7 delta = +5.83pp avg, compressed to +3.8pp late period.</p>
+      <p>Buyer share is tiny: 0.8% at D7 (1,729 ≤D7 buyers). Confirmed via pool size — not a signal failure but a reach problem.</p>
+    </div>
+    <div class="card">
+      <h4>Delta narrowing — computation verified correct</h4>
+      <p>Post-Nov 28: Buyer ret fell −4.3pp (28.5%→24.3%). Non-buyer ret fell −2.1pp (21.6%→19.5%). Buyer fell more → delta narrowed.</p>
+      <p><strong>This is NOT a computation error.</strong> Delta is buyer − non-buyer (not reversed). The offer attracted lower-retention buyers, diluting the enthusiast pool.</p>
+    </div>
+  </div>
+</div>
+
+<!-- STAPLES -->
+<div class="section" id="staples">
+  <div class="section-eyebrow">07 — Staples</div>
+  <h2>Staples: Negative D7 signal, strong D28 signal</h2>
+
+  <div class="callout callout-amber">
+    <strong>Do not use Staples at D7 as an activation trigger.</strong> D7 delta is negative throughout (−0.67pp early → −0.35pp late) — Staples buyers in their first 7 days retain slightly worse than non-buyers. The signal only becomes meaningful at D21+ (delta climbs to +5.0pp at D28, improving over time).
+  </div>
+
+  <p>Dec 1 Toor Dal price hike (SP +₹19, +31%): both buyer ret (−0.86pp) and non-buyer ret (−1.41pp) declined. Non-buyer fell more → signed delta improved slightly. This was a broad cohort quality decline, not Staples-buyer-specific. Do not over-attribute to Staples action.</p>
+</div>
+
+<!-- MILK -->
+<div class="section" id="milk">
+  <div class="section-eyebrow">08 — Milk</div>
+  <h2>Milk: Loyalty intact, funnel narrowing</h2>
+
+  <div class="two-col">
+    <div class="card">
+      <h4>Per-buyer quality: stable</h4>
+      <p>Buyer retention held at 21.7% throughout the period — the quality of Milk buyers has not degraded.</p>
+      <p>D7 delta compressed from 7.54pp (early) to 3.25pp (late) — but this is driven by non-buyer baseline fluctuation, not buyer quality decline.</p>
+    </div>
+    <div class="card">
+      <h4>Buyer share: declining</h4>
+      <p>D7 buyer share fell from 18.2% (Aug 2025) to 15.4% (Jan 2026) — a 2.8pp absolute decline, 15% relative fall.</p>
+      <p>114,019 ≤D7 Milk buyers — still the dominant early category. But fewer new users are making their first Milk purchase in Week 1.</p>
+    </div>
+  </div>
+
+  <div class="callout callout-blue">
+    The HP Milk surge post-Sep 15 (HP Cow Milk +10K customers, HP Paneer +3,187 at SP −₹13) is offer-driven. If offer is removed, adoption may not sustain. Track D60-90 retention of HP Milk buyers specifically vs core Milk buyers to understand if the protein positioning is attracting a higher or lower quality cohort.
+  </div>
+</div>
+
+<!-- CURRENT STATE -->
+<div class="section" id="current">
+  <div class="section-eyebrow">09 — Last 4 Weeks</div>
+  <h2>Where we stand vs historical baseline</h2>
+  <p style="font-size:12px;color:var(--ink3);margin-bottom:1rem">Late-period (Dec–Jan) D7 signed delta vs period average (Aug–Jan).</p>
+
+  <div class="current-grid">
+    <div class="current-cell">
+      <div class="cc-cat" style="color:var(--cat-mp)">MP</div>
+      <div class="cc-delta">5.4pp</div>
+      <div class="cc-label">D7 late delta</div>
+      <div class="cc-vs at">≈ 5.5pp avg · stable</div>
+    </div>
+    <div class="current-cell">
+      <div class="cc-cat" style="color:var(--cat-snacks)">Snacks</div>
+      <div class="cc-delta">3.8pp</div>
+      <div class="cc-label">D7 late delta</div>
+      <div class="cc-vs below">↓ from 7.15pp peak</div>
+    </div>
+    <div class="current-cell">
+      <div class="cc-cat" style="color:var(--cat-fnv)">FnV</div>
+      <div class="cc-delta">+0.5pp</div>
+      <div class="cc-label">D7 late delta</div>
+      <div class="cc-vs above">↑ stable / improving</div>
+    </div>
+    <div class="current-cell">
+      <div class="cc-cat" style="color:var(--cat-ccw)">CCW</div>
+      <div class="cc-delta">+1.0pp</div>
+      <div class="cc-label">D7 late delta</div>
+      <div class="cc-vs above">↑ crossed positive</div>
+    </div>
+    <div class="current-cell">
+      <div class="cc-cat" style="color:var(--cat-ghee)">Ghee</div>
+      <div class="cc-delta">−1.2pp</div>
+      <div class="cc-label">D7 late delta</div>
+      <div class="cc-vs below">⚠ turned negative</div>
+    </div>
+    <div class="current-cell">
+      <div class="cc-cat" style="color:var(--cat-milk)">Milk</div>
+      <div class="cc-delta">3.25pp</div>
+      <div class="cc-label">D7 late delta</div>
+      <div class="cc-vs below">↓ from 7.54pp peak</div>
+    </div>
+    <div class="current-cell">
+      <div class="cc-cat" style="color:var(--cat-staples)">Staples</div>
+      <div class="cc-delta">−0.1pp</div>
+      <div class="cc-label">D7 late delta</div>
+      <div class="cc-vs below">Negative · use D21+</div>
+    </div>
+  </div>
+
+  <div class="two-col" style="margin-top:1.5rem">
+    <div class="callout callout-red" style="margin:0">
+      <strong>Needs immediate action:</strong> Ghee D7 turned negative (−1.18pp) — stop combo promotions for new users. Milk buyer share at 5-month low (15.4%) — investigate first-week discovery funnel.
+    </div>
+    <div class="callout callout-green" style="margin:0">
+      <strong>Positive signals:</strong> CCW crossed positive at D7 for first time (self-selection effect). MP holding at 5.4pp — most reliable signal on the platform. FnV stable/improving.
+    </div>
+  </div>
+</div>
+
+</div><!-- /page -->
+
+<footer style="padding:2rem 3rem;border-top:1px solid var(--rule);display:flex;justify-content:space-between;font-size:11px;color:var(--ink3);font-family:'DM Mono',monospace;flex-wrap:wrap;gap:.5rem">
+  <span>SKU Pre/Post Analysis · ≤D7 Age Bucket · Aug 13 2025 – Jan 13 2026</span>
+  <span>D60-90 retention · 13 touchpoints · 7 categories</span>
+</footer>
+
+</body>
+</html>
