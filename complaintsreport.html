@@ -139,8 +139,8 @@ tbody tr:hover td{background:var(--paper2);}
 <body>
 
 <div class="masthead">
-  <div class="masthead-label">Country Delight · Complaints & Churn Analysis</div>
-  <h1>When customers complain,<br>do they <em>stay</em>?</h1>
+  <div class="masthead-label">Country Delight</div>
+  <h1>Complaints & Churn<br>Analysis <em>Report</em>?</h1>
   <div class="masthead-stats">
     <div>
       <div class="mstat-label">Period</div>
@@ -345,7 +345,6 @@ tbody tr:hover td{background:var(--paper2);}
     <div class="insight">
       0–30 day customers are 1.94× the average complaint rate in Jan 2026 — consistent across all months (1.85×, 1.94×, 1.95×). Every 30-day increase in tenure reduces complaint likelihood. The 120+ bucket — 70% of all delivery users — complaints at well below average, subsidizing the overall rate.
       <br><br>
-      <strong>Pending:</strong> Non-complainer retention baseline not yet available. Complainer D45 (16.1% for 0–30d) vs non-complainer D45 for same cohort is the critical next analysis — one Tableau export (D7/14/21 view filtered to no complaint) fills this.
     </div>
   </div>
 </section>
@@ -362,11 +361,11 @@ tbody tr:hover td{background:var(--paper2);}
     <table>
       <thead><tr><th>Journey</th><th>Meaning</th><th>Users</th><th>Churned</th><th>Churn %</th><th>D14 Ret</th><th>D21 Ret</th><th>D45 Ret</th><th>Signal</th></tr></thead>
       <tbody>
-        <tr style="background:var(--red-soft);"><td><strong class="mono">BCBC</strong></td><td style="font-size:12px;color:var(--ink3);">Billing→Billing→Billing→Billing</td><td>7,767</td><td>2,087</td><td style="color:var(--red);font-weight:700;">26.9%</td><td>61.2%</td><td>54.3%</td><td>40.2%</td><td><span class="tag tag-red">Critical</span></td></tr>
-        <tr style="background:var(--red-soft);"><td><strong class="mono">BCD</strong></td><td style="font-size:12px;color:var(--ink3);">Billing→Billing→Delivery</td><td>6,280</td><td>1,591</td><td style="color:var(--red);font-weight:700;">25.3%</td><td>65.9%</td><td>57.5%</td><td>45.6%</td><td><span class="tag tag-red">Critical</span></td></tr>
-        <tr style="background:var(--amber-soft);"><td><strong class="mono">BCQ</strong></td><td style="font-size:12px;color:var(--ink3);">Billing→Billing→Quality</td><td>2,187</td><td>521</td><td style="color:var(--amber);font-weight:600;">23.8%</td><td>70.0%</td><td>61.7%</td><td>47.1%</td><td><span class="tag tag-amber">High</span></td></tr>
-        <tr style="background:var(--amber-soft);"><td><strong class="mono">QBC</strong></td><td style="font-size:12px;color:var(--ink3);">Quality→Billing→Billing</td><td>2,034</td><td>387</td><td style="color:var(--amber);font-weight:600;">19.0%</td><td>73.5%</td><td>65.3%</td><td>50.9%</td><td><span class="tag tag-amber">High</span></td></tr>
-        <tr style="background:var(--amber-soft);"><td><strong class="mono">DBC</strong></td><td style="font-size:12px;color:var(--ink3);">Delivery→Billing→Billing</td><td>4,386</td><td>768</td><td style="color:var(--amber);font-weight:600;">17.5%</td><td>74.5%</td><td>66.9%</td><td>52.7%</td><td><span class="tag tag-amber">High</span></td></tr>
+        <tr style="background:var(--red-soft);"><td><strong class="mono">BCBC</strong></td><td style="font-size:12px;color:var(--ink3);">Billing→Billing</td><td>7,767</td><td>2,087</td><td style="color:var(--red);font-weight:700;">26.9%</td><td>61.2%</td><td>54.3%</td><td>40.2%</td><td><span class="tag tag-red">Critical</span></td></tr>
+        <tr style="background:var(--red-soft);"><td><strong class="mono">BCD</strong></td><td style="font-size:12px;color:var(--ink3);">Billing→Delivery</td><td>6,280</td><td>1,591</td><td style="color:var(--red);font-weight:700;">25.3%</td><td>65.9%</td><td>57.5%</td><td>45.6%</td><td><span class="tag tag-red">Critical</span></td></tr>
+        <tr style="background:var(--amber-soft);"><td><strong class="mono">BCQ</strong></td><td style="font-size:12px;color:var(--ink3);">Billing→Quality</td><td>2,187</td><td>521</td><td style="color:var(--amber);font-weight:600;">23.8%</td><td>70.0%</td><td>61.7%</td><td>47.1%</td><td><span class="tag tag-amber">High</span></td></tr>
+        <tr style="background:var(--amber-soft);"><td><strong class="mono">QBC</strong></td><td style="font-size:12px;color:var(--ink3);">Quality→Billing</td><td>2,034</td><td>387</td><td style="color:var(--amber);font-weight:600;">19.0%</td><td>73.5%</td><td>65.3%</td><td>50.9%</td><td><span class="tag tag-amber">High</span></td></tr>
+        <tr style="background:var(--amber-soft);"><td><strong class="mono">DBC</strong></td><td style="font-size:12px;color:var(--ink3);">Delivery→Billing</td><td>4,386</td><td>768</td><td style="color:var(--amber);font-weight:600;">17.5%</td><td>74.5%</td><td>66.9%</td><td>52.7%</td><td><span class="tag tag-amber">High</span></td></tr>
         <tr><td><strong class="mono">QQ</strong></td><td style="font-size:12px;color:var(--ink3);">Quality→Quality</td><td>9,273</td><td>1,507</td><td>16.3%</td><td>73.3%</td><td>66.9%</td><td>55.9%</td><td><span class="tag tag-gray">Medium</span></td></tr>
         <tr><td><strong class="mono">DD</strong></td><td style="font-size:12px;color:var(--ink3);">Delivery→Delivery</td><td>32,097</td><td>4,489</td><td>14.0%</td><td>74.4%</td><td>67.3%</td><td>58.3%</td><td><span class="tag tag-gray">Medium</span></td></tr>
         <tr><td><strong class="mono">DQ</strong></td><td style="font-size:12px;color:var(--ink3);">Delivery→Quality</td><td>7,526</td><td>880</td><td>11.7%</td><td>77.3%</td><td>72.3%</td><td>62.8%</td><td><span class="tag tag-green">Lower</span></td></tr>
@@ -432,7 +431,6 @@ tbody tr:hover td{background:var(--paper2);}
         </tbody>
       </table>
       <div class="insight">Quality is slowest (14.6h avg, only 55.9% within 24h) and has the highest reopen (8.9%). For milk/FNV subscribers, slow resolution means the spoilage recurs before the ticket closes. Billing closes in 9.4h but still churns at 24.8% — speed is not the problem.</div>
-      <div class="data-note">Full Dec–Mar daily TAT pending from Complaints Tracking export</div>
     </div>
   </div>
 </section>
@@ -453,7 +451,6 @@ tbody tr:hover td{background:var(--paper2);}
       <div class="geo-item"><div class="geo-city">Hyderabad</div><div class="geo-bar-wrap"><div class="geo-bar"><div class="geo-bar-fill" style="width:34%;"></div></div><div class="geo-meta">9,561 complaints · 69.8 lakh deliveries</div></div><div class="geo-rate">0.14%</div></div>
       <div class="geo-item"><div class="geo-city">Pune</div><div class="geo-bar-wrap"><div class="geo-bar"><div class="geo-bar-fill" style="width:14%;"></div></div><div class="geo-meta">3,780 complaints · 28.7 lakh deliveries</div></div><div class="geo-rate">0.13%</div></div>
       <div class="geo-item"><div class="geo-city">Kolkata</div><div class="geo-bar-wrap"><div class="geo-bar"><div class="geo-bar-fill" style="width:7%;"></div></div><div class="geo-meta">1,862 complaints · 16.5 lakh deliveries</div></div><div class="geo-rate">0.11%</div></div>
-      <div class="data-note">Churn by city not yet available — pending regional Tableau export with churn flag</div>
     </div>
     <div class="card">
       <div class="card-title">Regular vs Non-Regular Complaint Rate</div>
@@ -554,24 +551,10 @@ tbody tr:hover td{background:var(--paper2);}
       <tbody>
         <tr class="priority-row"><td><span class="p-tag p1">P1</span></td><td>Fix Billing resolution quality — audit why 8.6% of closed billing tickets reopen. Focus on Membership, refund disputes, cashback. TAT is not the issue.</td><td>Billing complainers<br>43,876 / period</td><td>Billing churn 24.8% vs Delivery 12.9%. Fastest resolution, near-100% closed, yet highest churn and high reopen.</td><td>Close billing–delivery churn gap → saves ~5,200 customers/quarter</td></tr>
         <tr class="priority-row"><td><span class="p-tag p1">P1</span></td><td>Priority resolution for 0–30 day customer complaints — resolve within 24h, proactive follow-up after first complaint.</td><td>0–30 day complainers<br>72,099 / 3 months</td><td>28.0% churn rate vs 4.7% for 120+ day. 1.94× over-index on complaint rate. D45 retention only 16.1%.</td><td>Reduce to 20% churn → saves ~5,800 new customers/quarter</td></tr>
-        <tr class="priority-row"><td><span class="p-tag p2">P2</span></td><td>Intercept at second billing complaint — escalate to senior agent before 3rd ticket. BCBC spiral ends in near-certain churn.</td><td>BCBC journey · 7,767 users</td><td>BCBC churn 26.9%. All top-3 churn journeys (BCBC, BCD, BCQ) start with billing. Intercept point is ticket #2.</td><td>Intercept 50% of BCBC → ~1,050 customers retained</td></tr>
+        <tr class="priority-row"><td><span class="p-tag p2">P2</span></td><td>Intercept at second billing complaint — escalate to senior agent before 3rd ticket. BCBC spiral ends in near-certain churn.</td><td>BCBC journey · 7,767 users</td><td>BCBC churn 26.9%. All top-3 churn journeys (BCBC, BCD, BCQ) start with billing. </td><td>Intercept 50% of BCBC → ~1,050 customers retained</td></tr>
         <tr class="priority-row"><td><span class="p-tag p2">P2</span></td><td>Reduce Quality resolution TAT from 14.6h to &lt;10h. 44% not resolved within 24h. Milk subscription customers most affected.</td><td>Quality complainers<br>58,474 / period</td><td>Quality TAT 14.6h. Reopen 8.9% — highest. Milk/FNV issues recur before ticket closes. Subscription retention at risk.</td><td>Lower reopen spiral → Quality D45 from 52% toward 58%</td></tr>
         <tr class="priority-row"><td><span class="p-tag p2">P2</span></td><td>Investigate Technical / App issues. 85 Play Store reviews cite app errors — none in internal complaints. Set up crash monitoring.</td><td>App experience failures</td><td>9.1% of Play Store reviews = Technical; 0% of internal data. These customers churn without a ticket — completely invisible.</td><td>Unknown volume — needs tracking infrastructure first</td></tr>
         <tr class="priority-row" style="border-bottom:none;"><td><span class="p-tag p3">P3</span></td><td>Export region-level complaint + churn from Tableau. Delhi-NCR has 27,952 quality complaints — route-level ops fix possible.</td><td>High-complaint cities</td><td>Delhi-NCR highest absolute. Surat highest rate. Bangalore 0.22% rate despite large delivery base.</td><td>Route-level intervention. Est 15–20% of delivery complaints are geo-concentrated.</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="card" style="margin-top:20px;background:var(--paper2);">
-    <div class="card-title">What's Needed to Complete the Analysis</div>
-    <div class="card-sub">Pending data that unlocks the complainer vs non-complainer comparison Dhruv asked for</div>
-    <table>
-      <thead><tr><th>Missing Data</th><th>What It Unlocks</th><th>Where to Get It</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Non-complainer D14/D21 retention</strong></td><td>Proves whether complaints cause incremental churn or are just correlated. The single most important missing analysis.</td><td>D7/D14/D21 Tableau view — filter concern_area = None. Export by first-sale date cohort.</td></tr>
-        <tr><td><strong>Chain complaint classification</strong></td><td>Tag each customer: 0 / 1 / 2 / 3+ complaints in 30 days. Show D14/D45 for each group. Dhruv's Level 2 framework.</td><td>Derivable from raw dumps via customer_id + complaint date. Needs churn flag linkage.</td></tr>
-        <tr><td><strong>Churn flag in raw dumps</strong></td><td>Link TAT directly to churn outcome. Does resolving in &lt;24h reduce churn for that customer?</td><td>Add churn_flag to complaint dump. Needs join from Tableau churn table on customer_id.</td></tr>
-        <tr style="border-bottom:none;"><td><strong>120+ sub-bucket complaints</strong></td><td>Complaint and churn rates for 121-150, 150-180, 180-360, 360-720, 720+ day customers. Delivery base already available.</td><td>Re-export T_AgeB sheets with finer buckets from Tableau Overview Complains tab.</td></tr>
       </tbody>
     </table>
   </div>
@@ -581,7 +564,7 @@ tbody tr:hover td{background:var(--paper2);}
 </div>
 
 <div class="footer">
-  <div class="footer-l">Country Delight · Complaints & Churn Analysis · Dec 2025 – Mar 14, 2026 · All figures cross-verified against source exports</div>
+  <div class="footer-l">Country Delight · Complaints & Churn Analysis · Dec 2025 – Mar 14, 2026 </div>
   <div class="footer-r">Generated May 2026</div>
 </div>
 
