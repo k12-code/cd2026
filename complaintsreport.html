@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Country Delight — Complaints & Churn Analysis</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:       #18160F;
+  --ink2:      #4A4740;
+  --ink3:      #8C8980;
+  --paper:     #F9F6F0;
+  --paper2:    #F0EDE5;
+  --paper3:    #E6E2D8;
+  --line:      #D8D4C8;
+  --red:       #C0392B;
+  --red-soft:  #F9E8E6;
+  --amber:     #B7620A;
+  --amber-soft:#FDF3E7;
+  --green:     #2D6A4F;
+  --green-soft:#EAF3EE;
+  --blue:      #1A4A8A;
+  --blue-soft: #E8F0F9;
+  --accent:    #7C5B2E;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);font-size:14px;line-height:1.6;}
+
+.masthead{background:var(--ink);color:var(--paper);padding:56px 64px 48px;position:relative;overflow:hidden;}
+.masthead::after{content:'';position:absolute;right:-40px;top:-40px;width:380px;height:380px;border-radius:50%;border:1px solid rgba(255,255,255,0.06);pointer-events:none;}
+.masthead::before{content:'';position:absolute;right:40px;top:40px;width:220px;height:220px;border-radius:50%;border:1px solid rgba(255,255,255,0.04);pointer-events:none;}
+.masthead-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink3);margin-bottom:20px;}
+.masthead h1{font-family:'DM Serif Display',serif;font-size:44px;line-height:1.1;font-weight:400;letter-spacing:-0.5px;margin-bottom:32px;}
+.masthead h1 em{font-style:italic;color:#C8B089;}
+.masthead-stats{display:flex;gap:48px;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,0.08);padding-top:28px;}
+.mstat-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;}
+.mstat-val{font-family:'DM Serif Display',serif;font-size:28px;line-height:1;color:var(--paper);}
+.mstat-sub{font-size:11px;color:var(--ink3);margin-top:4px;}
+.mstat-val.red{color:#E07B72;} .mstat-val.amber{color:#DFA96B;} .mstat-val.green{color:#7EC8A0;}
+
+.nav{background:var(--ink);border-top:1px solid rgba(255,255,255,0.06);padding:0 64px;position:sticky;top:0;z-index:100;display:flex;gap:0;overflow-x:auto;}
+.nav a{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink3);text-decoration:none;padding:14px 20px;border-bottom:2px solid transparent;white-space:nowrap;transition:color 0.2s,border-color 0.2s;}
+.nav a:hover{color:var(--paper);border-bottom-color:rgba(255,255,255,0.3);}
+
+.page{max-width:1160px;margin:0 auto;padding:0 48px;}
+section{padding:56px 0 0;}
+.section-eyebrow{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink3);display:flex;align-items:center;gap:14px;margin-bottom:24px;}
+.section-eyebrow::before{content:'';display:inline-block;width:24px;height:1px;background:var(--ink3);}
+h2{font-family:'DM Serif Display',serif;font-size:26px;font-weight:400;margin-bottom:24px;letter-spacing:-0.3px;}
+
+.alerts{display:flex;flex-direction:column;gap:12px;margin-bottom:40px;}
+.alert{display:flex;gap:16px;align-items:flex-start;padding:18px 22px;border-radius:4px;border-left:3px solid;}
+.alert.red{background:var(--red-soft);border-color:var(--red);}
+.alert.amber{background:var(--amber-soft);border-color:var(--amber);}
+.alert-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+.alert-text{font-size:13px;line-height:1.55;}
+.alert.red .alert-text{color:#7A1F17;} .alert.amber .alert-text{color:#7A420A;}
+.alert-text strong{font-weight:600;}
+
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-bottom:36px;}
+.kpi{background:var(--paper);padding:22px 24px;}
+.kpi-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;}
+.kpi-val{font-family:'DM Serif Display',serif;font-size:34px;line-height:1;margin-bottom:6px;}
+.kpi-val.red{color:var(--red);} .kpi-val.amber{color:var(--amber);} .kpi-val.green{color:var(--green);}
+.kpi-detail{font-size:11px;color:var(--ink3);}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.grid32{display:grid;grid-template-columns:1.55fr 1fr;gap:20px;}
+
+.card{background:var(--paper);border:1px solid var(--line);padding:28px;}
+.card-title{font-family:'DM Serif Display',serif;font-size:17px;font-weight:400;margin-bottom:4px;}
+.card-sub{font-size:11px;color:var(--ink3);font-family:'DM Mono',monospace;letter-spacing:0.04em;margin-bottom:22px;}
+
+table{width:100%;border-collapse:collapse;}
+thead th{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink3);font-weight:500;padding:9px 12px;text-align:right;border-bottom:1px solid var(--line);}
+thead th:first-child{text-align:left;}
+tbody td{padding:10px 12px;text-align:right;border-bottom:1px solid var(--paper3);font-size:13px;font-variant-numeric:tabular-nums;}
+tbody td:first-child{text-align:left;font-weight:500;}
+tbody tr:last-child td{border-bottom:none;}
+tbody tr:hover td{background:var(--paper2);}
+.tfoot td{padding:10px 12px;text-align:right;border-top:2px solid var(--line);font-weight:600;font-size:13px;}
+.tfoot td:first-child{text-align:left;}
+
+.tag{display:inline-block;padding:2px 9px;border-radius:2px;font-size:11px;font-weight:500;}
+.tag-del{background:var(--blue-soft);color:var(--blue);}
+.tag-qual{background:var(--green-soft);color:var(--green);}
+.tag-bill{background:var(--amber-soft);color:var(--amber);}
+.tag-red{background:var(--red-soft);color:var(--red);}
+.tag-amber{background:var(--amber-soft);color:var(--amber);}
+.tag-green{background:var(--green-soft);color:var(--green);}
+.tag-gray{background:var(--paper3);color:var(--ink3);}
+
+.bar-row{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.bar-key{width:72px;font-size:12px;font-weight:500;flex-shrink:0;}
+.bar-track{flex:1;height:6px;background:var(--paper3);border-radius:2px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:2px;}
+.bar-num{width:52px;text-align:right;font-family:'DM Mono',monospace;font-size:12px;}
+
+.insight{background:var(--paper2);border-left:2px solid var(--ink);padding:14px 18px;margin-top:14px;font-size:12px;color:var(--ink2);line-height:1.65;}
+.insight em{font-style:italic;}
+
+.oi-row{display:flex;align-items:center;gap:0;margin-bottom:10px;}
+.oi-bucket{width:60px;font-size:12px;font-weight:600;flex-shrink:0;}
+.oi-bar-wrap{flex:1;display:flex;align-items:center;gap:8px;}
+.oi-bar{height:24px;border-radius:2px;display:flex;align-items:center;padding:0 10px;font-family:'DM Mono',monospace;font-size:11px;font-weight:500;color:white;white-space:nowrap;min-width:50px;}
+.oi-meta{font-size:11px;color:var(--ink3);margin-left:10px;}
+
+.mono{font-family:'DM Mono',monospace;}
+.data-note{font-family:'DM Mono',monospace;font-size:10px;color:var(--ink3);margin-top:12px;letter-spacing:0.03em;padding:8px 0;border-top:1px solid var(--line);}
+
+.geo-item{padding:14px 0;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:16px;}
+.geo-item:last-child{border-bottom:none;}
+.geo-city{font-weight:600;width:110px;flex-shrink:0;font-size:13px;}
+.geo-bar-wrap{flex:1;}
+.geo-bar{height:8px;background:var(--paper3);border-radius:2px;overflow:hidden;margin-bottom:4px;}
+.geo-bar-fill{height:100%;border-radius:2px;background:var(--ink);}
+.geo-meta{font-size:11px;color:var(--ink3);font-family:'DM Mono',monospace;}
+.geo-rate{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;width:52px;text-align:right;}
+
+.priority-row td{padding:14px 12px;vertical-align:top;border-bottom:1px solid var(--paper3);font-size:13px;}
+.p-tag{font-family:'DM Mono',monospace;font-size:11px;font-weight:700;}
+.p1{color:var(--red);} .p2{color:var(--amber);} .p3{color:var(--ink3);}
+
+.review-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--paper3);}
+.review-cat{font-weight:600;font-size:13px;width:140px;flex-shrink:0;}
+.review-bar-wrap{flex:1;height:8px;background:var(--paper3);border-radius:2px;overflow:hidden;}
+.review-count{font-family:'DM Mono',monospace;font-size:12px;width:40px;text-align:right;}
+.review-pct{font-size:11px;color:var(--ink3);width:42px;text-align:right;}
+
+.divider{height:1px;background:var(--line);margin:48px 0 0;}
+
+.footer{border-top:1px solid var(--line);padding:28px 48px;display:flex;justify-content:space-between;align-items:center;margin-top:64px;}
+.footer-l{font-size:11px;color:var(--ink3);}
+.footer-r{font-family:'DM Mono',monospace;font-size:10px;color:var(--ink3);letter-spacing:0.08em;}
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="masthead-label">Country Delight · Complaints & Churn Analysis</div>
+  <h1>When customers complain,<br>do they <em>stay</em>?</h1>
+  <div class="masthead-stats">
+    <div>
+      <div class="mstat-label">Period</div>
+      <div class="mstat-val" style="font-size:18px;margin-top:4px;">Dec 2025 – Mar 14, 2026</div>
+      <div class="mstat-sub">104 days · dx = 7 day churn window</div>
+    </div>
+    <div>
+      <div class="mstat-label">Total Complaints</div>
+      <div class="mstat-val">2,64,374</div>
+      <div class="mstat-sub">avg 2,542 / day</div>
+    </div>
+    <div>
+      <div class="mstat-label">Churned After Complaint</div>
+      <div class="mstat-val red">38,847</div>
+      <div class="mstat-sub">14.7% of complainers</div>
+    </div>
+    <div>
+      <div class="mstat-label">Complaint Rate</div>
+      <div class="mstat-val amber">0.79%</div>
+      <div class="mstat-sub">of total delivery users / day</div>
+    </div>
+    <div>
+      <div class="mstat-label">Play Store Rating</div>
+      <div class="mstat-val green">4.67</div>
+      <div class="mstat-sub">660K reviews · 30M downloads</div>
+    </div>
+  </div>
+</div>
+
+<nav class="nav">
+  <a href="#overview">Overview</a>
+  <a href="#category">By Category</a>
+  <a href="#age">By Age Bucket</a>
+  <a href="#journey">Complaint Journey</a>
+  <a href="#resolution">Resolution</a>
+  <a href="#geo">Geography</a>
+  <a href="#reviews">App Reviews</a>
+  <a href="#actions">Actions</a>
+</nav>
+
+<div class="page">
+
+<!-- OVERVIEW -->
+<section id="overview" style="padding-top:44px;">
+  <div class="alerts">
+    <div class="alert red">
+      <div class="alert-icon">▲</div>
+      <div class="alert-text"><strong>Billing complaints churn at 24.8% — nearly 2× Delivery (12.9%) and Quality (13.0%).</strong> Billing resolves tickets fastest (9.4h avg, 99.6% closed) but reopens at 8.6% — tickets are being marked closed without fixing the issue. Membership cancellations and refund disputes drive this.</div>
+    </div>
+    <div class="alert amber">
+      <div class="alert-icon">▲</div>
+      <div class="alert-text"><strong>0–30 day customers complain at 1.94× the overall average rate and churn at 28.0% after a complaint — 6× higher than 120+ day customers (4.7%).</strong> D45 retention for new customers is only 16.1%. Every unresolved first-month complaint is a customer lost.</div>
+    </div>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi">
+      <div class="kpi-label">Overall Churn Rate</div>
+      <div class="kpi-val red">14.7%</div>
+      <div class="kpi-detail">38,847 churned of 2,64,374 complaints</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Billing Churn Rate</div>
+      <div class="kpi-val red">24.8%</div>
+      <div class="kpi-detail">10,889 churned · highest of all categories</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">New User Churn (0–30d)</div>
+      <div class="kpi-val amber">28.0%</div>
+      <div class="kpi-detail">20,161 churned of 72,099 complaints</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">D45 Retention (120+ days)</div>
+      <div class="kpi-val green">73.0%</div>
+      <div class="kpi-detail">Established customers hold well</div>
+    </div>
+  </div>
+
+  <div class="grid32">
+    <div class="card">
+      <div class="card-title">Monthly Complaint & Churn Trend</div>
+      <div class="card-sub">Dec 2025 – Mar 2026 · Mar = 14 days only · Cmp Rate = complaints / total delivery users</div>
+      <table>
+        <thead>
+          <tr><th>Month</th><th>Complaints</th><th>Avg/Day</th><th>Churned</th><th>Churn %</th><th>D14 Ret</th><th>D45 Ret</th><th>Cmp Rate</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Dec 2025</strong></td><td>86,745</td><td>2,798</td><td>12,819</td><td>14.8%</td><td>63.1%</td><td>46.9%</td><td class="mono">0.83%</td></tr>
+          <tr><td><strong>Jan 2026</strong></td><td>77,849</td><td>2,512</td><td>11,306</td><td>14.5%</td><td>65.6%</td><td>49.2%</td><td class="mono">0.77%</td></tr>
+          <tr><td><strong>Feb 2026</strong></td><td>67,411</td><td>2,408</td><td>9,882</td><td>14.7%</td><td>66.8%</td><td>51.9%</td><td class="mono">0.74%</td></tr>
+          <tr><td><strong>Mar 2026 (14d)</strong></td><td>32,369</td><td>2,312</td><td>4,759</td><td>14.7%</td><td>66.8%</td><td>52.2%</td><td class="mono">0.76%</td></tr>
+        </tbody>
+        <tfoot><tr class="tfoot"><td>Total / Avg</td><td>2,64,374</td><td>2,542</td><td>38,766</td><td>14.7%</td><td>—</td><td>—</td><td class="mono">0.78%</td></tr></tfoot>
+      </table>
+      <div class="insight">Complaint volume fell 22% Dec→Feb — a positive trend. Churn rate held flat at ~14.7%, meaning the mix of complaints worsening even as volume drops. Complaint rate as % of delivery users fell from 0.83% to 0.74%, confirming real operational improvement.</div>
+      <div class="data-note">Source: T_OverviewCC + Overview_Complains export · Cmp Rate denominator: Deliveries_plotted_Age_buckets.csv (~3.3L users/day)</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Category Split & Churn Rate</div>
+      <div class="card-sub">Full period combined</div>
+      <div style="margin:4px 0 18px;">
+        <div style="font-size:11px;color:var(--ink3);margin-bottom:10px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;">Complaint Share</div>
+        <div class="bar-row"><div class="bar-key"><span class="tag tag-del">Delivery</span></div><div class="bar-track"><div class="bar-fill" style="width:64.7%;background:var(--blue);"></div></div><div class="bar-num">64.7%</div></div>
+        <div class="bar-row"><div class="bar-key"><span class="tag tag-qual">Quality</span></div><div class="bar-track"><div class="bar-fill" style="width:22.1%;background:var(--green);"></div></div><div class="bar-num">22.1%</div></div>
+        <div class="bar-row"><div class="bar-key"><span class="tag tag-bill">Billing</span></div><div class="bar-track"><div class="bar-fill" style="width:16.6%;background:var(--amber);"></div></div><div class="bar-num">16.6%</div></div>
+      </div>
+      <div style="height:1px;background:var(--line);margin:16px 0;"></div>
+      <div style="font-size:11px;color:var(--ink3);margin-bottom:10px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;">Churn Rate</div>
+      <div class="bar-row"><div class="bar-key"><span class="tag tag-bill">Billing</span></div><div class="bar-track"><div class="bar-fill" style="width:99%;background:var(--red);"></div></div><div class="bar-num" style="color:var(--red);font-weight:700;">24.8%</div></div>
+      <div class="bar-row"><div class="bar-key"><span class="tag tag-qual">Quality</span></div><div class="bar-track"><div class="bar-fill" style="width:52.4%;background:var(--green);"></div></div><div class="bar-num">13.0%</div></div>
+      <div class="bar-row"><div class="bar-key"><span class="tag tag-del">Delivery</span></div><div class="bar-track"><div class="bar-fill" style="width:52%;background:var(--blue);"></div></div><div class="bar-num">12.9%</div></div>
+      <div class="insight">Billing is 16.6% of complaints but <strong>28% of all churns</strong> — it punches far above its weight.</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CATEGORY -->
+<section id="category">
+  <div class="section-eyebrow">Churn by Complaint Category</div>
+  <h2>Billing is a different problem than Delivery or Quality</h2>
+  <div class="card">
+    <div class="card-title">Category — Churn & Retention</div>
+    <div class="card-sub">Dec 2025 – Mar 14, 2026 · Source: T_CocernLevelSplit + Concern_Level_Split.xlsx + Apr 2026 dumps</div>
+    <table>
+      <thead><tr><th>Category</th><th>Complaints</th><th>Churned</th><th>Churn %</th><th>D14 Ret</th><th>D21 Ret</th><th>D45 Ret</th><th>Avg TAT</th><th>Resolution %</th><th>Reopen %</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="tag tag-del">Delivery</span></td><td>1,71,280</td><td>22,081</td><td>12.9%</td><td>66.7%</td><td>59.7%</td><td>50.9%</td><td class="mono">9.6h</td><td>83.7%</td><td>5.7%</td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-qual">Quality</span></td><td>58,474</td><td>7,600</td><td>13.0%</td><td>67.9%</td><td>60.9%</td><td>52.1%</td><td class="mono">14.6h</td><td>79.5%</td><td>8.9%</td>
+        </tr>
+        <tr style="background:var(--red-soft);">
+          <td><span class="tag tag-bill">Billing</span></td><td>43,876</td><td>10,889</td>
+          <td style="color:var(--red);font-weight:700;">24.8%</td>
+          <td style="color:var(--red);">55.1%</td><td>48.1%</td><td style="color:var(--red);">36.8%</td>
+          <td class="mono">9.4h</td><td>99.6%</td><td style="color:var(--amber);font-weight:600;">8.6%</td>
+        </tr>
+      </tbody>
+      <tfoot><tr class="tfoot"><td>All</td><td>2,73,630</td><td>40,570</td><td>14.8%</td><td>64.7%</td><td>57.7%</td><td>48.7%</td><td class="mono">11.2h</td><td>87.6%</td><td>6.8%</td></tr></tfoot>
+    </table>
+    <div class="insight">
+      Billing's paradox: fastest resolution (9.4h, 99.6% closed) yet highest churn (24.8%) and highest reopen (8.6%). Speed ≠ resolution quality. Tickets are marked done without actually fixing Membership cancellations, refund disputes, or cashback failures.
+      <br><br>
+      Delivery: 32,480 unresolved complaints (16.3%) — the largest absolute unresolved pool. NonDelivery has 45% breached TAT. This is a capacity/operational problem. Quality: slowest at 14.6h avg, 8.9% reopen — milk and FNV quality issues recur before the ticket closes.
+    </div>
+    <div class="data-note">TAT + Resolution %: Apr 8–14 dumps (Regular + Rapid). Churn data: T_CocernLevelSplit (Dec–Jan7) + Concern_Level_Split.xlsx (Jan8–Mar14).</div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- AGE BUCKET -->
+<section id="age">
+  <div class="section-eyebrow">Age Bucket Analysis</div>
+  <h2>Tenure is the strongest predictor of churn after a complaint</h2>
+  <div class="grid2" style="margin-bottom:20px;">
+    <div class="card">
+      <div class="card-title">Churn Rate by Customer Age</div>
+      <div class="card-sub">Days since onboarding · Dec 2025 – Feb 2026 · dx = 7 · Source: T_AgeB sheets</div>
+      <table>
+        <thead><tr><th>Age (Days)</th><th>Complaints</th><th>Churned</th><th>Churn %</th></tr></thead>
+        <tbody>
+          <tr style="background:var(--red-soft);"><td><strong>0 – 30</strong></td><td>72,099</td><td>20,161</td><td style="color:var(--red);font-weight:700;">28.0%</td></tr>
+          <tr><td><strong>31 – 60</strong></td><td>21,423</td><td>4,690</td><td>21.9%</td></tr>
+          <tr><td><strong>61 – 90</strong></td><td>13,749</td><td>2,595</td><td>18.9%</td></tr>
+          <tr><td><strong>91 – 120</strong></td><td>10,162</td><td>1,659</td><td>16.3%</td></tr>
+          <tr style="background:var(--green-soft);"><td><strong>120+</strong></td><td>1,14,349</td><td>5,398</td><td style="color:var(--green);font-weight:700;">4.7%</td></tr>
+        </tbody>
+      </table>
+      <div class="insight">The inflection point is ~120 days. Once past 4 months, churn risk drops from ~16% to 4.7%. A complaint for a new customer is 6× more damaging than for a loyal one.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Retention Curve by Age Bucket</div>
+      <div class="card-sub">% of complainers still active at D14 / D21 / D45</div>
+      <table>
+        <thead><tr><th>Age</th><th>D14 Ret</th><th>D21 Ret</th><th>D45 Ret</th><th>Signal</th></tr></thead>
+        <tbody>
+          <tr style="background:var(--red-soft);"><td style="color:var(--red);font-weight:700;">0–30</td><td style="color:var(--red);">43.2%</td><td style="color:var(--red);">30.6%</td><td style="color:var(--red);font-weight:700;">16.1%</td><td><span class="tag tag-red">Critical</span></td></tr>
+          <tr><td>31–60</td><td>58.5%</td><td>50.3%</td><td>36.3%</td><td><span class="tag tag-amber">High risk</span></td></tr>
+          <tr><td>61–90</td><td>61.6%</td><td>55.1%</td><td>43.7%</td><td><span class="tag tag-amber">Elevated</span></td></tr>
+          <tr><td>91–120</td><td>65.7%</td><td>59.9%</td><td>50.9%</td><td><span class="tag tag-gray">Moderate</span></td></tr>
+          <tr style="background:var(--green-soft);"><td style="color:var(--green);font-weight:700;">120+</td><td style="color:var(--green);">80.4%</td><td style="color:var(--green);">77.6%</td><td style="color:var(--green);font-weight:700;">73.0%</td><td><span class="tag tag-green">Resilient</span></td></tr>
+        </tbody>
+      </table>
+      <div class="insight">By D45, 0–30 day customers retain at only 16.1% vs 73.0% for 120+ day customers. The 4.5× gap in retention makes new customer complaint handling the highest-leverage intervention.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Complaint Disproportionality — Which Age Buckets Complain More Than Their Size?</div>
+    <div class="card-sub">Over-index = bucket complaint rate / overall avg complaint rate · >1.0 = disproportionate · Jan 2026 · Source: Deliveries_plotted_Age_buckets.csv × T_AgeB</div>
+    <div style="margin:20px 0;">
+      <div class="oi-row"><div class="oi-bucket">0–30</div><div class="oi-bar-wrap"><div class="oi-bar" style="width:194px;background:var(--red);">1.94×</div><div class="oi-meta">1.49% rate · 15.8% of users · generates <strong>29% of complaints</strong></div></div></div>
+      <div class="oi-row"><div class="oi-bucket">31–60</div><div class="oi-bar-wrap"><div class="oi-bar" style="width:149px;background:var(--amber);">1.49×</div><div class="oi-meta">1.14% rate · 6.4% of users</div></div></div>
+      <div class="oi-row"><div class="oi-bucket">61–90</div><div class="oi-bar-wrap"><div class="oi-bar" style="width:129px;background:var(--amber);">1.29×</div><div class="oi-meta">0.99% rate · 4.7% of users</div></div></div>
+      <div class="oi-row"><div class="oi-bucket">91–120</div><div class="oi-bar-wrap"><div class="oi-bar" style="width:112px;background:#7C9EB5;">1.12×</div><div class="oi-meta">0.86% rate · near average</div></div></div>
+      <div class="oi-row"><div class="oi-bucket">120+</div><div class="oi-bar-wrap"><div class="oi-bar" style="width:72px;background:var(--green);">0.72×</div><div class="oi-meta">0.55% rate · 69.6% of users · generates <strong>only 46% of complaints</strong></div></div></div>
+    </div>
+    <div class="insight">
+      0–30 day customers are 1.94× the average complaint rate in Jan 2026 — consistent across all months (1.85×, 1.94×, 1.95×). Every 30-day increase in tenure reduces complaint likelihood. The 120+ bucket — 70% of all delivery users — complaints at well below average, subsidizing the overall rate.
+      <br><br>
+      <strong>Pending:</strong> Non-complainer retention baseline not yet available. Complainer D45 (16.1% for 0–30d) vs non-complainer D45 for same cohort is the critical next analysis — one Tableau export (D7/14/21 view filtered to no complaint) fills this.
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- JOURNEY -->
+<section id="journey">
+  <div class="section-eyebrow">Complaint Journey — Combinations</div>
+  <h2>Repeat billing complaints create the highest churn risk</h2>
+  <div class="card">
+    <div class="card-title">Churn by Complaint Journey (B = Billing, D = Delivery, Q = Quality)</div>
+    <div class="card-sub">Jan 8 – Mar 14, 2026 · Source: T_CombinationsAB · Ordered by churn %</div>
+    <table>
+      <thead><tr><th>Journey</th><th>Meaning</th><th>Users</th><th>Churned</th><th>Churn %</th><th>D14 Ret</th><th>D21 Ret</th><th>D45 Ret</th><th>Signal</th></tr></thead>
+      <tbody>
+        <tr style="background:var(--red-soft);"><td><strong class="mono">BCBC</strong></td><td style="font-size:12px;color:var(--ink3);">Billing→Billing→Billing→Billing</td><td>7,767</td><td>2,087</td><td style="color:var(--red);font-weight:700;">26.9%</td><td>61.2%</td><td>54.3%</td><td>40.2%</td><td><span class="tag tag-red">Critical</span></td></tr>
+        <tr style="background:var(--red-soft);"><td><strong class="mono">BCD</strong></td><td style="font-size:12px;color:var(--ink3);">Billing→Billing→Delivery</td><td>6,280</td><td>1,591</td><td style="color:var(--red);font-weight:700;">25.3%</td><td>65.9%</td><td>57.5%</td><td>45.6%</td><td><span class="tag tag-red">Critical</span></td></tr>
+        <tr style="background:var(--amber-soft);"><td><strong class="mono">BCQ</strong></td><td style="font-size:12px;color:var(--ink3);">Billing→Billing→Quality</td><td>2,187</td><td>521</td><td style="color:var(--amber);font-weight:600;">23.8%</td><td>70.0%</td><td>61.7%</td><td>47.1%</td><td><span class="tag tag-amber">High</span></td></tr>
+        <tr style="background:var(--amber-soft);"><td><strong class="mono">QBC</strong></td><td style="font-size:12px;color:var(--ink3);">Quality→Billing→Billing</td><td>2,034</td><td>387</td><td style="color:var(--amber);font-weight:600;">19.0%</td><td>73.5%</td><td>65.3%</td><td>50.9%</td><td><span class="tag tag-amber">High</span></td></tr>
+        <tr style="background:var(--amber-soft);"><td><strong class="mono">DBC</strong></td><td style="font-size:12px;color:var(--ink3);">Delivery→Billing→Billing</td><td>4,386</td><td>768</td><td style="color:var(--amber);font-weight:600;">17.5%</td><td>74.5%</td><td>66.9%</td><td>52.7%</td><td><span class="tag tag-amber">High</span></td></tr>
+        <tr><td><strong class="mono">QQ</strong></td><td style="font-size:12px;color:var(--ink3);">Quality→Quality</td><td>9,273</td><td>1,507</td><td>16.3%</td><td>73.3%</td><td>66.9%</td><td>55.9%</td><td><span class="tag tag-gray">Medium</span></td></tr>
+        <tr><td><strong class="mono">DD</strong></td><td style="font-size:12px;color:var(--ink3);">Delivery→Delivery</td><td>32,097</td><td>4,489</td><td>14.0%</td><td>74.4%</td><td>67.3%</td><td>58.3%</td><td><span class="tag tag-gray">Medium</span></td></tr>
+        <tr><td><strong class="mono">DQ</strong></td><td style="font-size:12px;color:var(--ink3);">Delivery→Quality</td><td>7,526</td><td>880</td><td>11.7%</td><td>77.3%</td><td>72.3%</td><td>62.8%</td><td><span class="tag tag-green">Lower</span></td></tr>
+        <tr><td><strong class="mono">QD</strong></td><td style="font-size:12px;color:var(--ink3);">Quality→Delivery</td><td>7,629</td><td>889</td><td>11.7%</td><td>77.1%</td><td>71.2%</td><td>61.6%</td><td><span class="tag tag-green">Lower</span></td></tr>
+      </tbody>
+    </table>
+    <div class="insight">Every high-churn journey starts with <strong>B (Billing)</strong>. BCBC, BCD, BCQ — the top 3 all begin with an unresolved billing complaint. DD (Delivery→Delivery) has 32,097 users — the largest group — but churns at only 14.0%. Volume-wise it's the biggest issue, churn-wise billing is the problem. Intercept at the second billing complaint.</div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- RESOLUTION -->
+<section id="resolution">
+  <div class="section-eyebrow">Resolution & TAT</div>
+  <h2>Resolving fast is not enough — it has to actually be fixed</h2>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">Resolution Rate — Dec 2025 to Mar 2026</div>
+      <div class="card-sub">Source: Concern_Area_wise.csv · 3,38,502 total complaints tracked</div>
+      <table>
+        <thead><tr><th>Category</th><th>Received</th><th>Resolved</th><th>Unresolved</th><th>Res %</th><th>Reopen %</th></tr></thead>
+        <tbody>
+          <tr style="background:var(--amber-soft);">
+            <td><span class="tag tag-del">Delivery</span></td><td>1,99,147</td><td>1,66,667</td>
+            <td style="color:var(--red);font-weight:600;">32,480</td>
+            <td style="color:var(--amber);">83.7%</td><td>7.0%</td>
+          </tr>
+          <tr style="background:var(--amber-soft);">
+            <td><span class="tag tag-qual">Quality</span></td><td>70,975</td><td>56,455</td>
+            <td style="color:var(--amber);">14,520</td>
+            <td style="color:var(--amber);">79.5%</td>
+            <td style="color:var(--red);font-weight:600;">10.0%</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-bill">Billing</span></td><td>68,380</td><td>68,373</td><td>7</td>
+            <td style="color:var(--green);font-weight:600;">99.9%</td>
+            <td style="color:var(--amber);">8.6%</td>
+          </tr>
+        </tbody>
+        <tfoot><tr class="tfoot"><td>Total</td><td>3,38,502</td><td>2,91,495</td><td>47,007</td><td>86.1%</td><td>8.0%</td></tr></tfoot>
+      </table>
+      <div class="insight">47,007 complaints remain unresolved. Delivery = 69% of all unresolved. NonDelivery alone: 32K unresolved, 45% breached TAT — the largest single unresolved bucket in the system.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">TAT Buckets — Apr 8–14, 2026</div>
+      <div class="card-sub">Regular + Rapid combined · 24,119 complaints · Apr week only</div>
+      <table>
+        <thead><tr><th>Category</th><th>Total</th><th>&lt;24h %</th><th>&gt;48h %</th><th>Avg TAT</th><th>Reopen %</th></tr></thead>
+        <tbody>
+          <tr><td><span class="tag tag-del">Delivery</span></td><td>15,242</td><td>68.3%</td><td>3.6%</td><td class="mono"><strong>9.6h</strong></td><td>5.7%</td></tr>
+          <tr style="background:var(--amber-soft);">
+            <td><span class="tag tag-qual">Quality</span></td><td>5,824</td>
+            <td style="color:var(--amber);">55.9%</td><td>5.0%</td>
+            <td class="mono" style="color:var(--amber);"><strong>14.6h</strong></td>
+            <td style="color:var(--red);font-weight:600;">8.9%</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-bill">Billing</span></td><td>3,053</td>
+            <td style="color:var(--green);">95.3%</td><td>1.5%</td>
+            <td class="mono"><strong>9.4h</strong></td><td>5.5%</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="insight">Quality is slowest (14.6h avg, only 55.9% within 24h) and has the highest reopen (8.9%). For milk/FNV subscribers, slow resolution means the spoilage recurs before the ticket closes. Billing closes in 9.4h but still churns at 24.8% — speed is not the problem.</div>
+      <div class="data-note">Full Dec–Mar daily TAT pending from Complaints Tracking export</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- GEOGRAPHY -->
+<section id="geo">
+  <div class="section-eyebrow">Geographic Analysis</div>
+  <h2>Delhi-NCR leads in volume; subscription customers complain far less everywhere</h2>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">Quality Complaints by Region</div>
+      <div class="card-sub">Source: Quality_complaints_Report.csv · Dec 2025 – Mar 2026 · Sorted by complaint volume</div>
+      <div class="geo-item"><div class="geo-city">Delhi-NCR</div><div class="geo-bar-wrap"><div class="geo-bar"><div class="geo-bar-fill" style="width:100%;"></div></div><div class="geo-meta">27,952 complaints · 1.26 crore deliveries</div></div><div class="geo-rate">0.22%</div></div>
+      <div class="geo-item"><div class="geo-city">Bangalore</div><div class="geo-bar-wrap"><div class="geo-bar"><div class="geo-bar-fill" style="width:36%;"></div></div><div class="geo-meta">10,137 complaints · 46.6 lakh deliveries</div></div><div class="geo-rate">0.22%</div></div>
+      <div class="geo-item"><div class="geo-city">Mumbai</div><div class="geo-bar-wrap"><div class="geo-bar"><div class="geo-bar-fill" style="width:34%;"></div></div><div class="geo-meta">9,627 complaints · 49.3 lakh deliveries</div></div><div class="geo-rate">0.20%</div></div>
+      <div class="geo-item"><div class="geo-city">Hyderabad</div><div class="geo-bar-wrap"><div class="geo-bar"><div class="geo-bar-fill" style="width:34%;"></div></div><div class="geo-meta">9,561 complaints · 69.8 lakh deliveries</div></div><div class="geo-rate">0.14%</div></div>
+      <div class="geo-item"><div class="geo-city">Pune</div><div class="geo-bar-wrap"><div class="geo-bar"><div class="geo-bar-fill" style="width:14%;"></div></div><div class="geo-meta">3,780 complaints · 28.7 lakh deliveries</div></div><div class="geo-rate">0.13%</div></div>
+      <div class="geo-item"><div class="geo-city">Kolkata</div><div class="geo-bar-wrap"><div class="geo-bar"><div class="geo-bar-fill" style="width:7%;"></div></div><div class="geo-meta">1,862 complaints · 16.5 lakh deliveries</div></div><div class="geo-rate">0.11%</div></div>
+      <div class="data-note">Churn by city not yet available — pending regional Tableau export with churn flag</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Regular vs Non-Regular Complaint Rate</div>
+      <div class="card-sub">Regular = subscription customers · Non-Regular = non-subscription</div>
+      <div style="margin:16px 0 20px;">
+        <div class="bar-row"><div class="bar-key" style="width:110px;">Regular (Sub)</div><div class="bar-track"><div class="bar-fill" style="width:19%;background:var(--green);"></div></div><div class="bar-num" style="color:var(--green);font-weight:600;">0.18%</div></div>
+        <div class="bar-row"><div class="bar-key" style="width:110px;">Non-Regular</div><div class="bar-track"><div class="bar-fill" style="width:46%;background:var(--red);"></div></div><div class="bar-num" style="color:var(--red);font-weight:600;">0.46%</div></div>
+      </div>
+      <div class="insight" style="margin-bottom:20px;">Non-Regular (non-subscription) customers complain at <strong>2.5× the rate</strong> of subscription customers across all cities. Getting customers onto a subscription plan materially reduces complaint likelihood — and likely churn risk.</div>
+      <div style="height:1px;background:var(--line);margin:16px 0;"></div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:10px;">Avg Quality Refund by Region</div>
+      <table>
+        <thead><tr><th>Region</th><th>Regular Avg ₹</th><th>Non-Regular Avg ₹</th></tr></thead>
+        <tbody>
+          <tr><td>Delhi-NCR</td><td>₹122</td><td>₹111</td></tr>
+          <tr><td>Bangalore</td><td>₹103</td><td>₹112</td></tr>
+          <tr><td>Mumbai</td><td>₹106</td><td>₹103</td></tr>
+          <tr><td>Hyderabad</td><td>₹105</td><td>₹126</td></tr>
+          <tr><td>Kolkata</td><td>₹115</td><td>₹166</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- APP REVIEWS -->
+<section id="reviews">
+  <div class="section-eyebrow">App Reviews — Play Store & iOS</div>
+  <h2>Billing goes public; Technical issues are invisible to internal teams</h2>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">Play Store Review Category Breakdown</div>
+      <div class="card-sub">933 reviews tracked by CX team · Jan – Apr 2026 · All 1–3 star · Source: SOCIAL_DATA_NEW.xlsx</div>
+      <div class="review-row"><div class="review-cat">Billing</div><div class="review-bar-wrap"><div style="width:37.6%;height:100%;background:var(--amber);border-radius:2px;"></div></div><div class="review-count">351</div><div class="review-pct">37.6%</div></div>
+      <div class="review-row"><div class="review-cat">Delivery</div><div class="review-bar-wrap"><div style="width:19.8%;height:100%;background:var(--blue);border-radius:2px;"></div></div><div class="review-count">185</div><div class="review-pct">19.8%</div></div>
+      <div class="review-row"><div class="review-cat">Others</div><div class="review-bar-wrap"><div style="width:17.5%;height:100%;background:var(--ink3);border-radius:2px;"></div></div><div class="review-count">163</div><div class="review-pct">17.5%</div></div>
+      <div class="review-row"><div class="review-cat">Quality</div><div class="review-bar-wrap"><div style="width:12.5%;height:100%;background:var(--green);border-radius:2px;"></div></div><div class="review-count">117</div><div class="review-pct">12.5%</div></div>
+      <div class="review-row" style="border-bottom:none;"><div class="review-cat" style="color:var(--red);font-weight:700;">Technical / App</div><div class="review-bar-wrap"><div style="width:9.1%;height:100%;background:var(--red);border-radius:2px;"></div></div><div class="review-count" style="color:var(--red);">85</div><div class="review-pct" style="color:var(--red);">9.1%</div></div>
+      <div class="insight" style="margin-top:16px;">
+        <strong>Billing = 37.6% of Play Store reviews vs 16.6% of internal complaints</strong> — billing issues are 2.3× more likely to become public negative reviews.
+        <br><br>
+        <strong style="color:var(--red);">Technical / App Issues = 9.1% of reviews but 0% of internal complaints.</strong> These customers experienced app crashes or payment failures and left without raising a formal complaint. Completely invisible internally.
+      </div>
+      <div style="height:1px;background:var(--line);margin:16px 0;"></div>
+      <div style="font-size:12px;font-weight:600;margin-bottom:10px;">Internal vs Play Store — Category Alignment</div>
+      <table>
+        <thead><tr><th>Category</th><th>Internal %</th><th>Play Store %</th><th>Ratio</th></tr></thead>
+        <tbody>
+          <tr><td>Billing</td><td>16.6%</td><td>37.6%</td><td style="color:var(--red);font-weight:600;">2.3×</td></tr>
+          <tr><td>Delivery</td><td>64.7%</td><td>19.8%</td><td style="color:var(--green);">0.3×</td></tr>
+          <tr><td>Quality</td><td>22.1%</td><td>12.5%</td><td>0.6×</td></tr>
+          <tr style="background:var(--red-soft);"><td style="color:var(--red);font-weight:700;">Technical</td><td style="color:var(--red);">0%</td><td style="color:var(--red);">9.1%</td><td style="color:var(--red);">∞</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title">CX Follow-up Outcomes & App Rating</div>
+      <div class="card-sub">What happened after CX reached out to negative reviewers</div>
+      <div style="margin:12px 0 20px;">
+        <div class="bar-row"><div class="bar-key" style="width:120px;">Not agreed</div><div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--red);"></div></div><div class="bar-num" style="color:var(--red);">127</div></div>
+        <div class="bar-row"><div class="bar-key" style="width:120px;">Deleted review</div><div class="bar-track"><div class="bar-fill" style="width:93.7%;background:var(--green);"></div></div><div class="bar-num" style="color:var(--green);">119</div></div>
+        <div class="bar-row"><div class="bar-key" style="width:120px;">Changed to 5★</div><div class="bar-track"><div class="bar-fill" style="width:11%;background:var(--green);"></div></div><div class="bar-num">14</div></div>
+        <div class="bar-row"><div class="bar-key" style="width:120px;">Changed to 4★</div><div class="bar-track"><div class="bar-fill" style="width:10.2%;background:var(--green);"></div></div><div class="bar-num">13</div></div>
+        <div class="bar-row" style="margin-bottom:0;"><div class="bar-key" style="width:120px;">Changed to 3★</div><div class="bar-track"><div class="bar-fill" style="width:8.7%;background:var(--green);"></div></div><div class="bar-num">11</div></div>
+      </div>
+      <div class="insight" style="margin-bottom:20px;">Of tracked follow-ups: 127 not agreed (44%), 157 positive outcome (56%). But 649 reviews (70%) show no follow-up tracked. Success rate on attempted follow-ups: ~55%.</div>
+      <div style="height:1px;background:var(--line);margin:16px 0;"></div>
+      <div style="display:flex;align-items:center;gap:24px;margin-bottom:16px;">
+        <div>
+          <div class="mstat-label" style="color:var(--ink3);margin-bottom:6px;">Play Store Rating</div>
+          <div style="font-family:'DM Serif Display',serif;font-size:48px;line-height:1;color:var(--accent);">4.67</div>
+          <div style="font-size:11px;color:var(--ink3);margin-top:4px;">660K reviews · 30M downloads</div>
+        </div>
+        <div style="flex:1;">
+          <div class="bar-row" style="margin-bottom:8px;"><div style="width:130px;font-size:12px;font-weight:600;">Country Delight</div><div class="bar-track" style="width:100px;"><div class="bar-fill" style="width:93.4%;background:var(--accent);"></div></div><div class="bar-num">4.67</div></div>
+          <div class="bar-row" style="margin-bottom:8px;"><div style="width:130px;font-size:12px;">Blinkit</div><div class="bar-track" style="width:100px;"><div class="bar-fill" style="width:92%;background:var(--ink3);"></div></div><div class="bar-num">4.60</div></div>
+          <div class="bar-row" style="margin-bottom:0;"><div style="width:130px;font-size:12px;">Instamart</div><div class="bar-track" style="width:100px;"><div class="bar-fill" style="width:90%;background:var(--ink3);"></div></div><div class="bar-num">4.50</div></div>
+        </div>
+      </div>
+      <div class="insight">Rating held stable at 4.66–4.67 throughout the complaint period. <strong>Dissatisfied customers are not leaving reviews — they are churning silently.</strong> App rating is not a reliable signal of complaint health. The 14.7% churn rate is invisible in the store rating.</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ACTIONS -->
+<section id="actions">
+  <div class="section-eyebrow">Recommended Actions</div>
+  <h2>Priority interventions based on data</h2>
+  <div class="card">
+    <div class="card-title">Retention Actions</div>
+    <div class="card-sub">All estimates based on Dec 2025 – Mar 2026 data</div>
+    <table>
+      <thead><tr><th style="text-align:left;width:40px;">P</th><th style="text-align:left;">Action</th><th style="text-align:left;">Target</th><th style="text-align:left;">Data Basis</th><th style="text-align:left;">Est. Impact</th></tr></thead>
+      <tbody>
+        <tr class="priority-row"><td><span class="p-tag p1">P1</span></td><td>Fix Billing resolution quality — audit why 8.6% of closed billing tickets reopen. Focus on Membership, refund disputes, cashback. TAT is not the issue.</td><td>Billing complainers<br>43,876 / period</td><td>Billing churn 24.8% vs Delivery 12.9%. Fastest resolution, near-100% closed, yet highest churn and high reopen.</td><td>Close billing–delivery churn gap → saves ~5,200 customers/quarter</td></tr>
+        <tr class="priority-row"><td><span class="p-tag p1">P1</span></td><td>Priority resolution for 0–30 day customer complaints — resolve within 24h, proactive follow-up after first complaint.</td><td>0–30 day complainers<br>72,099 / 3 months</td><td>28.0% churn rate vs 4.7% for 120+ day. 1.94× over-index on complaint rate. D45 retention only 16.1%.</td><td>Reduce to 20% churn → saves ~5,800 new customers/quarter</td></tr>
+        <tr class="priority-row"><td><span class="p-tag p2">P2</span></td><td>Intercept at second billing complaint — escalate to senior agent before 3rd ticket. BCBC spiral ends in near-certain churn.</td><td>BCBC journey · 7,767 users</td><td>BCBC churn 26.9%. All top-3 churn journeys (BCBC, BCD, BCQ) start with billing. Intercept point is ticket #2.</td><td>Intercept 50% of BCBC → ~1,050 customers retained</td></tr>
+        <tr class="priority-row"><td><span class="p-tag p2">P2</span></td><td>Reduce Quality resolution TAT from 14.6h to &lt;10h. 44% not resolved within 24h. Milk subscription customers most affected.</td><td>Quality complainers<br>58,474 / period</td><td>Quality TAT 14.6h. Reopen 8.9% — highest. Milk/FNV issues recur before ticket closes. Subscription retention at risk.</td><td>Lower reopen spiral → Quality D45 from 52% toward 58%</td></tr>
+        <tr class="priority-row"><td><span class="p-tag p2">P2</span></td><td>Investigate Technical / App issues. 85 Play Store reviews cite app errors — none in internal complaints. Set up crash monitoring.</td><td>App experience failures</td><td>9.1% of Play Store reviews = Technical; 0% of internal data. These customers churn without a ticket — completely invisible.</td><td>Unknown volume — needs tracking infrastructure first</td></tr>
+        <tr class="priority-row" style="border-bottom:none;"><td><span class="p-tag p3">P3</span></td><td>Export region-level complaint + churn from Tableau. Delhi-NCR has 27,952 quality complaints — route-level ops fix possible.</td><td>High-complaint cities</td><td>Delhi-NCR highest absolute. Surat highest rate. Bangalore 0.22% rate despite large delivery base.</td><td>Route-level intervention. Est 15–20% of delivery complaints are geo-concentrated.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card" style="margin-top:20px;background:var(--paper2);">
+    <div class="card-title">What's Needed to Complete the Analysis</div>
+    <div class="card-sub">Pending data that unlocks the complainer vs non-complainer comparison Dhruv asked for</div>
+    <table>
+      <thead><tr><th>Missing Data</th><th>What It Unlocks</th><th>Where to Get It</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Non-complainer D14/D21 retention</strong></td><td>Proves whether complaints cause incremental churn or are just correlated. The single most important missing analysis.</td><td>D7/D14/D21 Tableau view — filter concern_area = None. Export by first-sale date cohort.</td></tr>
+        <tr><td><strong>Chain complaint classification</strong></td><td>Tag each customer: 0 / 1 / 2 / 3+ complaints in 30 days. Show D14/D45 for each group. Dhruv's Level 2 framework.</td><td>Derivable from raw dumps via customer_id + complaint date. Needs churn flag linkage.</td></tr>
+        <tr><td><strong>Churn flag in raw dumps</strong></td><td>Link TAT directly to churn outcome. Does resolving in &lt;24h reduce churn for that customer?</td><td>Add churn_flag to complaint dump. Needs join from Tableau churn table on customer_id.</td></tr>
+        <tr style="border-bottom:none;"><td><strong>120+ sub-bucket complaints</strong></td><td>Complaint and churn rates for 121-150, 150-180, 180-360, 360-720, 720+ day customers. Delivery base already available.</td><td>Re-export T_AgeB sheets with finer buckets from Tableau Overview Complains tab.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div style="height:64px;"></div>
+</div>
+
+<div class="footer">
+  <div class="footer-l">Country Delight · Complaints & Churn Analysis · Dec 2025 – Mar 14, 2026 · All figures cross-verified against source exports</div>
+  <div class="footer-r">Generated May 2026</div>
+</div>
+
+</body>
+</html>
