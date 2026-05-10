@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Country Delight — Milk Prototype</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --canvas:#F5F0E8;--canvas2:#EDE7DB;--dark:#1C1510;--warm:#2A1E12;
+  --cream:#FBF8F2;--parchment:#EDE7DA;
+  --blue:#1A4FA8;--blue-m:#153E88;--blue-d:#0E2D64;
+  --blue-l:rgba(26,79,168,0.08);--blue-xl:rgba(26,79,168,0.05);
+  --blue-bright:#2563EB;
+  --sky:#E8F0FC;--sky2:#D4E3FA;
+  --gold:#A07820;--gold-l:rgba(160,120,32,0.10);--gold-cta:#C89828;--gold-text:#7A5C12;
+  --terracotta:#8B3A1A;--terracotta-l:rgba(139,58,26,0.08);
+  --purple:#4A18A8;--purple-l:rgba(74,24,168,0.08);
+  --muted:#8A7A68;--border:#DDD6C8;--border2:#C8BEA8;
+  --shadow:0 3px 0 #D0C8BC;--shadow2:0 6px 24px rgba(42,30,18,.10);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--canvas2);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:32px 16px 80px;color:var(--dark);-webkit-font-smoothing:antialiased}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes gentleBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.35}}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+/* ── page header ── */
+.pg-head{text-align:center;margin-bottom:32px;max-width:500px}
+.pg-tag{font-size:9px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-cta);margin-bottom:8px;opacity:.85}
+.pg-title{font-family:'Fraunces',serif;font-size:21px;font-weight:400;color:var(--warm);line-height:1.3}
+.pg-sub{font-size:11px;color:var(--muted);margin-top:7px;line-height:1.6;letter-spacing:.01em}
+
+/* ── screen nav ── */
+.screen-nav{display:flex;gap:4px;margin-bottom:22px;background:rgba(42,30,18,0.07);padding:5px;border-radius:16px;border:0.5px solid var(--border)}
+.snav-btn{flex:1;padding:8px 10px;border:none;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;cursor:pointer;background:transparent;color:var(--muted);transition:all .25s;letter-spacing:.01em}
+.snav-btn.active{background:var(--cream);color:var(--warm);box-shadow:0 2px 8px rgba(42,30,18,.10),0 0.5px 0 rgba(42,30,18,.06)}
+
+/* ── phone shell ── */
+.phone{width:393px;border-radius:46px;background:var(--canvas);box-shadow:0 24px 72px rgba(42,30,18,.22),0 4px 12px rgba(42,30,18,.10),inset 0 0.5px 0 rgba(255,255,255,.4);overflow:hidden;border:7px solid #161210;display:flex;flex-direction:column;position:relative}
+
+/* status bar */
+.sbar{padding:14px 24px 0;display:flex;justify-content:space-between;align-items:center;position:relative;z-index:4}
+
+/* ─────────────────────────
+   SCREEN 1 — D0 HOMEPAGE
+───────────────────────── */
+#s1{display:flex;flex-direction:column}
+
+/* Hero: deep navy-to-warm-parchment gradient, no photo */
+.s1-hero{position:relative;overflow:hidden;background:linear-gradient(160deg,#0C1C3A 0%,#0E2D64 35%,#1A3A6E 60%,#2A2010 88%,#3A2808 100%)}
+.s1-hero-inner{position:relative;z-index:2;padding:0 22px 28px}
+.s1-grain{position:absolute;inset:0;opacity:.04;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");background-size:128px}
+.s1-glow{position:absolute;bottom:-40px;left:50%;transform:translateX(-50%);width:260px;height:180px;background:radial-gradient(ellipse,rgba(200,152,40,.18) 0%,transparent 70%);pointer-events:none}
+.s1-fade{position:absolute;bottom:0;left:0;right:0;height:60px;background:linear-gradient(to bottom,transparent,var(--canvas));z-index:3}
+
+/* status bar on dark hero */
+.s1-sbar{padding:14px 24px 0;display:flex;justify-content:space-between;align-items:center;position:relative;z-index:4}
+
+.s1-eyebrow{font-size:9.5px;font-weight:600;letter-spacing:.1em;color:rgba(200,185,145,.55);text-transform:uppercase;margin-bottom:10px;padding-top:18px}
+
+/* Hero offer banner */
+.hero-offer{background:rgba(255,255,255,.07);border:0.5px solid rgba(200,152,40,.3);border-radius:16px;padding:14px 16px;margin-bottom:18px}
+.hero-offer-tag{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-cta);margin-bottom:6px}
+.hero-offer-headline{font-family:'Fraunces',serif;font-size:22px;font-weight:400;color:#F5EED8;line-height:1.22;margin-bottom:10px}
+.hero-offer-headline em{font-style:italic;font-weight:300;color:rgba(200,170,100,.85)}
+.hero-pills-row{display:flex;gap:6px;flex-wrap:wrap}
+.hero-pill{display:flex;align-items:center;gap:5px;background:rgba(26,79,168,.22);border:0.5px solid rgba(100,150,255,.22);border-radius:20px;padding:5px 10px}
+.hero-pill-num{font-family:'Fraunces',serif;font-size:15px;font-weight:500;color:#F5EED8;line-height:1}
+.hero-pill-label{font-size:9px;color:rgba(200,218,255,.65);line-height:1.3}
+.hero-pill.gold-pill{background:rgba(160,120,32,.18);border-color:rgba(200,152,40,.28)}
+.hero-pill.gold-pill .hero-pill-num{color:#F5D888}
+.hero-pill.gold-pill .hero-pill-label{color:rgba(240,210,140,.65)}
+
+/* Trust bar below hero */
+.trust-bar{display:flex;gap:5px;flex-wrap:wrap;padding:10px 18px 0}
+.trust-pill{background:rgba(26,79,168,.07);border:0.5px solid rgba(26,79,168,.14);border-radius:20px;padding:5px 11px;font-size:9.5px;color:#2A4A7A;display:flex;align-items:center;gap:4px;white-space:nowrap;letter-spacing:.01em;font-weight:500}
+.live-dot{width:5px;height:5px;border-radius:3px;background:#3B82F6;animation:pulse 2s ease-in-out infinite;box-shadow:0 0 5px rgba(59,130,246,.5)}
+
+.s1-body{padding:12px 18px 22px;display:flex;flex-direction:column;gap:13px}
+.s1-proof{display:flex;align-items:center;gap:8px;padding:9px 13px;background:var(--blue-l);border:0.5px solid rgba(26,79,168,.14);border-radius:11px}
+.s1-proof span{font-size:11px;color:#1A3A6E;line-height:1.45;letter-spacing:.01em}
+.s1-proof strong{color:var(--blue-m);font-weight:600}
+
+.section-label{font-size:11.5px;font-weight:600;color:var(--warm);margin-bottom:7px;letter-spacing:.01em}
+.journey-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.j-card{background:var(--cream);border:0.5px solid var(--border);border-radius:16px;padding:14px 12px;cursor:pointer;transition:border-color .2s,transform .15s,box-shadow .15s}
+.j-card:hover{border-color:rgba(26,79,168,.28);transform:translateY(-1px);box-shadow:var(--shadow2)}
+.j-icon{font-size:20px;margin-bottom:7px}
+.j-title{font-size:12.5px;font-weight:600;color:var(--warm);margin-bottom:2px}
+.j-sub{font-size:10px;color:var(--muted);line-height:1.4}
+
+/* Starter card */
+.starter-card{background:var(--cream);border:0.5px solid rgba(26,79,168,.2);border-radius:20px;overflow:hidden;box-shadow:var(--shadow2)}
+.starter-stripe{height:3px;background:linear-gradient(90deg,var(--blue-m) 0%,var(--blue-bright) 50%,var(--blue-m) 100%);background-size:200% 100%;animation:shimmer 3s linear infinite}
+.starter-top{background:linear-gradient(90deg,rgba(26,79,168,.06),rgba(26,79,168,.02));padding:10px 15px;display:flex;justify-content:space-between;align-items:center}
+.starter-label{font-size:11px;font-weight:600;color:var(--blue-m)}
+.starter-badge{font-size:9px;background:rgba(26,79,168,.1);color:var(--blue-m);border-radius:20px;padding:3px 9px;font-weight:600;border:0.5px solid rgba(26,79,168,.18)}
+.starter-body{padding:13px 15px}
+.starter-items{font-size:11.5px;color:var(--muted);margin-bottom:10px;letter-spacing:.01em}
+.starter-row{display:flex;align-items:baseline;gap:8px;margin-bottom:11px}
+.starter-price{font-family:'Fraunces',serif;font-size:24px;font-weight:500;color:var(--warm)}
+.starter-was{font-size:12px;color:var(--muted);text-decoration:line-through}
+.starter-off{font-size:9.5px;background:rgba(26,79,168,.09);color:var(--blue-m);border-radius:20px;padding:2px 8px;font-weight:600;border:0.5px solid rgba(26,79,168,.15)}
+
+.btn-blue{width:100%;padding:14px 20px;border:none;border-radius:13px;background:var(--blue-m);color:#fff;font-size:14px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;animation:gentleBob 3s ease-in-out infinite;box-shadow:0 4px 16px rgba(26,79,168,.28),0 1px 3px rgba(26,79,168,.18);letter-spacing:.01em}
+
+/* 4+4 teaser inside home */
+.offer-teaser{background:linear-gradient(135deg,#0E2D64,#1A3A6E);border-radius:18px;padding:16px;overflow:hidden;position:relative;cursor:pointer}
+.offer-teaser::after{content:'';position:absolute;top:-20px;right:-20px;width:100px;height:100px;border-radius:50%;background:rgba(200,152,40,.08)}
+.offer-teaser-label{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(200,170,100,.7);margin-bottom:5px}
+.offer-teaser-title{font-family:'Fraunces',serif;font-size:15px;font-weight:400;color:#F5EED8;margin-bottom:4px;line-height:1.35}
+.offer-teaser-sub{font-size:11px;color:rgba(200,218,255,.55);line-height:1.5;margin-bottom:12px}
+.offer-teaser-row{display:flex;align-items:center;gap:8px}
+.offer-teaser-cta{display:inline-flex;align-items:center;gap:5px;background:rgba(200,152,40,.18);border:0.5px solid rgba(200,152,40,.3);border-radius:20px;padding:6px 14px;font-size:11px;color:#F5D888;font-weight:600;letter-spacing:.01em}
+.offer-teaser-free{font-size:10px;color:rgba(200,218,255,.45)}
+
+/* bottom nav */
+.bnav{display:flex;justify-content:space-around;padding:10px 0 15px;border-top:0.5px solid var(--border);background:var(--cream)}
+.bnav-item{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:9px;color:#aaa;cursor:pointer;letter-spacing:.01em}
+.bnav-item.active{color:var(--blue-m)}
+.bnav-item svg{width:20px;height:20px}
+
+/* ─────────────────────────
+   SCREEN 2 — MILK PDP
+───────────────────────── */
+#s2{display:none;flex-direction:column}
+
+/* PDP hero also gets a gradient, product name floats over */
+.s2-hero{height:270px;position:relative;overflow:hidden}
+.s2-photo{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1563636619-e9143da7973b?w=800&q=80') center/cover no-repeat;filter:brightness(.88) saturate(.9)}
+.s2-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,18,38,.62) 0%,rgba(10,18,38,.15) 50%,rgba(10,18,38,.72) 100%)}
+.s2-vignette{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 110%,rgba(200,152,40,.14) 0%,transparent 65%)}
+.s2-fade{position:absolute;bottom:0;left:0;right:0;height:90px;background:linear-gradient(to bottom,transparent,var(--canvas));z-index:3}
+.s2-appbar{position:relative;z-index:4;padding:8px 22px 0;display:flex;align-items:center;justify-content:space-between}
+.back-btn{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.1);border:0.5px solid rgba(255,255,255,.14);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.s2-title-block{position:relative;z-index:4;padding:12px 22px 0}
+.s2-tag{display:inline-flex;align-items:center;gap:5px;font-size:9.5px;color:rgba(200,218,255,.72);background:rgba(10,18,38,.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:0.5px solid rgba(100,150,255,.14);padding:4px 10px;border-radius:20px;margin-bottom:9px;letter-spacing:.01em}
+.s2-name{font-family:'Fraunces',serif;font-size:30px;font-weight:400;color:#F5EED8;text-shadow:0 2px 12px rgba(0,0,0,.28);margin-bottom:2px}
+.s2-vol{font-size:12px;color:rgba(200,218,255,.6);letter-spacing:.02em}
+
+/* Delivery highlight strip — replaces boring vol line */
+.s2-delivery-strip{display:flex;gap:10px;margin-top:8px}
+.s2-strip-pill{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.1);border:0.5px solid rgba(255,255,255,.16);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:20px;padding:5px 11px}
+.s2-strip-num{font-family:'Fraunces',serif;font-size:14px;font-weight:400;color:#F5EED8}
+.s2-strip-label{font-size:9px;color:rgba(200,218,255,.6)}
+
+.s2-body{padding:13px 18px 26px;display:flex;flex-direction:column;gap:13px}
+.size-row{display:flex;gap:7px}
+.size-chip{border:0.5px solid var(--border);border-radius:11px;padding:7px 13px;font-size:11.5px;color:#666;background:var(--cream);cursor:pointer;transition:all .2s}
+.size-chip.active{border-color:var(--blue-m);background:var(--blue-xl);color:var(--blue-m);font-weight:600}
+
+/* Price + action block — cleaner layout */
+.pdp-price-block{background:var(--cream);border:0.5px solid var(--border);border-radius:17px;padding:14px 15px;box-shadow:var(--shadow2)}
+.pdp-price-row{display:flex;align-items:baseline;gap:8px;margin-bottom:12px}
+.pdp-price{font-family:'Fraunces',serif;font-size:28px;font-weight:500;color:var(--warm)}
+.pdp-per{font-size:11px;color:var(--muted)}
+.pdp-trial-note{font-size:10.5px;color:#1A3A6E;background:var(--sky);border:0.5px solid rgba(26,79,168,.14);border-radius:8px;padding:7px 10px;margin-bottom:12px;line-height:1.55}
+.pdp-trial-note strong{color:var(--blue-m)}
+.refund-note{font-size:10px;color:#3A2808;background:rgba(160,120,32,.06);border-radius:9px;padding:7px 11px;margin-top:9px;line-height:1.55;border:0.5px solid rgba(160,120,32,.14)}
+.or-div{text-align:center;font-size:11px;color:var(--muted);margin:2px 0;letter-spacing:.02em}
+.sub-box{background:var(--cream);border:0.5px solid var(--border);border-radius:15px;padding:14px}
+.sub-head{font-size:12.5px;font-weight:600;color:var(--warm);margin-bottom:2px}
+.sub-sub{font-size:11px;color:var(--muted);margin-bottom:11px;line-height:1.45}
+.btn-outline{width:100%;padding:12px;border:1.5px solid var(--blue-m);border-radius:12px;background:transparent;color:var(--blue-m);font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;letter-spacing:.01em}
+
+.lab-card{background:var(--cream);border:0.5px solid var(--border);border-radius:17px;padding:14px;box-shadow:var(--shadow2)}
+.lab-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px}
+.lab-title{font-size:12.5px;font-weight:600;color:var(--warm);display:flex;align-items:center;gap:6px}
+.lab-live{display:flex;align-items:center;gap:4px;font-size:9px;color:var(--blue-m);background:var(--blue-l);padding:3px 8px;border-radius:20px;border:0.5px solid rgba(26,79,168,.14)}
+.lab-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:0.5px solid var(--border);font-size:11.5px}
+.lab-row:last-child{border-bottom:none}
+.lab-val{color:var(--blue-m);font-weight:500}
+
+.hl-card{background:var(--blue-l);border:0.5px solid rgba(26,79,168,.14);border-radius:12px;padding:10px 13px;display:flex;align-items:center;gap:9px}
+.hl-dot{width:7px;height:7px;border-radius:4px;background:var(--blue-m);flex-shrink:0;animation:pulse 2.5s ease-in-out infinite}
+.hl-text{font-size:11px;color:#1A3A6E;line-height:1.45;letter-spacing:.01em}
+.hl-text strong{color:var(--blue-m);font-weight:600}
+
+/* ─────────────────────────
+   SCREEN 3 — POST-ORDER
+───────────────────────── */
+#s3{display:none;flex-direction:column}
+.s3-confirm-bar{background:var(--blue-m);padding:12px 20px;text-align:center;font-size:12.5px;font-weight:600;color:#fff;display:flex;align-items:center;justify-content:center;gap:6px;letter-spacing:.01em}
+.s3-body{padding:15px 18px 26px;display:flex;flex-direction:column;gap:13px;overflow-y:auto}
+
+.ritual-card{background:linear-gradient(145deg,#081424,#0E2D64);border-radius:20px;padding:18px;color:#fff;overflow:hidden;position:relative;border:0.5px solid rgba(100,150,255,.12)}
+.ritual-card::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;border-radius:50%;background:rgba(200,152,40,.07)}
+.ritual-card::after{content:'';position:absolute;bottom:-20px;left:-20px;width:80px;height:80px;border-radius:50%;background:rgba(100,150,255,.05)}
+.ritual-headline{font-family:'Fraunces',serif;font-size:16px;font-weight:400;color:#E8F0FC;margin-bottom:7px;line-height:1.35}
+.ritual-sub{font-size:11px;color:rgba(200,218,255,.5);line-height:1.65;margin-bottom:16px;letter-spacing:.01em}
+.timeline{display:flex;align-items:center}
+.tl-node{display:flex;flex-direction:column;align-items:center}
+.tl-dot{width:9px;height:9px;border-radius:50%;background:#60A5FA}
+.tl-dot.dim{background:rgba(96,165,250,.28);border:1px solid rgba(96,165,250,.38)}
+.tl-lbl{font-size:9px;color:rgba(200,218,255,.7);margin-top:4px;text-align:center;letter-spacing:.01em}
+.tl-time{font-size:8px;color:rgba(200,218,255,.38);margin-top:1px;text-align:center}
+.tl-line{flex:1;height:0.5px;background:rgba(96,165,250,.22);margin:0 3px;margin-bottom:19px}
+/* highlighted time node */
+.tl-dot.highlight{background:#F5D888;box-shadow:0 0 8px rgba(245,216,136,.4)}
+.tl-lbl.highlight{color:#F5D888;font-weight:600}
+.tl-time.highlight{color:rgba(245,216,136,.7)}
+
+.streak-card{background:var(--cream);border:0.5px solid var(--border);border-radius:20px;padding:16px;box-shadow:var(--shadow2)}
+.streak-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.streak-title{font-size:12.5px;font-weight:600;color:var(--warm)}
+.streak-badge{font-size:9.5px;background:var(--blue-l);color:var(--blue-m);border-radius:20px;padding:3px 9px;border:0.5px solid rgba(26,79,168,.16)}
+.streak-days{display:flex;gap:5px}
+.sd{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:9.5px;font-weight:600;flex-direction:column;gap:1px}
+.sd.done{background:var(--blue-m);color:#fff;box-shadow:0 2px 8px rgba(26,79,168,.25)}
+.sd.today{background:var(--blue-l);border:1.5px solid var(--blue-m);color:var(--blue-m)}
+.sd.future{background:#F0EBE2;color:#C4B8A8}
+.streak-tip{font-size:10px;color:var(--muted);margin-top:10px;line-height:1.55}
+
+.order-summary{background:var(--cream);border:0.5px solid var(--border);border-radius:17px;padding:14px;box-shadow:var(--shadow2)}
+.os-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;font-size:11.5px}
+.os-label{color:var(--muted)}
+.os-val{color:var(--warm);font-weight:500}
+.os-val.blue{color:var(--blue-m)}
+.os-divider{height:0.5px;background:var(--border);margin:7px 0}
+.os-total{font-size:13.5px;font-weight:600}
+
+.crosssell{background:var(--parchment);border:0.5px solid var(--border);border-radius:17px;padding:14px}
+.cs-title{font-size:11.5px;font-weight:600;color:var(--warm);margin-bottom:10px;letter-spacing:.01em}
+.cs-items{display:flex;gap:8px}
+.cs-item{flex:1;background:var(--cream);border:0.5px solid var(--border);border-radius:12px;padding:10px 8px;text-align:center}
+.cs-name{font-size:10px;color:#4A3E30;margin-bottom:5px;line-height:1.35}
+.cs-price{font-size:13px;font-weight:600;color:var(--blue-m);margin-bottom:7px;font-family:'Fraunces',serif}
+.cs-add{background:var(--blue-m);color:#fff;border:none;border-radius:8px;padding:5px 10px;font-size:10px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500}
+
+/* ─────────────────────────
+   SCREEN 4 — NOTIFICATIONS
+───────────────────────── */
+#s4{display:none;flex-direction:column}
+.s4-appbar{padding:14px 20px 10px;border-bottom:0.5px solid var(--border);background:var(--cream)}
+.s4-title{font-size:15px;font-weight:600;color:var(--warm)}
+.s4-sub{font-size:10.5px;color:var(--muted);margin-top:2px;letter-spacing:.01em}
+.s4-body{padding:14px 16px 26px;display:flex;flex-direction:column;gap:16px;background:var(--canvas)}
+.notif-group-label{font-size:9.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.notif-card{background:var(--cream);border:0.5px solid var(--border);border-radius:17px;padding:14px;box-shadow:var(--shadow2);animation:fadeUp .5s ease both}
+.notif-top{display:flex;align-items:center;gap:8px;margin-bottom:9px}
+.notif-logo{width:30px;height:30px;background:var(--blue-m);border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.notif-app-name{font-size:11px;font-weight:600;color:var(--warm)}
+.notif-time{font-size:10px;color:var(--muted);margin-left:auto}
+.notif-title{font-size:13px;font-weight:600;color:var(--warm);margin-bottom:4px;line-height:1.35}
+.notif-body{font-size:11.5px;color:#4A3E30;line-height:1.58}
+.notif-action{display:inline-block;margin-top:10px;background:var(--blue-l);border:0.5px solid rgba(26,79,168,.18);border-radius:9px;padding:6px 14px;font-size:11px;color:var(--blue-m);font-weight:600;cursor:pointer;letter-spacing:.01em}
+.notif-tag{display:inline-block;font-size:9px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:2px 8px;border-radius:20px;margin-bottom:7px}
+.tag-urgency{background:rgba(139,58,26,.07);color:var(--terracotta);border:0.5px solid rgba(139,58,26,.15)}
+.tag-trust{background:rgba(74,24,168,.07);color:var(--purple);border:0.5px solid rgba(74,24,168,.14)}
+.tag-habit{background:var(--blue-l);color:var(--blue-m);border:0.5px solid rgba(26,79,168,.15)}
+.tag-social{background:rgba(160,120,32,.08);color:var(--gold-text);border:0.5px solid rgba(160,120,32,.18)}
+
+/* ── annotations ── */
+.ann{max-width:393px;margin-top:36px;padding:24px;background:#ffffff;border-radius:22px;color:#444;width:100%;box-shadow:var(--shadow2);border:0.5px solid var(--border)}
+.ann-tag{font-size:9px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--blue-m);margin-bottom:10px;opacity:.85}
+.ann-heading{font-family:'Fraunces',serif;font-size:15px;color:#111;margin-bottom:18px;line-height:1.45}
+.ann-item{margin-bottom:15px;padding-bottom:15px;border-bottom:0.5px solid #E8E8E8}
+.ann-item:last-child{border:none;margin:0;padding:0}
+.ann-item h4{font-size:11px;font-weight:600;color:#111;margin-bottom:5px;letter-spacing:.01em}
+.ann-item p{font-size:10px;line-height:1.7;letter-spacing:.01em;color:#555}
+
+/* modal */
+.modal-overlay{position:fixed;inset:0;z-index:200;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
+.modal-overlay.open{opacity:1;pointer-events:auto}
+.modal-backdrop{position:absolute;inset:0;background:rgba(10,18,38,.6);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.modal-sheet{position:relative;z-index:1;width:100%;max-width:450px;background:var(--canvas);border-radius:26px 26px 0 0;padding:8px 0 40px;max-height:82vh;overflow-y:auto;transform:translateY(100%);transition:transform .35s cubic-bezier(.25,1,.5,1)}
+.modal-overlay.open .modal-sheet{transform:translateY(0)}
+.modal-handle{width:34px;height:3.5px;border-radius:2px;background:var(--border2);margin:0 auto 18px}
+.modal-body{padding:0 24px}
+.modal-title{font-family:'Fraunces',serif;font-size:20px;font-weight:500;color:var(--warm);margin-bottom:5px}
+.modal-desc{font-size:12px;color:var(--muted);line-height:1.58;margin-bottom:20px}
+.glasses-row{display:flex;align-items:center;justify-content:center;gap:5px;padding:16px;background:rgba(240,235,225,.5);border-radius:14px;border:0.5px solid var(--border);margin-bottom:9px}
+.glass-unit{text-align:center}
+.glass-label{font-size:8px;margin-top:3px;font-weight:600;letter-spacing:.01em}
+.glass-label.paid{color:var(--blue-m)}
+.glass-label.free{color:var(--gold-text)}
+.glass-divider{width:0.5px;height:28px;background:var(--border2);margin:0 3px}
+.zone-labels{display:flex;justify-content:space-between;margin-bottom:16px;padding:0 4px}
+.zone-label{display:flex;align-items:center;gap:4px;font-size:9px;font-weight:500}
+.zone-dot{width:6px;height:6px;border-radius:3px}
+.savings-strip{display:flex;align-items:center;gap:12px;padding:12px 14px;background:rgba(160,120,32,.06);border:0.5px solid rgba(160,120,32,.18);border-radius:13px;margin-bottom:16px}
+.savings-icon{width:32px;height:32px;border-radius:50%;background:rgba(160,120,32,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.savings-amount{font-family:'Fraunces',serif;font-size:22px;font-weight:500;color:var(--gold-text)}
+.savings-label{font-size:10px;color:var(--muted)}
+.how-box{padding:14px;background:var(--cream);border-radius:12px;border:0.5px solid var(--border);margin-bottom:16px}
+.how-title{font-size:12px;font-weight:600;color:var(--warm);margin-bottom:7px}
+.how-body{font-size:11px;color:#5A4A38;line-height:1.72}
+.hl-p{color:var(--blue-m);font-weight:500}
+.hl-g{color:var(--gold-text);font-weight:500}
+.fine-print{font-size:9px;color:var(--muted);text-align:center}
+</style>
+</head>
+<body>
+
+<div class="pg-head">
+  <div class="pg-tag">Country Delight · Milk Prototype · All Screens</div>
+  <h1 class="pg-title">Reduce uncertainty. Create the first ritual.</h1>
+  <p class="pg-sub">4 screens · D0 Homepage → Milk PDP → Post-order → Push notifications</p>
+</div>
+
+<div class="screen-nav" style="max-width:393px;width:100%">
+  <button class="snav-btn active" onclick="show(1)">D0 Home</button>
+  <button class="snav-btn" onclick="show(2)">Milk PDP</button>
+  <button class="snav-btn" onclick="show(3)">Post-order</button>
+  <button class="snav-btn" onclick="show(4)">Notifs</button>
+</div>
+
+<div class="phone" style="max-width:393px;width:100%">
+
+<!-- ═══ SCREEN 1 ═══ -->
+<div id="s1">
+  <div class="s1-hero">
+    <div class="s1-grain"></div>
+    <div class="s1-glow"></div>
+    <div class="s1-fade"></div>
+
+    <div class="s1-sbar">
+      <span style="font-size:14px;font-weight:600;color:rgba(220,230,255,.85);letter-spacing:.02em">9:41</span>
+      <div style="display:flex;gap:5px;align-items:center">
+        <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><rect x="0" y="7" width="3" height="5" rx=".5" fill="rgba(200,218,255,.4)"/><rect x="4.5" y="4" width="3" height="8" rx=".5" fill="rgba(200,218,255,.4)"/><rect x="9" y="1" width="3" height="11" rx=".5" fill="rgba(200,218,255,.4)"/><rect x="13" y="0" width="3" height="12" rx=".5" fill="rgba(200,218,255,.6)"/></svg>
+        <svg width="24" height="12" viewBox="0 0 24 12" fill="none"><rect x=".5" y=".5" width="20" height="11" rx="3" stroke="rgba(200,218,255,.25)"/><rect x="2" y="2" width="12" height="8" rx="2" fill="#60A5FA"/><rect x="22" y="3.5" width="2" height="5" rx="1" fill="rgba(200,218,255,.2)"/></svg>
+      </div>
+    </div>
+
+    <div class="s1-hero-inner">
+      <div class="s1-eyebrow">Good morning, Priya</div>
+
+      <!-- Main offer card -->
+      <div class="hero-offer">
+        <div class="hero-offer-tag">Limited offer · New members</div>
+        <div class="hero-offer-headline">Your first <em>4 days of milk,</em><br>on us. Completely free.</div>
+        <!-- Key detail pills -->
+        <div class="hero-pills-row">
+          <div class="hero-pill gold-pill">
+            <div><div class="hero-pill-num">7 AM</div><div class="hero-pill-label">At your door,<br>guaranteed</div></div>
+          </div>
+          <div class="hero-pill">
+            <div><div class="hero-pill-num">4+4</div><div class="hero-pill-label">Pay 4 days,<br>get 4 free</div></div>
+          </div>
+          <div class="hero-pill">
+            <div><div class="hero-pill-num">0</div><div class="hero-pill-label">Risk — cancel<br>anytime</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Trust pills -->
+  <div class="trust-bar">
+    <div class="trust-pill"><div class="live-dot"></div>Lab tested daily</div>
+    <div class="trust-pill">50L+ families</div>
+    <div class="trust-pill">Farm to door</div>
+    <div class="trust-pill">Pause anytime</div>
+  </div>
+
+  <div class="s1-body">
+    <div class="s1-proof">
+      <div class="live-dot" style="background:var(--blue-m);width:7px;height:7px;flex-shrink:0"></div>
+      <span><strong>312 families</strong> in Dwarka got fresh milk by 6:45 AM today</span>
+    </div>
+
+    <div>
+      <div class="section-label">What do you need tomorrow morning?</div>
+      <div class="journey-grid">
+        <div class="j-card"><div class="j-icon">☕</div><div class="j-title">Tea & milk</div><div class="j-sub">Cow or buffalo milk</div></div>
+        <div class="j-card"><div class="j-icon">🍞</div><div class="j-title">Family breakfast</div><div class="j-sub">Milk, bread, eggs, dahi</div></div>
+        <div class="j-card"><div class="j-icon">💪</div><div class="j-title">High protein start</div><div class="j-sub">Paneer, dahi, A2 milk</div></div>
+        <div class="j-card"><div class="j-icon">🍌</div><div class="j-title">Fruits & milk</div><div class="j-sub">Banana, milk, coconut</div></div>
+      </div>
+    </div>
+
+    <!-- Starter basket -->
+    <div class="starter-card">
+      <div class="starter-stripe"></div>
+      <div class="starter-top">
+        <span class="starter-label">Most families start with this</span>
+        <span class="starter-badge">Starter basket</span>
+      </div>
+      <div class="starter-body">
+        <div class="starter-items">Cow Milk · Ghar Jaisa Dahi · Banana · Bread</div>
+        <div class="starter-row">
+          <span class="starter-price">₹149</span>
+          <span class="starter-was">₹178</span>
+          <span class="starter-off">16% off</span>
+        </div>
+        <button class="btn-blue">Claim free 4 days — deliver tomorrow</button>
+      </div>
+    </div>
+
+    <!-- 4+4 offer teaser -->
+    <div class="offer-teaser" onclick="openModal()">
+      <div class="offer-teaser-label">How the offer works</div>
+      <div class="offer-teaser-title">Pay 4, Get 4 Free — up to ₹200 savings</div>
+      <div class="offer-teaser-sub">Subscribe to milk. Your next 4 deliveries after your trial include one free packet each, automatically.</div>
+      <div class="offer-teaser-row">
+        <div class="offer-teaser-cta">See how it works →</div>
+        <div class="offer-teaser-free">No commitment. Cancel anytime.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bnav">
+    <div class="bnav-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home</div>
+    <div class="bnav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Products</div>
+    <div class="bnav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>Yummy Bits</div>
+    <div class="bnav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Refer</div>
+    <div class="bnav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>Favourites</div>
+  </div>
+</div>
+
+<!-- ═══ SCREEN 2 ═══ -->
+<div id="s2">
+  <div class="s2-hero">
+    <div class="s2-photo"></div>
+    <div class="s2-overlay"></div>
+    <div class="s2-vignette"></div>
+    <div class="s2-fade"></div>
+    <div class="sbar" style="padding-top:12px">
+      <span style="font-size:14px;font-weight:600;color:rgba(200,218,255,.88)">9:44</span>
+      <div style="display:flex;gap:5px"><svg width="24" height="12" viewBox="0 0 24 12" fill="none"><rect x=".5" y=".5" width="20" height="11" rx="3" stroke="rgba(200,218,255,.25)"/><rect x="2" y="2" width="12" height="8" rx="2" fill="#60A5FA"/></svg></div>
+    </div>
+    <div class="s2-appbar">
+      <div class="back-btn"><svg width="16" height="16" viewBox="0 0 18 18" fill="none"><path d="M11 4L6 9L11 14" stroke="rgba(200,218,255,.8)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div style="width:36px"></div>
+    </div>
+    <div class="s2-title-block">
+      <div class="s2-tag"><div class="live-dot"></div>Collected 4:00 AM · Farm: Haryana</div>
+      <div class="s2-name">Cow Milk</div>
+      <!-- Key delivery details as floating pills -->
+      <div class="s2-delivery-strip">
+        <div class="s2-strip-pill"><div><div class="s2-strip-num">7 AM</div><div class="s2-strip-label">Delivered by</div></div></div>
+        <div class="s2-strip-pill"><div><div class="s2-strip-num">4 AM</div><div class="s2-strip-label">Lab tested</div></div></div>
+        <div class="s2-strip-pill"><div><div class="s2-strip-num">4+4</div><div class="s2-strip-label">Free offer</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="s2-body">
+    <div class="size-row">
+      <div class="size-chip active">450 ml — ₹36</div>
+      <div class="size-chip">900 ml — ₹70</div>
+      <div class="size-chip">1 L — ₹78</div>
+    </div>
+
+    <!-- Price + primary CTA block — above the fold -->
+    <div class="pdp-price-block">
+      <div class="pdp-price-row">
+        <span class="pdp-price">₹36</span>
+        <span class="pdp-per">/ 450 ml · charged after delivery</span>
+      </div>
+      <div class="pdp-trial-note"><strong>Your first 4 days are free</strong> — try tomorrow with zero commitment. Instant refund if you don't love it.</div>
+      <button class="btn-blue" style="animation:none">Add for tomorrow morning — ₹36</button>
+      <div class="refund-note">No commitment. Not happy? Full refund, instant cancel.</div>
+    </div>
+
+    <div class="or-div">— or set it and forget it —</div>
+
+    <div class="sub-box">
+      <div class="sub-head">Never run out of milk again</div>
+      <div class="sub-sub">Daily delivery · Cancel anytime · Pause when you travel</div>
+      <button class="btn-outline">Subscribe — ₹36/day</button>
+    </div>
+
+    <!-- Lab card — trust builder -->
+    <div class="lab-card">
+      <div class="lab-head">
+        <div class="lab-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue-m)" stroke-width="2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/></svg>Today's quality report</div>
+        <div class="lab-live"><div style="width:5px;height:5px;border-radius:3px;background:var(--blue-m);animation:pulse 2s ease-in-out infinite"></div>Live</div>
+      </div>
+      <div class="lab-row"><span>Fat content</span><span class="lab-val">4.2% — Pass ✓</span></div>
+      <div class="lab-row"><span>SNF</span><span class="lab-val">8.6% — Pass ✓</span></div>
+      <div class="lab-row"><span>Adulteration</span><span class="lab-val">None detected ✓</span></div>
+      <div class="lab-row"><span>Tested on</span><span class="lab-val">Today, 3:45 AM</span></div>
+    </div>
+
+    <div class="hl-card">
+      <div class="hl-dot"></div>
+      <div class="hl-text"><strong>312 families</strong> in your area receive this milk every morning</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SCREEN 3 ═══ -->
+<div id="s3">
+  <div class="sbar" style="background:var(--cream);padding-top:14px">
+    <span style="font-size:14px;font-weight:600;color:var(--warm)">9:47</span>
+  </div>
+  <div class="s3-confirm-bar">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+    Order confirmed — delivering tomorrow morning
+  </div>
+  <div class="s3-body">
+
+    <!-- Farm-to-door ritual card -->
+    <div class="ritual-card">
+      <div class="ritual-headline">Your milk is already being prepared tonight.</div>
+      <div class="ritual-sub">It leaves the farm at 10 PM, reaches the hub by 3 AM, and is at your door before 7 AM. Wake up to a stocked kitchen.</div>
+      <div class="timeline">
+        <div class="tl-node"><div class="tl-dot"></div><div class="tl-lbl">Farm</div><div class="tl-time">10 PM</div></div>
+        <div class="tl-line"></div>
+        <div class="tl-node"><div class="tl-dot"></div><div class="tl-lbl">Hub</div><div class="tl-time">3 AM</div></div>
+        <div class="tl-line"></div>
+        <div class="tl-node"><div class="tl-dot highlight"></div><div class="tl-lbl highlight">Your door</div><div class="tl-time highlight">by 7 AM</div></div>
+      </div>
+    </div>
+
+    <!-- Streak card -->
+    <div class="streak-card">
+      <div class="streak-head">
+        <span class="streak-title">Your 7-day fresh milk streak</span>
+        <span class="streak-badge">Day 1 of 7</span>
+      </div>
+      <div class="streak-days">
+        <div class="sd done"><span>1</span></div>
+        <div class="sd today"><span>2</span></div>
+        <div class="sd future"><span>3</span></div>
+        <div class="sd future"><span>4</span></div>
+        <div class="sd future"><span>5</span></div>
+        <div class="sd future"><span>6</span></div>
+        <div class="sd future"><span>7</span></div>
+      </div>
+      <div class="streak-tip">Order milk 7 days in a row to unlock a free delivery week. The habit that sticks is the one that starts tomorrow.</div>
+    </div>
+
+    <div class="order-summary">
+      <div class="os-row"><span class="os-label">Cow Milk 450ml × 1</span><span class="os-val">₹59</span></div>
+      <div class="os-row"><span class="os-label">4-day free trial applied</span><span class="os-val blue">–₹14</span></div>
+      <div class="os-row"><span class="os-label">Convenience fee</span><span class="os-val">₹1</span></div>
+      <div class="os-divider"></div>
+      <div class="os-row"><span class="os-label os-total">Total</span><span class="os-val os-total blue">₹46</span></div>
+      <div style="font-size:10px;color:var(--muted);margin-top:6px;text-align:center">Amount charged only after delivery</div>
+    </div>
+
+    <div class="crosssell">
+      <div class="cs-title">Complete your dairy basket — same farm, same morning</div>
+      <div class="cs-items">
+        <div class="cs-item"><div class="cs-name">Taaza Paneer 200g</div><div class="cs-price">₹65</div><button class="cs-add">Add</button></div>
+        <div class="cs-item"><div class="cs-name">Ghar Jaisa Dahi 400g</div><div class="cs-price">₹35</div><button class="cs-add">Add</button></div>
+        <div class="cs-item"><div class="cs-name">Cow Chaas 500ml</div><div class="cs-price">₹28</div><button class="cs-add">Add</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SCREEN 4 ═══ -->
+<div id="s4">
+  <div class="sbar" style="background:var(--cream);padding-top:14px;padding-bottom:4px">
+    <span style="font-size:14px;font-weight:600;color:var(--warm)">9:00 PM</span>
+  </div>
+  <div class="s4-appbar">
+    <div class="s4-title">Notifications</div>
+    <div class="s4-sub">D2–D5 · sequenced by intent</div>
+  </div>
+  <div class="s4-body">
+
+    <div class="notif-group-label">D2 · 9 PM — open slot urgency</div>
+    <div class="notif-card">
+      <div class="notif-top">
+        <div class="notif-logo"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M12 6v6l4 2"/></svg></div>
+        <span class="notif-app-name">Country Delight</span>
+        <span class="notif-time">9:02 PM</span>
+      </div>
+      <div class="notif-tag tag-urgency">Slot closes soon</div>
+      <div class="notif-title">Tomorrow's milk slot is open</div>
+      <div class="notif-body">Cow Milk 450 ml, ₹36. Tap to add before tonight's slot closes — arrives by 7 AM.</div>
+      <div class="notif-action">Add for tomorrow →</div>
+    </div>
+
+    <div class="notif-group-label">D3 · 7:45 AM — trust transfer to MP</div>
+    <div class="notif-card" style="animation-delay:.1s">
+      <div class="notif-top">
+        <div class="notif-logo"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg></div>
+        <span class="notif-app-name">Country Delight</span>
+        <span class="notif-time">7:46 AM</span>
+      </div>
+      <div class="notif-tag tag-trust">Dairy expansion</div>
+      <div class="notif-title">You've been getting fresh milk every day</div>
+      <div class="notif-body">Did you know our paneer and dahi are made from the same milk — same farm, same morning? Try Taaza Paneer.</div>
+      <div class="notif-action">Explore dairy →</div>
+    </div>
+
+    <div class="notif-group-label">D4 · 9 PM — streak habit nudge</div>
+    <div class="notif-card" style="animation-delay:.2s">
+      <div class="notif-top">
+        <div class="notif-logo"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg></div>
+        <span class="notif-app-name">Country Delight</span>
+        <span class="notif-time">9:01 PM</span>
+      </div>
+      <div class="notif-tag tag-habit">Streak · 3 more days</div>
+      <div class="notif-title">3 more days to complete your streak</div>
+      <div class="notif-body">Wake up to fresh milk tomorrow. Add it now before the slot closes tonight.</div>
+      <div class="notif-action">Keep streak going →</div>
+    </div>
+
+    <div class="notif-group-label">D5 · 9 PM — hyperlocal social proof</div>
+    <div class="notif-card" style="animation-delay:.3s">
+      <div class="notif-top">
+        <div class="notif-logo"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg></div>
+        <span class="notif-app-name">Country Delight</span>
+        <span class="notif-time">9:00 PM</span>
+      </div>
+      <div class="notif-tag tag-social">Your neighbourhood</div>
+      <div class="notif-title">312 families near you got milk this morning</div>
+      <div class="notif-body">Most families who order with us start with fresh milk. Your first 4 days are on us — try tomorrow.</div>
+      <div class="notif-action">Try tomorrow →</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /phone -->
+
+<!-- ── ANNOTATIONS ── -->
+<div class="ann" style="max-width:393px">
+  <div class="ann-tag">Design Rationale · All 4 Screens</div>
+  <div class="ann-heading">Why each screen is built the way it is</div>
+  <div class="ann-item">
+    <h4>D0 Homepage — offer-first, not category-first</h4>
+    <p>The hero leads with "Your first 4 days of milk, on us" — anchoring intent before product. Three key details (7 AM delivery, 4+4 deal, zero risk) are scannable at a glance. The 4+4 teaser card below the fold keeps the offer visible throughout browsing without overwhelming. CTA copy mirrors the offer language to reduce decision friction.</p>
+  </div>
+  <div class="ann-item">
+    <h4>Milk PDP — price block above lab report, trial framing as primary CTA</h4>
+    <p>Price and the free-trial note appear before the quality report — users scan price first. The lab card moves below the CTA as validation, not gatekeeping. "7 AM", "4 AM tested", and "4+4" float in the hero as scannable delivery facts, visible before any scroll.</p>
+  </div>
+  <div class="ann-item">
+    <h4>Post-order — 7 AM highlighted in timeline, trial reflected in order summary</h4>
+    <p>The farm-to-door timeline now highlights "Your door · by 7 AM" in gold — the delivery promise becomes the emotional payoff. The order summary relabels the discount line as "4-day free trial applied" to reinforce the offer frame. Dairy cross-sell uses trust transfer: same farm, same milk.</p>
+  </div>
+  <div class="ann-item">
+    <h4>Notifications — consistent offer language across all pushes</h4>
+    <p>D2 now includes "arrives by 7 AM" in the body. D5 restates "Your first 4 days are on us" — the same offer headline from the homepage, so it feels like a reminder rather than a new pitch. Sequencing remains intent-driven: urgency → trust → habit → social proof.</p>
+  </div>
+</div>
+
+<!-- ══ MODAL for 4+4 ══ -->
+<div class="modal-overlay" id="modal4">
+  <div class="modal-backdrop" onclick="closeModal()"></div>
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-body">
+      <div class="modal-title">Pay 4, Get 4 Free</div>
+      <p class="modal-desc">Complete 4 paid deliveries at regular price. Then enjoy 4 deliveries with 1 free packet each — automatically applied.</p>
+      <div class="glasses-row">
+        <div class="glass-unit"><svg width="22" height="28" viewBox="0 0 16 20" fill="none"><path d="M3 2L2.5 16Q2.5 18 4.5 18L11.5 18Q13.5 18 13.5 16L13 2Z" fill="transparent" stroke="#1A4FA8" stroke-width="1.2" opacity="0.5"/></svg><div class="glass-label paid">Day 1</div></div>
+        <div class="glass-unit"><svg width="22" height="28" viewBox="0 0 16 20" fill="none"><path d="M3 2L2.5 16Q2.5 18 4.5 18L11.5 18Q13.5 18 13.5 16L13 2Z" fill="transparent" stroke="#1A4FA8" stroke-width="1.2" opacity="0.5"/></svg><div class="glass-label paid">Day 2</div></div>
+        <div class="glass-unit"><svg width="22" height="28" viewBox="0 0 16 20" fill="none"><path d="M3 2L2.5 16Q2.5 18 4.5 18L11.5 18Q13.5 18 13.5 16L13 2Z" fill="transparent" stroke="#1A4FA8" stroke-width="1.2" opacity="0.5"/></svg><div class="glass-label paid">Day 3</div></div>
+        <div class="glass-unit"><svg width="22" height="28" viewBox="0 0 16 20" fill="none"><path d="M3 2L2.5 16Q2.5 18 4.5 18L11.5 18Q13.5 18 13.5 16L13 2Z" fill="transparent" stroke="#1A4FA8" stroke-width="1.2" opacity="0.5"/></svg><div class="glass-label paid">Day 4</div></div>
+        <div class="glass-divider"></div>
+        <div class="glass-unit"><svg width="22" height="28" viewBox="0 0 16 20" fill="none"><path d="M3 2L2.5 16Q2.5 18 4.5 18L11.5 18Q13.5 18 13.5 16L13 2Z" fill="transparent" stroke="#C89828" stroke-width="1.2" opacity="0.5"/></svg><div class="glass-label free">Free</div></div>
+        <div class="glass-unit"><svg width="22" height="28" viewBox="0 0 16 20" fill="none"><path d="M3 2L2.5 16Q2.5 18 4.5 18L11.5 18Q13.5 18 13.5 16L13 2Z" fill="transparent" stroke="#C89828" stroke-width="1.2" opacity="0.5"/></svg><div class="glass-label free">Free</div></div>
+        <div class="glass-unit"><svg width="22" height="28" viewBox="0 0 16 20" fill="none"><path d="M3 2L2.5 16Q2.5 18 4.5 18L11.5 18Q13.5 18 13.5 16L13 2Z" fill="transparent" stroke="#C89828" stroke-width="1.2" opacity="0.5"/></svg><div class="glass-label free">Free</div></div>
+        <div class="glass-unit"><svg width="22" height="28" viewBox="0 0 16 20" fill="none"><path d="M3 2L2.5 16Q2.5 18 4.5 18L11.5 18Q13.5 18 13.5 16L13 2Z" fill="transparent" stroke="#C89828" stroke-width="1.2" opacity="0.5"/></svg><div class="glass-label free">Free</div></div>
+      </div>
+      <div class="zone-labels">
+        <div class="zone-label"><div class="zone-dot" style="background:var(--blue-m)"></div><span style="color:var(--blue-m)">4 paid deliveries</span></div>
+        <div class="zone-label"><div class="zone-dot" style="background:var(--gold-cta)"></div><span style="color:var(--gold-text)">4 free deliveries</span></div>
+      </div>
+      <div class="savings-strip">
+        <div class="savings-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+        <div><div class="savings-label">Total savings up to</div><div class="savings-amount">₹200</div></div>
+      </div>
+      <div class="how-box">
+        <div class="how-title">How it works</div>
+        <div class="how-body">Start your milk subscription. Your first <span class="hl-p">4 deliveries are paid</span> at regular price. Then your next <span class="hl-g">4 deliveries include 1 free packet each</span> — that's ₹30–50 off per delivery, automatically applied.</div>
+      </div>
+      <div class="fine-print">*1 free packet per delivery. Savings depend on subscription quantity and SKU.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+var screens=['s1','s2','s3','s4'];
+function show(n){
+  screens.forEach(function(id){document.getElementById(id).style.display='none'});
+  document.getElementById('s'+n).style.display='flex';
+  document.querySelectorAll('.snav-btn').forEach(function(b,i){b.classList.toggle('active',i===n-1)});
+}
+function openModal(){document.getElementById('modal4').classList.add('open')}
+function closeModal(){document.getElementById('modal4').classList.remove('open')}
+show(1);
+document.querySelectorAll('.size-chip').forEach(function(c){
+  c.addEventListener('click',function(){
+    this.closest('.size-row').querySelectorAll('.size-chip').forEach(function(x){x.classList.remove('active')});
+    this.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>
