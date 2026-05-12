@@ -6,6 +6,28 @@
 <title>Country Delight — D7 Retention Inflection Report v2</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Libre+Franklin:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
 <style>
+.top-link{
+  position: fixed;
+  top: 18px;
+  right: 24px;
+  z-index: 9999;
+  background: rgba(20,24,32,0.92);
+  color: white;
+  text-decoration: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .3px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.15);
+  transition: all .15s ease;
+}
+
+.top-link:hover{
+  background: #c0392b;
+  transform: translateY(-1px);
+}
+  
 :root {
   --ink:    #141820;
   --paper:  #f6f4ef;
@@ -258,7 +280,7 @@ footer { background: var(--ink); padding: 40px 72px; color: rgba(255,255,255,0.3
 </style>
 </head>
 <body>
-
+<a href="skudashboard.html" class="top-link">Open SKU Dashboard ↗</a>
 <!-- COVER -->
 <div class="cover">
   <div class="cover-bg"></div>
