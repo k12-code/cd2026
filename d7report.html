@@ -679,51 +679,7 @@ footer { background: var(--ink); padding: 40px 72px; color: rgba(255,255,255,0.3
     </div>
   </div>
 
-  <!-- Cross-category findings -->
-  <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--rule);">Cross-Category Summary</div>
-  <div class="cross-cat-grid">
-    <div class="cross-card">
-      <div class="cross-cat-label">Pricing Mechanism</div>
-      <div class="cross-headline">Pricing effects differ by category — no single rule applies</div>
-      <div class="cross-body">In Milk and MP, price rises filter for committed buyers — delta improves; discounts dilute it. Ghee inverts this: its loyal buyers are value-seekers, so discounts drove the delta peak (Sep 17: 8.8pp) while extreme hikes deterred even intent-driven users. The mechanism is category-specific, shaped by buyer motivation.</div>
-    </div>
-    <div class="cross-card">
-      <div class="cross-cat-label">Seasonal Timing</div>
-      <div class="cross-headline">Category-window mismatch is the most avoidable retention error</div>
-      <div class="cross-body">CCW prices were raised during peak summer demand (Aug–Sep) — the one window when CCW had the most opportunity to lock in loyal buyers. This single pricing decision explains the category's worst delta reading of the period.</div>
-    </div>
-    <div class="cross-card">
-      <div class="cross-cat-label">Measurement Window</div>
-      <div class="cross-headline">FnV and Staples D7 delta understate category value — D28 is the right window</div>
-      <div class="cross-body">Both show near-zero or negative D7 delta but positive D28 delta (+5pp Staples, +3.9pp FnV). Using D7 to deprioritise these categories would be a measurement error, not a product insight.</div>
-    </div>
-    <div class="cross-card">
-      <div class="cross-cat-label">Reach vs. Signal</div>
-      <div class="cross-headline">Snacks has the best signal and the worst reach — highest leverage gap in portfolio</div>
-      <div class="cross-body">No other category simultaneously has delta in the top quartile and buyer share in the bottom. The decision to invest in Snacks reach (sampling, onboarding nudges) has a clearer expected payoff than any single pricing move in the portfolio.</div>
-    </div>
-    <div class="cross-card">
-      <div class="cross-cat-label">SKU Continuity</div>
-      <div class="cross-headline">Discontinuing top-volume SKUs mid-period creates artificial retention troughs</div>
-      <div class="cross-body">Ghee's Jan collapse (−5.1pp) and FnV's recurrent troughs are both directly traceable to SKU discontinuations. Treating pack-size reformulations as new products rather than continuations creates artificial inflections in the data.</div>
-    </div>
-    <div class="cross-card">
-      <div class="cross-cat-label">Winter Behaviour</div>
-      <div class="cross-headline">Late-period buyers in summer categories are disproportionately loyal</div>
-      <div class="cross-body">CCW's winter delta (+5.8pp) is higher than its summer delta despite dramatically lower volume. The same pattern appears in Snacks (consistent high delta regardless of BS level). Small, committed buyer pools retain disproportionately well.</div>
-    </div>
-    <div class="cross-card">
-      <div class="cross-cat-label">Cohort Quality</div>
-      <div class="cross-headline">Period-end cohort degradation affects all categories simultaneously</div>
-      <div class="cross-body">All seven categories show buyer share compression in Dec–Jan. This is not a category-specific signal — it reflects a platform-level shift in the quality of late-period acquired cohorts. Retention strategy should address acquisition mix, not just per-category levers.</div>
-    </div>
-    <div class="cross-card">
-      <div class="cross-cat-label">Innovation</div>
-      <div class="cross-headline">MP is the only category where discovery — not price — drives delta</div>
-      <div class="cross-body">Every other category's delta peaks are tied to pricing events. MP's Nov 22 peak is tied to a product launch. This suggests MP buyers have a different purchase motivation from the rest of the portfolio, and that innovation investment has a measurable retention payoff specifically in this category.</div>
-    </div>
-  </div>
-</div>
+
 </section>
 
 <footer>
@@ -883,11 +839,11 @@ const CAT_CONTENT = {
       {date:'Nov 11',t:'peak',v:'6.3pp',swing:'+9.2pp',cause:'Deep discount phase attracting brand-loyal buyers temporarily'},
       {date:'Jan 06',t:'trough',v:'−5.1pp',swing:'Period low',cause:'DISCONTINUED: 850ml + 850ml×2 — buyers lost preferred format'},
     ],
-    insight:'The 400ml entry SKU needs a stable price. Its ₹130 swing across the period made repeat trial impossible. The Jan discontinuation of both high-volume formats (329 combined ord/day) needs immediate review — this is the single most preventable retention hit in the portfolio.',
+    insight:'The 400ml entry SKU needs a stable price. Its ₹130 swing across the period made repeat trial impossible. The Jan discontinuation of both high-volume formats (329 combined ord/day) needs review — this is the single most preventable retention hit in the portfolio.',
   },
   Snacks:{
     signals:[{cls:'signal-rise',txt:'Delta 16.1pp — highest of period'},{cls:'signal-mixed',txt:'BS only 0.8% avg'},{cls:'signal-info',txt:'No SKU driver — pure cohort effect'}],
-    story:'<strong>Snacks has the strongest retention signal and the worst reach of all seven categories.</strong> The Nov 22 peak (16.1pp) and consistent readings above 10pp are not driven by any pricing or SKU event — they reflect cohort composition. At 0.8% BS, the signal barely touches retention outcomes. This is a reach problem, not a product problem.',
+    story:'<strong>Snacks has the strongest retention signal and the lowest reach of all seven categories.</strong> The Nov 22 peak (16.1pp) and consistent readings above 10pp are not driven by any pricing or SKU event — they reflect cohort composition. At 0.8% BS, the signal barely touches retention outcomes. This is a reach problem, not a product problem.',
     stats:[{v:'16.1pp',l:'Peak delta (period high)'},{v:'0.8%',l:'Avg buyer share'},{v:'~0.05pp',l:'Cohort retention contribution'}],
     bs_title:'Buyer Share — Snacks D7', delta_title:'Delta — Snacks D7',
     table_bs:[
@@ -953,7 +909,7 @@ const CAT_CONTENT = {
       {date:'Dec 03',t:'trough',v:'−3.2pp',swing:'−6.4pp',cause:'Carrot + Cauliflower ↓₹7–11; winter discount trial — lowest intent'},
       {date:'Dec 17',t:'peak',v:'3.3pp',swing:'+6.5pp',cause:'Post-discount stabilisation; committed winter FnV buyers remain'},
     ],
-    insight:'Treating pack-size reformulations as new SKUs creates artificial volatility in the FnV signal. Treating Potato 500gm → Potato 450gm as a continuous product would eliminate most of the apparent BS inflections. The real question is D28 delta (+3.9pp) — FnV retention value is systematically understated at D7.',
+    insight:'Treating pack-size reformulations as new SKUs creates artificial volatility in the FnV signal. Treating Potato 500gm → Potato 450gm as a continuous product would eliminate most of the apparent BS inflections. D28 delta (+3.9pp) — FnV retention value is systematically understated at D7.',
   },
   Staples:{
     signals:[{cls:'signal-fall',txt:'D7 delta persistently negative'},{cls:'signal-rise',txt:'D28 delta: +5pp'},{cls:'signal-info',txt:'Sugar 900gm is the single actionable lever'}],
