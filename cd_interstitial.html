@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Country Delight — Interstitials</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=DM+Serif+Display:ital@0;1&family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#eeecea;font-family:sans-serif;padding:20px 16px 48px;min-height:100vh}
+h1{text-align:center;font-size:11px;font-weight:700;color:#999;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:20px}
+
+/* TABS */
+.tab-bar{display:flex;gap:6px;justify-content:center;margin-bottom:20px;flex-wrap:wrap}
+.tab-btn{font-size:11px;font-weight:700;padding:6px 14px;border-radius:20px;border:1.5px solid rgba(0,0,0,0.15);background:#fff;cursor:pointer;color:#666;letter-spacing:0.03em;transition:all 0.15s}
+.tab-btn.active{background:#111;color:#fff;border-color:#111}
+
+/* PHONE */
+.phone{width:100%;max-width:360px;margin:0 auto;border-radius:34px;overflow:hidden;border:2px solid rgba(0,0,0,0.1);box-shadow:0 12px 40px rgba(0,0,0,0.15);position:relative}
+.variant-pane{display:none}
+
+/* INTERSTITIAL */
+.interstitial{width:100%;position:relative;display:flex;flex-direction:column;align-items:center;overflow:hidden}
+
+/* CLOSE */
+.close-btn{position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:20;cursor:pointer;flex-shrink:0}
+
+/* POPULAR BADGE */
+.popular-badge{position:absolute;top:-1px;left:-1px;font-size:8px;font-weight:800;padding:3px 8px;border-radius:10px 0 10px 0;letter-spacing:0.04em;z-index:4;text-transform:uppercase}
+
+/* PROD CARD BASE */
+.prod-card{position:relative;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer}
+.prod-img-box{width:100%;aspect-ratio:1;border-radius:10px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.prod-img-txt{font-size:8.5px;font-weight:600;text-align:center;line-height:1.4;letter-spacing:0.03em;text-transform:uppercase;padding:6px}
+.prod-name{font-size:11.5px;font-weight:700;text-align:center;line-height:1.2;width:100%}
+.prod-rating{font-size:9.5px;text-align:center;width:100%;line-height:1}
+.prod-reviews{opacity:0.6}
+.prod-price-row{display:flex;gap:4px;align-items:baseline;justify-content:center}
+.prod-price{font-size:12px;font-weight:800}
+.prod-mrp{font-size:9.5px;text-decoration:line-through;opacity:0.4}
+.add-btn{width:100%;border:none;border-radius:8px;padding:6px 0;font-size:11px;font-weight:700;cursor:pointer;transition:all 0.2s;letter-spacing:0.03em}
+.add-btn.added{opacity:0.85}
+
+/* STICKY CART BAR */
+.cart-bar{position:sticky;bottom:0;left:0;right:0;width:100%;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;z-index:30;transition:opacity 0.2s}
+.cart-bar.hidden{opacity:0;pointer-events:none}
+.cart-info{display:flex;flex-direction:column;gap:1px}
+.cart-count{font-size:11px;font-weight:700;line-height:1}
+.cart-total{font-size:13px;font-weight:800;line-height:1}
+.cart-cta{font-size:12px;font-weight:800;padding:8px 18px;border-radius:10px;border:none;cursor:pointer;letter-spacing:0.03em;white-space:nowrap}
+
+/* MOTIVATIONAL LINE */
+.motive-line{font-size:10.5px;text-align:center;font-style:italic;padding:0 20px;line-height:1.5;font-weight:500}
+
+/* TRUST ROW */
+.trust-row{display:flex;justify-content:center;font-size:9px;font-weight:600;flex-wrap:wrap;gap:5px;padding:0 14px;text-align:center}
+
+/* ═══ V1 — Deep Navy · Playfair Display ═══════════════════════ */
+.v1 .interstitial{background:linear-gradient(170deg,#0d1b3e 0%,#162347 55%,#1a2d5a 100%);padding-bottom:0}
+.v1 .close-btn{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.18)}
+.v1 .hero{width:100%;padding:48px 24px 0}
+.v1 .eyebrow{font-family:'Outfit',sans-serif;font-size:9.5px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#c8a96e;margin-bottom:8px}
+.v1 .headline{font-family:'Playfair Display',serif;font-size:26px;font-weight:800;line-height:1.2;color:#f5f0e8;margin-bottom:0}
+.v1 .headline em{font-style:italic;color:#c8a96e}
+.v1 .offer-row{display:flex;align-items:center;gap:10px;margin-top:12px}
+.v1 .offer-pill{background:#c8a96e;color:#0d1b3e;font-family:'Outfit',sans-serif;font-size:11px;font-weight:800;padding:4px 12px;border-radius:20px;white-space:nowrap;letter-spacing:0.04em}
+.v1 .offer-txt{font-family:'Outfit',sans-serif;font-size:10.5px;color:rgba(245,240,232,0.65);line-height:1.4}
+.v1 .divider{width:calc(100% - 48px);height:1px;background:rgba(255,255,255,0.08);margin:16px 0 12px}
+.v1 .sec-label{font-family:'Outfit',sans-serif;font-size:9.5px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(200,169,110,0.7);width:100%;padding:0 24px;margin-bottom:10px}
+.v1 .prod-scroll{width:100%;display:flex;gap:10px;overflow-x:auto;overflow-y:visible;padding:4px 24px 10px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.v1 .prod-scroll::-webkit-scrollbar{display:none}
+.v1-prod-card{flex-shrink:0;width:96px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:13px;padding:10px 8px 8px}
+.v1-prod-card .prod-img-box{background:rgba(255,255,255,0.07);border:1px dashed rgba(255,255,255,0.14)}
+.v1-prod-card .prod-img-txt{color:rgba(255,255,255,0.28)}
+.v1-prod-card .prod-name{color:#f5f0e8;font-family:'Outfit',sans-serif}
+.v1-prod-card .prod-rating{color:#c8a96e;font-family:'Outfit',sans-serif}
+.v1-prod-card .prod-price{color:#c8a96e;font-family:'Outfit',sans-serif}
+.v1-prod-card .prod-mrp{color:rgba(255,255,255,0.3)}
+.v1-prod-card .add-btn{background:#c8a96e;color:#0d1b3e;font-family:'Outfit',sans-serif}
+.v1-prod-card .add-btn.added{background:#2dba73;color:#fff}
+.v1-prod-card .popular-badge{background:#c8a96e;color:#0d1b3e}
+.v1 .cta-btn{margin:14px 24px 0;width:calc(100% - 48px);background:#f5f0e8;color:#0d1b3e;border:none;border-radius:12px;padding:13px 0;font-family:'Outfit',sans-serif;font-size:13.5px;font-weight:700;cursor:pointer;letter-spacing:0.04em}
+.v1 .motive-line{color:rgba(200,169,110,0.6);font-family:'Outfit',sans-serif;margin:12px 0 8px}
+.v1 .trust-row{color:rgba(200,169,110,0.5);font-family:'Outfit',sans-serif;margin-bottom:0}
+.v1 .cart-bar{background:rgba(200,169,110,0.95);backdrop-filter:blur(8px);border-top:1px solid rgba(255,255,255,0.1);margin-top:10px}
+.v1 .cart-count{color:rgba(13,27,62,0.7)}
+.v1 .cart-total{color:#0d1b3e}
+.v1 .cart-cta{background:#0d1b3e;color:#c8a96e;font-family:'Outfit',sans-serif}
+
+/* ═══ V2 — Forest Green · Cormorant Garamond ══════════════════ */
+.v2 .interstitial{background:linear-gradient(160deg,#f8f4eb 0%,#f2ede0 60%,#ede7d4 100%);padding-bottom:0}
+.v2 .close-btn{background:rgba(30,60,30,0.1);border:1px solid rgba(30,60,30,0.14)}
+.v2 .hero{width:100%;padding:48px 24px 0}
+.v2 .eyebrow{font-family:'Plus Jakarta Sans',sans-serif;font-size:9.5px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#2d5a27;margin-bottom:8px}
+.v2 .headline{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:700;line-height:1.1;color:#1a3318}
+.v2 .headline em{font-style:italic;color:#3d7a35}
+.v2 .sub{font-family:'Plus Jakarta Sans',sans-serif;font-size:11.5px;color:#5a7a55;line-height:1.5;margin-top:5px}
+.v2 .offer-row{display:flex;align-items:center;gap:10px;margin-top:12px}
+.v2 .offer-pill{background:#2d5a27;color:#f8f4eb;font-family:'Plus Jakarta Sans',sans-serif;font-size:11px;font-weight:800;padding:4px 12px;border-radius:20px;white-space:nowrap}
+.v2 .offer-txt{font-family:'Plus Jakarta Sans',sans-serif;font-size:10.5px;color:#5a7a55;line-height:1.4}
+.v2 .divider{width:calc(100% - 48px);height:1px;background:rgba(45,90,39,0.1);margin:16px 0 12px}
+.v2 .sec-label{font-family:'Plus Jakarta Sans',sans-serif;font-size:9.5px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#3d7a35;width:100%;padding:0 24px;margin-bottom:10px}
+.v2 .prod-grid{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 24px;overflow-y:auto;max-height:340px;scrollbar-width:none}
+.v2 .prod-grid::-webkit-scrollbar{display:none}
+.v2-prod-card{background:#fff;border:1px solid rgba(45,90,39,0.1);border-radius:13px;padding:10px 8px 8px}
+.v2-prod-card .prod-img-box{background:#f0f5ee;border:1px dashed rgba(45,90,39,0.18)}
+.v2-prod-card .prod-img-txt{color:#8aab85}
+.v2-prod-card .prod-name{color:#1a3318;font-family:'Plus Jakarta Sans',sans-serif}
+.v2-prod-card .prod-rating{color:#2d5a27;font-family:'Plus Jakarta Sans',sans-serif}
+.v2-prod-card .prod-price{color:#2d5a27;font-family:'Plus Jakarta Sans',sans-serif}
+.v2-prod-card .prod-mrp{color:#bbb}
+.v2-prod-card .add-btn{background:#2d5a27;color:#fff;font-family:'Plus Jakarta Sans',sans-serif}
+.v2-prod-card .add-btn.added{background:#1a7a4f}
+.v2-prod-card .popular-badge{background:#2d5a27;color:#f8f4eb}
+.v2 .cta-btn{margin:14px 24px 0;width:calc(100% - 48px);background:#2d5a27;color:#f8f4eb;border:none;border-radius:12px;padding:13px 0;font-family:'Plus Jakarta Sans',sans-serif;font-size:13.5px;font-weight:700;cursor:pointer}
+.v2 .motive-line{color:#8aab85;font-family:'Plus Jakarta Sans',sans-serif;margin:12px 0 8px}
+.v2 .trust-row{color:#8aab85;font-family:'Plus Jakarta Sans',sans-serif;margin-bottom:0}
+.v2 .cart-bar{background:rgba(45,90,39,0.96);backdrop-filter:blur(8px);border-top:1px solid rgba(255,255,255,0.1);margin-top:10px}
+.v2 .cart-count{color:rgba(248,244,235,0.7)}
+.v2 .cart-total{color:#f8f4eb}
+.v2 .cart-cta{background:#f8f4eb;color:#2d5a27;font-family:'Plus Jakarta Sans',sans-serif}
+
+/* ═══ V3 — Charcoal + Gold · Space Grotesk ════════════════════ */
+.v3 .interstitial{background:linear-gradient(158deg,#1c1c1c 0%,#242424 55%,#1a1a1a 100%);padding-bottom:0}
+.v3 .close-btn{background:rgba(255,255,255,0.09);border:1px solid rgba(255,255,255,0.13)}
+.v3 .hero{width:100%;padding:48px 24px 0}
+.v3 .eyebrow{font-family:'Space Grotesk',sans-serif;font-size:9.5px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#d4a843;margin-bottom:8px}
+.v3 .headline{font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:700;line-height:1.2;color:#f0f0f0}
+.v3 .headline span{color:#d4a843}
+.v3 .sub{font-family:'Space Grotesk',sans-serif;font-size:11.5px;color:rgba(240,240,240,0.45);line-height:1.5;margin-top:5px}
+.v3 .offer-row{display:flex;align-items:center;gap:10px;margin-top:12px}
+.v3 .offer-pill{background:#d4a843;color:#1c1c1c;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;padding:4px 12px;border-radius:6px;white-space:nowrap;letter-spacing:0.06em}
+.v3 .offer-txt{font-family:'Space Grotesk',sans-serif;font-size:10.5px;color:rgba(240,240,240,0.5);line-height:1.4}
+.v3 .divider{width:calc(100% - 48px);height:1px;background:rgba(255,255,255,0.07);margin:16px 0 12px}
+.v3 .sec-label{font-family:'Space Grotesk',sans-serif;font-size:9.5px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(212,168,67,0.65);width:100%;padding:0 24px;margin-bottom:10px}
+.v3 .prod-scroll{width:100%;display:flex;gap:10px;overflow-x:auto;overflow-y:visible;padding:4px 24px 10px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.v3 .prod-scroll::-webkit-scrollbar{display:none}
+.v3-prod-card{flex-shrink:0;width:96px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:10px 8px 8px}
+.v3-prod-card .prod-img-box{background:rgba(255,255,255,0.05);border:1px dashed rgba(255,255,255,0.1)}
+.v3-prod-card .prod-img-txt{color:rgba(255,255,255,0.22)}
+.v3-prod-card .prod-name{color:#f0f0f0;font-family:'Space Grotesk',sans-serif}
+.v3-prod-card .prod-rating{color:#d4a843;font-family:'Space Grotesk',sans-serif}
+.v3-prod-card .prod-price{color:#d4a843;font-family:'Space Grotesk',sans-serif}
+.v3-prod-card .prod-mrp{color:rgba(255,255,255,0.22)}
+.v3-prod-card .add-btn{background:#d4a843;color:#1c1c1c;font-family:'Space Grotesk',sans-serif}
+.v3-prod-card .add-btn.added{background:#2dba73;color:#fff}
+.v3-prod-card .popular-badge{background:#d4a843;color:#1c1c1c}
+.v3 .cta-btn{margin:14px 24px 0;width:calc(100% - 48px);background:#d4a843;color:#1c1c1c;border:none;border-radius:10px;padding:13px 0;font-family:'Space Grotesk',sans-serif;font-size:13.5px;font-weight:700;cursor:pointer;letter-spacing:0.04em}
+.v3 .motive-line{color:rgba(212,168,67,0.5);font-family:'Space Grotesk',sans-serif;margin:12px 0 8px}
+.v3 .trust-row{color:rgba(212,168,67,0.45);font-family:'Space Grotesk',sans-serif;margin-bottom:0}
+.v3 .cart-bar{background:rgba(212,168,67,0.97);backdrop-filter:blur(8px);border-top:1px solid rgba(0,0,0,0.08);margin-top:10px}
+.v3 .cart-count{color:rgba(28,28,28,0.6)}
+.v3 .cart-total{color:#1c1c1c}
+.v3 .cart-cta{background:#1c1c1c;color:#d4a843;font-family:'Space Grotesk',sans-serif}
+
+/* ═══ V4 — Sunrise Amber · DM Serif Display ═══════════════════ */
+.v4 .interstitial{background:linear-gradient(165deg,#fff8f0 0%,#fff2e2 50%,#ffecd0 100%);padding-bottom:0}
+.v4 .close-btn{background:rgba(180,80,0,0.09);border:1px solid rgba(180,80,0,0.13)}
+.v4 .hero{width:100%;padding:48px 24px 0}
+.v4 .eyebrow{font-family:'Plus Jakarta Sans',sans-serif;font-size:9.5px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#b45000;margin-bottom:8px}
+.v4 .headline{font-family:'DM Serif Display',serif;font-size:30px;font-weight:400;line-height:1.15;color:#1a0f00}
+.v4 .headline em{font-style:italic;color:#b45000}
+.v4 .sub{font-family:'Plus Jakarta Sans',sans-serif;font-size:11.5px;color:#7a4a20;line-height:1.5;margin-top:5px}
+.v4 .offer-row{display:flex;align-items:center;gap:10px;margin-top:12px}
+.v4 .offer-pill{background:#b45000;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:11px;font-weight:800;padding:4px 12px;border-radius:20px;white-space:nowrap}
+.v4 .offer-txt{font-family:'Plus Jakarta Sans',sans-serif;font-size:10.5px;color:#7a4a20;line-height:1.4}
+.v4 .divider{width:calc(100% - 48px);height:1px;background:rgba(180,80,0,0.1);margin:16px 0 12px}
+.v4 .sec-label{font-family:'Plus Jakarta Sans',sans-serif;font-size:9.5px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#b45000;width:100%;padding:0 24px;margin-bottom:10px;opacity:0.7}
+.v4 .prod-grid{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 24px;overflow-y:auto;max-height:340px;scrollbar-width:none}
+.v4 .prod-grid::-webkit-scrollbar{display:none}
+.v4-prod-card{background:rgba(255,255,255,0.82);border:1px solid rgba(180,80,0,0.09);border-radius:13px;padding:10px 8px 8px;backdrop-filter:blur(4px)}
+.v4-prod-card .prod-img-box{background:#fef5ec;border:1px dashed rgba(180,80,0,0.18)}
+.v4-prod-card .prod-img-txt{color:#c89060}
+.v4-prod-card .prod-name{color:#1a0f00;font-family:'Plus Jakarta Sans',sans-serif}
+.v4-prod-card .prod-rating{color:#b45000;font-family:'Plus Jakarta Sans',sans-serif}
+.v4-prod-card .prod-price{color:#b45000;font-family:'Plus Jakarta Sans',sans-serif}
+.v4-prod-card .prod-mrp{color:#bbb}
+.v4-prod-card .add-btn{background:#b45000;color:#fff;font-family:'Plus Jakarta Sans',sans-serif}
+.v4-prod-card .add-btn.added{background:#2d8a40;color:#fff}
+.v4-prod-card .popular-badge{background:#b45000;color:#fff}
+.v4 .cta-btn{margin:14px 24px 0;width:calc(100% - 48px);background:#1a0f00;color:#fff8f0;border:none;border-radius:12px;padding:13px 0;font-family:'Plus Jakarta Sans',sans-serif;font-size:13.5px;font-weight:700;cursor:pointer}
+.v4 .motive-line{color:#b45000;font-family:'Plus Jakarta Sans',sans-serif;margin:12px 0 8px;opacity:0.65}
+.v4 .trust-row{color:#b45000;font-family:'Plus Jakarta Sans',sans-serif;margin-bottom:0;opacity:0.55}
+.v4 .cart-bar{background:rgba(180,80,0,0.95);backdrop-filter:blur(8px);border-top:1px solid rgba(255,255,255,0.1);margin-top:10px}
+.v4 .cart-count{color:rgba(255,248,240,0.7)}
+.v4 .cart-total{color:#fff8f0}
+.v4 .cart-cta{background:#fff8f0;color:#b45000;font-family:'Plus Jakarta Sans',sans-serif}
+</style>
+</head>
+<body>
+<h1>Country Delight · Interstitial Variants</h1>
+<div class="tab-bar">
+  <button class="tab-btn active" data-id="1">V1 · Trust-led</button>
+  <button class="tab-btn" data-id="2">V2 · Sensory-led</button>
+  <button class="tab-btn" data-id="3">V3 · Lifestyle-led</button>
+  <button class="tab-btn" data-id="4">V4 · Routine-led</button>
+</div>
+<div class="phone">
+
+<!-- V1 -->
+<div class="variant-pane v1" id="pane-1">
+<div class="interstitial">
+  <div class="close-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+  <div class="hero">
+    <div class="eyebrow">Farm to doorstep</div>
+    <div class="headline">Freshly sourced.<br><em>Delivered daily.</em></div>
+    <div class="offer-row">
+      <span class="offer-pill">1+1 Free</span>
+      <span class="offer-txt">Order any product,<br>get the next one free</span>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div class="sec-label">Pick your daily essentials</div>
+  <div class="prod-scroll"><div class="v1-prod-card prod-card" data-price="89">
+  <div class="popular-badge">Popular pick</div>
+  <div class="prod-img-box"><span class="prod-img-txt">Paneer<br>image</span></div>
+  <div class="prod-name">Paneer</div>
+  <div class="prod-rating">⭐ 4.8 <span class="prod-reviews">(4k+)</span></div>
+  <div class="prod-price-row"><span class="prod-price">₹89</span><span class="prod-mrp">₹178</span></div>
+  <button class="add-btn" onclick="addToCart(this,'Paneer',89)">Add</button>
+</div><div class="v1-prod-card prod-card" data-price="55">
+  <div class="popular-badge">Popular pick</div>
+  <div class="prod-img-box"><span class="prod-img-txt">Dahi<br>image</span></div>
+  <div class="prod-name">Dahi</div>
+  <div class="prod-rating">⭐ 4.7 <span class="prod-reviews">(3.2k+)</span></div>
+  <div class="prod-price-row"><span class="prod-price">₹55</span><span class="prod-mrp">₹110</span></div>
+  <button class="add-btn" onclick="addToCart(this,'Dahi',55)">Add</button>
+</div><div class="v1-prod-card prod-card" data-price="79">
+  
+  <div class="prod-img-box"><span class="prod-img-txt">Idli Batter<br>image</span></div>
+  <div class="prod-name">Idli Batter</div>
+  <div class="prod-rating">⭐ 4.6 <span class="prod-reviews">(2.1k+)</span></div>
+  <div class="prod-price-row"><span class="prod-price">₹79</span><span class="prod-mrp">₹158</span></div>
+  <button class="add-btn" onclick="addToCart(this,'Idli Batter',79)">Add</button>
+</div><div class="v1-prod-card prod-card" data-price="45">
+  
+  <div class="prod-img-box"><span class="prod-img-txt">Breads<br>image</span></div>
+  <div class="prod-name">Breads</div>
+  <div class="prod-rating">⭐ 4.5 <span class="prod-reviews">(5k+)</span></div>
+  <div class="prod-price-row"><span class="prod-price">₹45</span><span class="prod-mrp">₹90</span></div>
+  <button class="add-btn" onclick="addToCart(this,'Breads',45)">Add</button>
+</div><div class="v1-prod-card prod-card" data-price="99">
+  
+  <div class="prod-img-box"><span class="prod-img-txt">Eggs<br>image</span></div>
+  <div class="prod-name">Eggs</div>
+  <div class="prod-rating">⭐ 4.9 <span class="prod-reviews">(6k+)</span></div>
+  <div class="prod-price-row"><span class="prod-price">₹99</span><span class="prod-mrp">₹180</span></div>
+  <button class="add-btn" onclick="addToCart(this,'Eggs',99)">Add</button>
+</div><div class="v1-prod-card prod-card" data-price="35">
+  
+  <div class="prod-img-box"><span class="prod-img-txt">Buttermilk<br>image</span></div>
+  <div class="prod-name">Buttermilk</div>
+  <div class="prod-rating">⭐ 4.6 <span class="prod-reviews">(1.8k+)</span></div>
+  <div class="prod-price-row"><span class="prod-price">₹35</span><span class="prod-mrp">₹70</span></div>
+  <button class="add-btn" onclick="addToCart(this,'Buttermilk',35)">Add</button>
+</div><div class="v1-prod-card prod-card" data-price="65">
+  
+  <div class="prod-img-box"><span class="prod-img-txt">Lassi<br>image</span></div>
+  <div class="prod-name">Lassi</div>
+  <div class="prod-rating">⭐ 4.7 <span class="prod-reviews">(2.5k+)</span></div>
+  <div class="prod-price-row"><span class="prod-price">₹65</span><span class="prod-mrp">₹120</span></div>
+  <button class="add-btn" onclick="addToCart(this,'Lassi',65)">Add</button>
+</div><div class="v1-prod-card prod-card" data-price="59">
+  
+  <div class="prod-img-box"><span class="prod-img-txt">Yogurt<br>image</span></div>
+  <div class="prod-name">Yogurt</div>
+  <div class="prod-rating">⭐ 4.5 <span class="prod-reviews">(1.2k+)</span></div>
+  <div class="prod-price-row"><span class="prod-price">₹59</span><span class="prod-mrp">₹115</span></div>
+  <button class="add-btn" onclick="addToCart(this,'Yogurt',59)">Add</button>
+</div></div>
+  <button class="cta-btn">Explore All Products →</button>
+  <div class="motive-line">You're one step closer to a healthier lifestyle.</div>
+  <div class="trust-row"><span>✓ Delivered before 7 AM</span><span>✓ Farm-fresh dairy</span><span>✓ No minimum order</span></div>
+  <div class="cart-bar hidden" id="cart-1">
+    <div class="cart-info">
+      <span class="cart-count" id="cart-count-1">0 items</span>
+      <span class="cart-total" id="cart-total-1">₹0</span>
+    </div>
+    <button class="cart-cta">Checkout →</button>
+  </div>
+</div>
+</div>
+
+<!-- V2 -->
+<div class="variant-pane v2" id="pane-2">
+<div class="interstitial">
+  <div class="close-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="#2d5a27" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+  <div class="hero">
+    <div class="eyebrow">Pure. Natural. Real.</div>
+    <div class="headline">Freshness<br>you can <em>taste</em></div>
+    <div class="sub">Every drop, every bite — exactly as nature intended.</div>
+    <div class="offer-row">
+      <span class="offer-pill">1+1 Free</span>
+      <span class="offer-txt">Order any product,<br>get the next one free</span>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div class="sec-label">Pick your daily essentials</div>
+  <div class="prod-grid"><div class="v2-prod-card prod-card" data-price="89">
+  <div class="popular-badge">Popular pick</div>
+  <div class="prod-img-box"><span class="prod-img-txt">Paneer<br>image</span></div>
+  <div class="prod-name">Paneer</div>
+  <div class="prod-rating">⭐ 4.8 <span class="prod-reviews">(4k+)</span></div>
+  <div class="prod-price-row"><span class="prod-price">₹89</span><span class="prod-mrp">₹178</span></div>
+  <button class="add-btn" onclick="addToCart(this,'Paneer',89)">Add</button>
+</div><div class="v2-prod-card prod-card" data-price="55">
+  <div class="popular-badge">Popular pick</div>
+  <div class="prod-img-box"><span class="prod-img-txt">Dahi<br>image</span></div>
+  <div class="prod-name">Dahi</div>
+  <div class="prod-rating">⭐ 4.7 <span class="prod-reviews">(3.2k+)</span></div>
+  <div class="prod-price-row"><span class="prod-price">₹55</span><span class="prod-mrp">₹110</span></div>
+  <button class="add-btn" onclick="addToCart(this,'Dahi',55)">Add</button>
+</div><div class="v2-prod-card prod-card" data-price="79">
+  
+  <div class="prod-img-box"><span class="prod-img-txt">Idli Batter<br>image</span></div>
+  <div class="prod-name">Idli Batter</div>
+  <div class="prod-rating">⭐ 4.6 <span class="prod-reviews">(2.1k+)</span></div>
+  <div class="prod-price-row"><span class="prod-price">₹79</span><span class="prod-mrp">₹158</span></div>
+  <button class="add-btn" onclick="addToCart(this,'Idli Batter',79)">Add</button>
+</div><div class="v2-prod-card prod-card" data-price="45">
+  
+  <div class="prod-img-box"><span class="prod-img-txt">Breads<br>image</span></div>
+  <div class="prod-name">Breads</div>
+  <div class="prod-rating">⭐ 4.5 <span class="prod-reviews">(5k+)</span></div>
+  <div class="prod-price-row"><span class="prod-price">₹45</span><span class="prod-mrp">₹90</span></div>
+  <button class="add-btn" onclick="addToCart(this,'Breads',45)">Add</button>
+</div><div class="v2-prod-card prod-card" data-price="99">
+  
+  <div class="prod-img-box"><span class="prod-img-txt">Eggs<br>image</span></div>
+  <div class="prod-name">Eggs</div>
+  <div class="prod-rating">⭐ 4.9 <span class="prod-reviews">(6k+)</span></div>
+  <div class="prod-price-row"><span class="prod-price">₹99</span><span class="prod-mrp">₹180</span></div>
+  <button class="add-btn" onclick="addToCart(this,'Eggs',99)">Add</button>
+</div><div class="v2-prod-card prod-card" data-price="35">
+  
+  <div class="prod-img-box"><span class="prod-img-txt">Buttermilk<br>image</span></div>
+  <div class="prod-name">Buttermilk</div>
+  <div class="prod-rating">⭐ 4.6 <span class="prod-reviews">(1.8k+)</span></div>
+  <div class="prod-price-row"><span class="prod-price">₹35</span><span class="prod-mrp">₹70</span></div>
+  <button class="add-btn" onclick="addToCart(this,'Buttermilk',35)">Add</button>
+</div><div class="v2-prod-card prod-card" data-price="65">
+  
+  <div class="prod-img-box"><span class="prod-img-txt">Lassi<br>image</span></div>
+  <div class="prod-name">Lassi</div>
+  <div class="prod-rating">⭐ 4.7 <span class="prod-reviews">(2.5k+)</span></div>
+  <div class="prod-price-row"><span class="prod-price">₹65</span><span class="prod-mrp">₹120</span></div>
+  <button class="add-btn" onclick="addToCart(this,'Lassi',65)">Add</button>
+</div><div class="v2-prod-card prod-card" data-price="59">
+  
+  <div class="prod-img-box"><span class="prod-img-txt">Yogurt<br>image</span></div>
+  <div class="prod-name">Yogurt</div>
+  <div class="prod-rating">⭐ 4.5 <span class="prod-reviews">(1.2k+)</span></div>
+  <div class="prod-price-row"><span class="prod-price">₹59</span><span class="prod-mrp">₹115</span></div>
+  <button class="add-btn" onclick="addToCart(this,'Yogurt',59)">Add</button>
+</div></div>
+  <button class="cta-btn">Shop All Products →</button>
+  <div class="motive-line">You're one step closer to a healthier lifestyle.</div>
+  <div class="trust-row"><span>✓ Delivered before 7 AM</span><span>✓ Farm-fresh dairy</span><span>✓ No minimum order</span></div>
+  <div class="cart-bar hidden" id="cart-2">
+    <div class="cart-info">
+      <span class="cart-count" id="cart-count-2">0 items</span>
+      <span class="cart-total" id="cart-total-2">₹0</span>
+    </div>
+    <button class="cart-cta">Checkout →</button>
+  </div>
+</div>
+</div>
+
+<!-- V3 -->
+<div class="variant-pane v3" id="pane-3">
+<div class="interstitial">
+  <div class="close-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+  <div class="hero">
+    <div class="eyebrow">Elevate your table</div>
+    <div class="headline">Daily food,<br><span>upgraded.</span></div>
+    <div class="sub">Premium quality. Same price. Every single day.</div>
+    <div class="offer-row">
+      <span class="offer-pill">1+1 FREE</span>
+      <span class="offer-txt">Order any product,<br>get the next one free</span>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div class="sec-label">Pick your daily essentials</div>
+  <div class="prod-scroll"><div class="v3-prod-card prod-card" data-price="89">
+  <div class="popular-badge">Popular pick</div>
+  <div class="prod-img-box"><span class="prod-img-txt">Paneer<br>image</span></div>
+  <div class="prod-name">Paneer</div>
+  <div class="prod-rating">⭐ 4.8 <span class="prod-reviews">(4k+)</span></div>
+  <div class="prod-price-row"><span class="prod-price">₹89</span><span class="prod-mrp">₹178</span></div>
+  <button class="add-btn" onclick="addToCart(this,'Paneer',89)">Add</button>
+</div><div class="v3-prod-card prod-card" data-price="55">
+  <div class="popular-badge">Popular pick</div>
+  <div class="prod-img-box"><span class="prod-img-txt">Dahi<br>image</span></div>
+  <div class="prod-name">Dahi</div>
+  <div class="prod-rating">⭐ 4.7 <span class="prod-reviews">(3.2k+)</span></div>
+  <div class="prod-price-row"><span class="prod-price">₹55</span><span class="prod-mrp">₹110</span></div>
+  <button class="add-btn" onclick="addToCart(this,'Dahi',55)">Add</button>
+</div><div class="v3-prod-card prod-card" data-price="79">
+  
+  <div class="prod-img-box"><span class="prod-img-txt">Idli Batter<br>image</span></div>
+  <div class="prod-name">Idli Batter</div>
+  <div class="prod-rating">⭐ 4.6 <span class="prod-reviews">(2.1k+)</span></div>
+  <div class="prod-price-row"><span class="prod-price">₹79</span><span class="prod-mrp">₹158</span></div>
+  <button class="add-btn" onclick="addToCart(this,'Idli Batter',79)">Add</button>
+</div><div class="v3-prod-card prod-card" data-price="45">
+  
+  <div class="prod-img-box"><span class="prod-img-txt">Breads<br>image</span></div>
+  <div class="prod-name">Breads</div>
+  <div class="prod-rating">⭐ 4.5 <span class="prod-reviews">(5k+)</span></div>
+  <div class="prod-price-row"><span class="prod-price">₹45</span><span class="prod-mrp">₹90</span></div>
+  <button class="add-btn" onclick="addToCart(this,'Breads',45)">Add</button>
+</div><div class="v3-prod-card prod-card" data-price="99">
+  
+  <div class="prod-img-box"><span class="prod-img-txt">Eggs<br>image</span></div>
+  <div class="prod-name">Eggs</div>
+  <div class="prod-rating">⭐ 4.9 <span class="prod-reviews">(6k+)</span></div>
+  <div class="prod-price-row"><span class="prod-price">₹99</span><span class="prod-mrp">₹180</span></div>
+  <button class="add-btn" onclick="addToCart(this,'Eggs',99)">Add</button>
+</div><div class="v3-prod-card prod-card" data-price="35">
+  
+  <div class="prod-img-box"><span class="prod-img-txt">Buttermilk<br>image</span></div>
+  <div class="prod-name">Buttermilk</div>
+  <div class="prod-rating">⭐ 4.6 <span class="prod-reviews">(1.8k+)</span></div>
+  <div class="prod-price-row"><span class="prod-price">₹35</span><span class="prod-mrp">₹70</span></div>
+  <button class="add-btn" onclick="addToCart(this,'Buttermilk',35)">Add</button>
+</div><div class="v3-prod-card prod-card" data-price="65">
+  
+  <div class="prod-img-box"><span class="prod-img-txt">Lassi<br>image</span></div>
+  <div class="prod-name">Lassi</div>
+  <div class="prod-rating">⭐ 4.7 <span class="prod-reviews">(2.5k+)</span></div>
+  <div class="prod-price-row"><span class="prod-price">₹65</span><span class="prod-mrp">₹120</span></div>
+  <button class="add-btn" onclick="addToCart(this,'Lassi',65)">Add</button>
+</div><div class="v3-prod-card prod-card" data-price="59">
+  
+  <div class="prod-img-box"><span class="prod-img-txt">Yogurt<br>image</span></div>
+  <div class="prod-name">Yogurt</div>
+  <div class="prod-rating">⭐ 4.5 <span class="prod-reviews">(1.2k+)</span></div>
+  <div class="prod-price-row"><span class="prod-price">₹59</span><span class="prod-mrp">₹115</span></div>
+  <button class="add-btn" onclick="addToCart(this,'Yogurt',59)">Add</button>
+</div></div>
+  <button class="cta-btn">Browse Full Range →</button>
+  <div class="motive-line">You're one step closer to a healthier lifestyle.</div>
+  <div class="trust-row"><span>✓ Delivered before 7 AM</span><span>✓ Farm-fresh dairy</span><span>✓ No minimum order</span></div>
+  <div class="cart-bar hidden" id="cart-3">
+    <div class="cart-info">
+      <span class="cart-count" id="cart-count-3">0 items</span>
+      <span class="cart-total" id="cart-total-3">₹0</span>
+    </div>
+    <button class="cart-cta">Checkout →</button>
+  </div>
+</div>
+</div>
+
+<!-- V4 -->
+<div class="variant-pane v4" id="pane-4">
+<div class="interstitial">
+  <div class="close-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="#b45000" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+  <div class="hero">
+    <div class="eyebrow">Rise &amp; nourish</div>
+    <div class="headline">Morning starts<br><em>here.</em></div>
+    <div class="sub">We bring the basket — fresh, daily, doorstep.</div>
+    <div class="offer-row">
+      <span class="offer-pill">1+1 Free</span>
+      <span class="offer-txt">Order any product,<br>get the next one free</span>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div class="sec-label">Pick your daily essentials</div>
+  <div class="prod-grid"><div class="v4-prod-card prod-card" data-price="89">
+  <div class="popular-badge">Popular pick</div>
+  <div class="prod-img-box"><span class="prod-img-txt">Paneer<br>image</span></div>
+  <div class="prod-name">Paneer</div>
+  <div class="prod-rating">⭐ 4.8 <span class="prod-reviews">(4k+)</span></div>
+  <div class="prod-price-row"><span class="prod-price">₹89</span><span class="prod-mrp">₹178</span></div>
+  <button class="add-btn" onclick="addToCart(this,'Paneer',89)">Add</button>
+</div><div class="v4-prod-card prod-card" data-price="55">
+  <div class="popular-badge">Popular pick</div>
+  <div class="prod-img-box"><span class="prod-img-txt">Dahi<br>image</span></div>
+  <div class="prod-name">Dahi</div>
+  <div class="prod-rating">⭐ 4.7 <span class="prod-reviews">(3.2k+)</span></div>
+  <div class="prod-price-row"><span class="prod-price">₹55</span><span class="prod-mrp">₹110</span></div>
+  <button class="add-btn" onclick="addToCart(this,'Dahi',55)">Add</button>
+</div><div class="v4-prod-card prod-card" data-price="79">
+  
+  <div class="prod-img-box"><span class="prod-img-txt">Idli Batter<br>image</span></div>
+  <div class="prod-name">Idli Batter</div>
+  <div class="prod-rating">⭐ 4.6 <span class="prod-reviews">(2.1k+)</span></div>
+  <div class="prod-price-row"><span class="prod-price">₹79</span><span class="prod-mrp">₹158</span></div>
+  <button class="add-btn" onclick="addToCart(this,'Idli Batter',79)">Add</button>
+</div><div class="v4-prod-card prod-card" data-price="45">
+  
+  <div class="prod-img-box"><span class="prod-img-txt">Breads<br>image</span></div>
+  <div class="prod-name">Breads</div>
+  <div class="prod-rating">⭐ 4.5 <span class="prod-reviews">(5k+)</span></div>
+  <div class="prod-price-row"><span class="prod-price">₹45</span><span class="prod-mrp">₹90</span></div>
+  <button class="add-btn" onclick="addToCart(this,'Breads',45)">Add</button>
+</div><div class="v4-prod-card prod-card" data-price="99">
+  
+  <div class="prod-img-box"><span class="prod-img-txt">Eggs<br>image</span></div>
+  <div class="prod-name">Eggs</div>
+  <div class="prod-rating">⭐ 4.9 <span class="prod-reviews">(6k+)</span></div>
+  <div class="prod-price-row"><span class="prod-price">₹99</span><span class="prod-mrp">₹180</span></div>
+  <button class="add-btn" onclick="addToCart(this,'Eggs',99)">Add</button>
+</div><div class="v4-prod-card prod-card" data-price="35">
+  
+  <div class="prod-img-box"><span class="prod-img-txt">Buttermilk<br>image</span></div>
+  <div class="prod-name">Buttermilk</div>
+  <div class="prod-rating">⭐ 4.6 <span class="prod-reviews">(1.8k+)</span></div>
+  <div class="prod-price-row"><span class="prod-price">₹35</span><span class="prod-mrp">₹70</span></div>
+  <button class="add-btn" onclick="addToCart(this,'Buttermilk',35)">Add</button>
+</div><div class="v4-prod-card prod-card" data-price="65">
+  
+  <div class="prod-img-box"><span class="prod-img-txt">Lassi<br>image</span></div>
+  <div class="prod-name">Lassi</div>
+  <div class="prod-rating">⭐ 4.7 <span class="prod-reviews">(2.5k+)</span></div>
+  <div class="prod-price-row"><span class="prod-price">₹65</span><span class="prod-mrp">₹120</span></div>
+  <button class="add-btn" onclick="addToCart(this,'Lassi',65)">Add</button>
+</div><div class="v4-prod-card prod-card" data-price="59">
+  
+  <div class="prod-img-box"><span class="prod-img-txt">Yogurt<br>image</span></div>
+  <div class="prod-name">Yogurt</div>
+  <div class="prod-rating">⭐ 4.5 <span class="prod-reviews">(1.2k+)</span></div>
+  <div class="prod-price-row"><span class="prod-price">₹59</span><span class="prod-mrp">₹115</span></div>
+  <button class="add-btn" onclick="addToCart(this,'Yogurt',59)">Add</button>
+</div></div>
+  <button class="cta-btn">Start Your Morning →</button>
+  <div class="motive-line">You're one step closer to a healthier lifestyle.</div>
+  <div class="trust-row"><span>✓ Delivered before 7 AM</span><span>✓ Farm-fresh dairy</span><span>✓ No minimum order</span></div>
+  <div class="cart-bar hidden" id="cart-4">
+    <div class="cart-info">
+      <span class="cart-count" id="cart-count-4">0 items</span>
+      <span class="cart-total" id="cart-total-4">₹0</span>
+    </div>
+    <button class="cart-cta">Checkout →</button>
+  </div>
+</div>
+</div>
+
+</div><!-- /phone -->
+
+<script>
+var tabs=document.querySelectorAll('.tab-btn');
+var panes=document.querySelectorAll('.variant-pane');
+function show(id){
+  tabs.forEach(function(t){t.classList.toggle('active',t.dataset.id===id)});
+  panes.forEach(function(p){p.style.display=p.id==='pane-'+id?'block':'none'});
+}
+tabs.forEach(function(t){t.addEventListener('click',function(){show(t.dataset.id)})});
+show('1');
+
+var carts={};
+[1,2,3,4].forEach(function(v){carts[v]={count:0,total:0}});
+
+function addToCart(btn, name, price){
+  var pane=btn.closest('.variant-pane');
+  var vid=pane.id.replace('pane-','');
+  if(btn.classList.contains('added'))return;
+  btn.classList.add('added');
+  btn.textContent='Added ✓';
+  carts[vid].count++;
+  carts[vid].total+=parseInt(price);
+  var bar=document.getElementById('cart-'+vid);
+  document.getElementById('cart-count-'+vid).textContent=carts[vid].count+' item'+(carts[vid].count>1?'s':'')+' in cart';
+  document.getElementById('cart-total-'+vid).textContent='₹'+carts[vid].total;
+  bar.classList.remove('hidden');
+}
+</script>
+</body>
+</html>
