@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Country Delight Redesign</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.30.0/iconfont/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#E8E8E2;min-height:100vh;padding:24px 12px;}
+h1{text-align:center;font-size:13px;font-weight:500;color:#888;letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px;}
+.tabs{display:flex;gap:6px;justify-content:center;margin-bottom:20px;flex-wrap:wrap;}
+.tab{padding:6px 13px;border-radius:20px;font-size:11px;font-weight:500;cursor:pointer;border:1px solid #ccc;background:#fff;color:#555;transition:all .15s;}
+.tab.active{background:#1A1A1A;color:#fff;border-color:#1A1A1A;}
+.screens{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;align-items:flex-start;}
+.screen-wrap{display:none;flex-direction:column;align-items:center;gap:6px;}
+.screen-wrap.visible{display:flex;}
+.screen-label{font-size:11px;color:#888;letter-spacing:.06em;text-transform:uppercase;}
+.phone{width:360px;height:780px;background:#F5F5F0;border-radius:36px;overflow:hidden;border:1.5px solid #C8C8C0;box-shadow:0 8px 32px rgba(0,0,0,.12);display:flex;flex-direction:column;}
+.phone-top{flex-shrink:0;}
+.phone-body{flex:1;overflow-y:auto;scrollbar-width:none;}
+.phone-body::-webkit-scrollbar{display:none;}
+.phone-bottom{flex-shrink:0;}
+
+/* COMMON */
+.status-bar{background:#fff;padding:12px 20px 8px;display:flex;justify-content:space-between;align-items:center;}
+.status-bar .time{font-size:13px;font-weight:600;color:#1A1A1A;}
+.status-icons{display:flex;gap:5px;align-items:center;}
+.status-icons i{font-size:14px;color:#1A1A1A;}
+.bottom-nav{background:#fff;border-top:0.5px solid #E0E0D8;display:flex;padding:9px 0 5px;}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;}
+.nav-item i{font-size:22px;color:#C0C0B8;}
+.nav-item span{font-size:10px;color:#C0C0B8;}
+.nav-item.act i,.nav-item.act span{color:#2D9E6B;}
+.nav-special{background:#2D9E6B;border-radius:14px;padding:4px 8px;margin-top:-4px;}
+.nav-special i,.nav-special span{color:#fff!important;}
+.nav-orange{background:#E8621A;border-radius:14px;padding:4px 8px;margin-top:-4px;}
+.nav-orange i,.nav-orange span{color:#fff!important;}
+.page-header{background:#fff;padding:12px 16px 10px;display:flex;align-items:center;gap:10px;border-bottom:0.5px solid #E0E0D8;}
+.page-header h2{font-size:16px;font-weight:600;color:#1A1A1A;}
+.page-header .sub{font-size:11px;color:#aaa;}
+.vip-bar{background:#FFF8EE;border-top:0.5px solid #F4D580;padding:7px 12px;display:flex;align-items:center;gap:7px;}
+.vip-bar i{color:#F4A623;font-size:14px;flex-shrink:0;}
+.vip-bar p{font-size:11px;color:#7A5000;}
+.sec-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.sec-hdr h3{font-size:14px;font-weight:600;color:#1A1A1A;}
+.sec-hdr a{font-size:12px;color:#2D9E6B;font-weight:500;cursor:pointer;}
+.content{padding:12px;}
+.filter-row{background:#fff;padding:10px 14px;display:flex;gap:7px;overflow-x:auto;border-bottom:0.5px solid #E0E0D8;scrollbar-width:none;flex-shrink:0;}
+.filter-row::-webkit-scrollbar{display:none;}
+.fpill{white-space:nowrap;font-size:11px;padding:5px 12px;border-radius:20px;border:0.5px solid #D8D8D0;background:#fff;color:#555;cursor:pointer;}
+.fpill.act{background:#1A1A1A;color:#fff;border-color:#1A1A1A;}
+.split{display:flex;flex:1;overflow:hidden;}
+.side-cats{width:78px;background:#fff;border-right:0.5px solid #E0E0D8;overflow-y:auto;scrollbar-width:none;flex-shrink:0;}
+.side-cats::-webkit-scrollbar{display:none;}
+.ce{padding:10px 6px;text-align:center;font-size:10px;color:#888;cursor:pointer;border-left:3px solid transparent;}
+.ce .cei{width:36px;height:36px;border-radius:10px;background:#F5F5F0;display:flex;align-items:center;justify-content:center;margin:0 auto 4px;font-size:18px;}
+.ce.act{color:#2D9E6B;border-left:3px solid #2D9E6B;}
+.ce.act .cei{background:#E8F7F0;}
+.prod-list{flex:1;padding:10px;overflow-y:auto;scrollbar-width:none;}
+.prod-list::-webkit-scrollbar{display:none;}
+.pcard{background:#fff;border-radius:14px;border:0.5px solid #E0E0D8;margin-bottom:10px;overflow:hidden;}
+.pcard-inner{display:flex;gap:10px;padding:12px;}
+.pthumb{width:78px;height:78px;background:#F5F5F0;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.pthumb i{font-size:30px;color:#ccc;}
+.pack-badge{position:absolute;bottom:4px;right:4px;background:#1A1A1A;color:#fff;font-size:8px;font-weight:700;border-radius:5px;padding:2px 5px;}
+.pdetails{flex:1;}
+.ptag{font-size:9px;color:#2D9E6B;font-weight:600;margin-bottom:2px;}
+.pdetails h4{font-size:13px;font-weight:600;color:#1A1A1A;}
+.pdetails .pwt{font-size:11px;color:#aaa;margin-bottom:7px;}
+.pa{display:flex;align-items:center;justify-content:space-between;gap:6px;}
+.pa .pold{font-size:10px;color:#ccc;text-decoration:line-through;}
+.pa .pnew{font-size:14px;font-weight:600;color:#1A1A1A;}
+.btn-sub{background:transparent;color:#2D9E6B;font-size:11px;font-weight:600;border-radius:9px;padding:5px 10px;border:1px solid #2D9E6B;cursor:pointer;}
+.btn-add{background:#2D9E6B;color:#fff;font-size:11px;font-weight:700;border-radius:9px;padding:5px 14px;cursor:pointer;}
+.size-row{display:flex;gap:6px;padding:0 12px 12px;}
+.sopt{flex:1;border-radius:9px;border:0.5px solid #E0E0D8;padding:5px 4px;text-align:center;cursor:pointer;}
+.sopt .so{font-size:9px;color:#2D9E6B;font-weight:600;}
+.sopt .sn{font-size:10px;font-weight:600;color:#1A1A1A;}
+.sopt .sp{font-size:9px;color:#aaa;}
+.sopt.sel{border-color:#2D9E6B;background:#F0FBF6;}
+.search-fab-wrap{padding:8px 10px;background:#F5F5F0;flex-shrink:0;}
+.search-fab{background:#1A1A1A;color:#fff;border-radius:24px;padding:10px 0;font-size:13px;font-weight:500;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;}
+.white-search{background:#fff;border:1.5px solid #E0E0D8;border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:8px;box-shadow:0 1px 4px rgba(0,0,0,.06);}
+.white-search i{font-size:16px;color:#aaa;flex-shrink:0;}
+.white-search span{font-size:13px;color:#bbb;}
+.cat-strip{background:#fff;padding:10px 16px 0;display:flex;gap:18px;overflow-x:auto;border-bottom:0.5px solid #E0E0D8;scrollbar-width:none;flex-shrink:0;}
+.cat-strip::-webkit-scrollbar{display:none;}
+.cat-item{display:flex;flex-direction:column;align-items:center;gap:4px;padding-bottom:10px;cursor:pointer;min-width:50px;}
+.cat-icon{width:42px;height:42px;background:#F5F5F0;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;}
+.cat-lbl{font-size:10px;color:#666;text-align:center;line-height:1.3;}
+.cat-item.act .cat-icon{background:#E8F7F0;}
+.cat-item.act .cat-lbl{color:#2D9E6B;font-weight:600;}
+.cat-item.act{border-bottom:2.5px solid #2D9E6B;}
+.prod-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+.prod-card{background:#fff;border-radius:14px;overflow:hidden;border:0.5px solid #E0E0D8;}
+.prod-img{background:#F5F5F0;height:88px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.prod-img i{font-size:36px;color:#ccc;}
+.off-badge{position:absolute;top:7px;left:7px;background:#E8F7F0;color:#1A7A50;font-size:9px;font-weight:700;border-radius:6px;padding:2px 6px;}
+.prod-info{padding:8px 10px 10px;}
+.prod-info h4{font-size:12px;font-weight:600;color:#1A1A1A;margin-bottom:1px;}
+.prod-info .qty{font-size:10px;color:#aaa;margin-bottom:7px;}
+.price-row{display:flex;align-items:center;justify-content:space-between;}
+.price-row .old{font-size:10px;color:#ccc;text-decoration:line-through;}
+.price-row .nw{font-size:13px;font-weight:600;color:#1A1A1A;}
+.add-sm{background:#2D9E6B;color:#fff;font-size:11px;font-weight:700;border-radius:8px;padding:4px 12px;cursor:pointer;}
+.quality-link{background:#EFF8FF;padding:7px 12px;display:flex;align-items:center;justify-content:space-between;border-top:0.5px solid #DDEEFF;}
+.quality-link span{font-size:11px;color:#2D6ECC;font-weight:500;}
+.quality-link i{font-size:14px;color:#2D6ECC;}
+.promo-strip{background:#FFF8EE;border:0.5px solid #F4D580;border-radius:12px;padding:9px 13px;display:flex;align-items:center;gap:9px;margin-bottom:10px;}
+.promo-strip i{font-size:18px;color:#F4A623;flex-shrink:0;}
+.promo-strip p{font-size:12px;color:#7A5000;font-weight:500;line-height:1.4;}
+.banner{background:#1A1A1A;border-radius:16px;overflow:hidden;margin-bottom:12px;padding:16px;display:flex;justify-content:space-between;align-items:center;}
+.banner-text .offer-tag{background:#F4A623;color:#7A3800;font-size:9px;font-weight:800;border-radius:6px;padding:3px 8px;display:inline-block;margin-bottom:6px;letter-spacing:.04em;}
+.banner-text h2{color:#fff;font-size:20px;font-weight:600;line-height:1.25;}
+.banner-text h2 span{color:#F4A623;}
+.shop-btn{background:#fff;color:#1A1A1A;font-size:12px;font-weight:700;border-radius:9px;padding:7px 18px;margin-top:10px;display:inline-block;cursor:pointer;}
+.banner-visual{width:96px;height:96px;background:#2A2A2A;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.banner-visual i{font-size:48px;color:#F4A623;}
+.wallet-zero{background:#E8621A;border-radius:20px;padding:6px 12px;font-size:13px;font-weight:500;color:#fff;display:flex;align-items:center;gap:4px;}
+.wallet{background:#F5F5F0;border-radius:20px;padding:6px 12px;font-size:13px;font-weight:500;color:#1A1A1A;display:flex;align-items:center;gap:4px;}
+.avatar{width:36px;height:36px;border-radius:50%;background:#F0F0E8;display:flex;align-items:center;justify-content:center;}
+.avatar i{font-size:20px;color:#aaa;}
+/* subs */
+.sub-card{background:#fff;border-radius:14px;border:0.5px solid #E0E0D8;margin-bottom:10px;overflow:hidden;}
+.sub-inner{display:flex;gap:10px;padding:12px;}
+.sthumb{width:64px;height:64px;background:#F5F5F0;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;position:relative;}
+.sthumb i{font-size:28px;color:#ccc;}
+.s44{position:absolute;top:-1px;left:-1px;background:#F4A623;color:#7A3800;font-size:8px;font-weight:800;border-radius:6px 0 6px 0;padding:2px 5px;}
+.sinfo{flex:1;}
+.sinfo h4{font-size:13px;font-weight:600;color:#1A1A1A;}
+.sinfo .swt{font-size:11px;color:#aaa;}
+.freq-pill{display:inline-block;background:#F0FBF6;color:#2D9E6B;font-size:10px;border-radius:6px;padding:2px 8px;margin:4px 0;border:0.5px solid #B0E8CF;}
+.sprice{display:flex;align-items:baseline;gap:5px;margin-top:3px;}
+.sprice .sold{font-size:11px;text-decoration:line-through;color:#ccc;}
+.sprice .snew{font-size:15px;font-weight:600;color:#1A1A1A;}
+.edit-btn{background:#2D9E6B;color:#fff;font-size:11px;font-weight:700;border-radius:9px;padding:6px 14px;cursor:pointer;align-self:center;}
+.progress-wrap{background:#E8F7F0;border:0.5px dashed #2D9E6B;border-radius:12px;padding:9px 13px;margin-bottom:10px;display:flex;align-items:center;gap:9px;}
+.progress-wrap i{font-size:18px;color:#2D9E6B;flex-shrink:0;}
+.progress-wrap p{font-size:11px;color:#1A7A50;flex:1;line-height:1.4;}
+.progress-wrap a{color:#2D9E6B;font-weight:700;font-size:11px;white-space:nowrap;cursor:pointer;}
+.upsell-row{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;scrollbar-width:none;}
+.upsell-row::-webkit-scrollbar{display:none;}
+.ucard{min-width:100px;background:#fff;border-radius:12px;border:0.5px solid #E0E0D8;overflow:hidden;flex-shrink:0;}
+.uimg{height:68px;background:#F5F5F0;display:flex;align-items:center;justify-content:center;}
+.uimg i{font-size:28px;color:#ccc;}
+.uinfo{padding:7px 8px 9px;}
+.uinfo h5{font-size:11px;font-weight:600;color:#1A1A1A;}
+.uinfo .uwt{font-size:10px;color:#aaa;}
+.uinfo .uprice{font-size:11px;color:#1A1A1A;margin-top:2px;}
+.uadd{background:#2D9E6B;color:#fff;font-size:10px;font-weight:700;border-radius:7px;padding:4px 0;margin-top:5px;text-align:center;cursor:pointer;}
+/* order */
+.savings-strip{background:#E8F7F0;padding:8px 16px;text-align:center;font-size:12px;color:#1A7A50;font-weight:500;}
+.vip-save{background:#FFF8EE;border-radius:12px;padding:10px 13px;display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.vip-save i{font-size:20px;color:#F4A623;flex-shrink:0;}
+.vip-save p{font-size:12px;color:#7A5000;}
+.ocard{background:#fff;border-radius:12px;border:0.5px solid #E0E0D8;margin-bottom:10px;overflow:hidden;}
+.ocard-hdr{padding:10px 13px;font-size:12px;font-weight:600;color:#1A1A1A;border-bottom:0.5px solid #E0E0D8;}
+.oitem{display:flex;align-items:center;gap:10px;padding:10px 13px;}
+.othumb{width:44px;height:44px;background:#F5F5F0;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.othumb i{font-size:22px;color:#ccc;}
+.oinfo{flex:1;}
+.oinfo h4{font-size:12px;font-weight:600;color:#1A1A1A;}
+.oinfo p{font-size:11px;color:#aaa;}
+.oprice{font-size:14px;font-weight:600;color:#1A1A1A;}
+.otag{background:#F0F0E8;color:#666;font-size:10px;border-radius:6px;padding:2px 7px;display:block;margin-top:3px;text-align:right;}
+.bill-card{background:#fff;border-radius:12px;border:0.5px solid #E0E0D8;padding:12px;margin-bottom:10px;}
+.brow{display:flex;justify-content:space-between;font-size:12px;color:#666;padding:3px 0;}
+.brow.vip{color:#2D9E6B;}
+.brow.total{font-size:14px;font-weight:600;color:#1A1A1A;border-top:0.5px solid #E0E0D8;padding-top:9px;margin-top:5px;}
+.striked{text-decoration:line-through;color:#ccc;margin-right:4px;font-weight:400;}
+.note{font-size:11px;color:#aaa;text-align:center;margin-top:8px;}
+.upsell-strip{background:#1565C0;padding:9px 14px;display:flex;align-items:center;gap:10px;}
+.upsell-strip p{font-size:11px;color:#fff;flex:1;}
+</style>
+</head>
+<body>
+<h1>Country Delight — Redesign · 9 Screens</h1>
+
+<div class="tabs">
+  <div class="tab active" onclick="show('newuser',this)">👋 New User</div>
+  <div class="tab" onclick="show('home',this)">🏠 Home</div>
+  <div class="tab" onclick="show('yummy',this)">🍪 Yummy Bites</div>
+  <div class="tab" onclick="show('listing',this)">📦 Product Listing</div>
+  <div class="tab" onclick="show('order',this)">✅ Order Confirmed</div>
+  <div class="tab" onclick="show('subs',this)">🔁 Subscriptions</div>
+  <div class="tab" onclick="show('catfilter',this)">🏷️ Category Filter</div>
+  <div class="tab" onclick="show('favourites',this)">⭐ Favourites</div>
+  <div class="tab" onclick="show('homebanner',this)">🎯 Homepage Banner</div>
+</div>
+
+<div class="screens">
+
+<!-- ══════════════════════════════════════
+     SCREEN 1 · NEW USER
+══════════════════════════════════════ -->
+<div class="screen-wrap visible" id="screen-newuser">
+  <div class="screen-label">New User · 360×780px</div>
+  <div class="phone">
+    <div class="phone-top">
+      <div class="status-bar"><span class="time">9:41</span><div class="status-icons"><i class="ti ti-wifi"></i><i class="ti ti-signal-4g"></i><i class="ti ti-battery"></i></div></div>
+      <div style="background:#fff;padding:10px 16px;border-bottom:0.5px solid #E0E0D8;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div class="avatar"><i class="ti ti-user"></i></div>
+            <div><p style="font-size:11px;color:#888;">Morning 5am – 7:30am</p><h3 style="font-size:15px;font-weight:600;color:#1A1A1A;">Hi Priya 👋</h3></div>
+          </div>
+          <div class="wallet-zero"><i class="ti ti-wallet" style="font-size:14px;"></i> ₹ 0</div>
+        </div>
+      </div>
+      <div style="background:#fff;padding:8px 14px 10px;border-bottom:0.5px solid #E0E0D8;">
+        <div class="white-search"><i class="ti ti-search"></i><span>Search milk, paneer, dahi…</span></div>
+      </div>
+    </div>
+    <div class="phone-body">
+      <!-- 4+4 Milk Hero -->
+      <div style="margin:12px 12px 10px;background:linear-gradient(135deg,#F0FBF6,#E0F4EC);border-radius:18px;overflow:hidden;border:1px solid #B8E8D0;">
+        <div style="padding:12px 14px 0;display:flex;align-items:center;justify-content:space-between;">
+          <div style="background:#2D9E6B;color:#fff;font-size:9px;font-weight:800;border-radius:6px;padding:3px 8px;letter-spacing:.05em;">MILK OFFER · NEW USERS ONLY</div>
+          <div style="font-size:10px;color:#2D9E6B;font-weight:600;">Ends in 2 days</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 14px 12px;">
+          <div style="display:flex;gap:5px;flex-shrink:0;">
+            <div style="width:46px;height:58px;background:#fff;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.08);overflow:hidden;">
+              <img src="https://images.unsplash.com/photo-1563636619-e9143da7973b?w=80&h=80&fit=crop" style="width:46px;height:46px;object-fit:cover;border-radius:8px 8px 0 0;"/>
+              <div style="font-size:7px;color:#2D9E6B;font-weight:800;padding:2px 0;">FREE</div>
+            </div>
+            <div style="width:46px;height:58px;background:#fff;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.08);overflow:hidden;">
+              <img src="https://images.unsplash.com/photo-1563636619-e9143da7973b?w=80&h=80&fit=crop" style="width:46px;height:46px;object-fit:cover;border-radius:8px 8px 0 0;"/>
+              <div style="font-size:7px;color:#2D9E6B;font-weight:800;padding:2px 0;">FREE</div>
+            </div>
+            <div style="width:46px;height:58px;background:#fff;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:.4;box-shadow:0 2px 6px rgba(0,0,0,.06);overflow:hidden;">
+              <img src="https://images.unsplash.com/photo-1563636619-e9143da7973b?w=80&h=80&fit=crop" style="width:46px;height:46px;object-fit:cover;border-radius:8px 8px 0 0;filter:grayscale(1);"/>
+              <div style="font-size:7px;color:#888;font-weight:800;padding:2px 0;">PAY</div>
+            </div>
+          </div>
+          <div style="flex:1;">
+            <div style="font-size:16px;font-weight:800;color:#1A1A1A;line-height:1.25;margin-bottom:3px;">Your first 4 days<br>of milk are on us.</div>
+            <div style="font-size:11px;color:#555;line-height:1.4;">Pay for 4 days, get 4 days free. Subscribe daily, cancel anytime.</div>
+          </div>
+        </div>
+        <div style="background:#1A1A1A;padding:7px 14px;display:flex;align-items:center;gap:14px;">
+          <div style="display:flex;align-items:center;gap:5px;"><i class="ti ti-flask" style="font-size:12px;color:#2D9E6B;"></i><span style="font-size:10px;color:#fff;">Lab tested daily</span></div>
+          <div style="display:flex;align-items:center;gap:5px;"><i class="ti ti-map-pin" style="font-size:12px;color:#2D9E6B;"></i><span style="font-size:10px;color:#fff;">Farm to door</span></div>
+          <div style="display:flex;align-items:center;gap:5px;"><i class="ti ti-clock" style="font-size:12px;color:#2D9E6B;"></i><span style="font-size:10px;color:#fff;">By 7:30 AM</span></div>
+        </div>
+        <div style="padding:10px 14px 12px;display:flex;gap:8px;align-items:center;">
+          <div style="flex:1;background:#2D9E6B;color:#fff;font-size:13px;font-weight:700;border-radius:10px;padding:11px;text-align:center;cursor:pointer;">Subscribe to Milk →</div>
+          <div style="background:#E8F7F0;border:1px solid #B8E8D0;border-radius:10px;padding:11px 12px;cursor:pointer;display:flex;align-items:center;gap:4px;">
+            <i class="ti ti-file-text" style="font-size:14px;color:#2D9E6B;"></i>
+            <span style="font-size:10px;color:#2D9E6B;font-weight:600;">Lab<br>Report</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dairy basket cross-sell -->
+      <div style="margin:0 12px 10px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+          <div>
+            <div style="font-size:13px;font-weight:700;color:#1A1A1A;">Complete your dairy basket</div>
+            <div style="font-size:11px;color:#888;margin-top:1px;">Made from the same farm-fresh milk</div>
+          </div>
+          <div style="font-size:11px;color:#2D9E6B;font-weight:600;cursor:pointer;">See all</div>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <!-- Paneer -->
+          <div style="flex:1;background:#fff;border-radius:14px;border:0.5px solid #E0E0D8;overflow:hidden;">
+            <div style="height:72px;background:#FFFBF0;position:relative;">
+              <div style="position:absolute;top:6px;left:6px;background:#FFF8EE;color:#F4A623;font-size:8px;font-weight:700;border-radius:5px;padding:2px 5px;border:0.5px solid #F4D580;">FRESH DAILY</div>
+            </div>
+            <div style="padding:7px 9px 9px;"><div style="font-size:11px;font-weight:600;color:#1A1A1A;">Taaza Paneer</div><div style="font-size:10px;color:#aaa;margin-bottom:5px;">180 gm</div><div style="display:flex;align-items:center;justify-content:space-between;"><span style="font-size:12px;font-weight:700;color:#1A1A1A;">₹65</span><div style="background:#2D9E6B;color:#fff;font-size:10px;font-weight:700;border-radius:7px;padding:3px 10px;">ADD</div></div></div>
+          </div>
+          <!-- Dahi -->
+          <div style="flex:1;background:#fff;border-radius:14px;border:0.5px solid #E0E0D8;overflow:hidden;">
+            <div style="height:72px;background:#F0FBF4;position:relative;">
+              <div style="position:absolute;top:6px;left:6px;background:#FFF8EE;color:#F4A623;font-size:8px;font-weight:700;border-radius:5px;padding:2px 5px;border:0.5px solid #F4D580;">FRESH DAILY</div>
+            </div>
+            <div style="padding:7px 9px 9px;"><div style="font-size:11px;font-weight:600;color:#1A1A1A;">Ghar Jaisa Dahi</div><div style="font-size:10px;color:#aaa;margin-bottom:5px;">400 gm</div><div style="display:flex;align-items:center;justify-content:space-between;"><span style="font-size:12px;font-weight:700;color:#1A1A1A;">₹55</span><div style="background:#2D9E6B;color:#fff;font-size:10px;font-weight:700;border-radius:7px;padding:3px 10px;">ADD</div></div></div>
+          </div>
+          <!-- Cow Milk -->
+          <div style="flex:1;background:#fff;border-radius:14px;border:0.5px solid #E0E0D8;overflow:hidden;">
+            <div style="height:72px;position:relative;overflow:hidden;">
+              <img src="https://images.unsplash.com/photo-1563636619-e9143da7973b?w=200&h=144&fit=crop&crop=center" style="width:100%;height:100%;object-fit:cover;"/>
+              <div style="position:absolute;top:6px;left:6px;background:#E8F7F0;color:#1A7A50;font-size:8px;font-weight:700;border-radius:5px;padding:2px 5px;">25% OFF</div>
+            </div>
+            <div style="padding:7px 9px 9px;"><div style="font-size:11px;font-weight:600;color:#1A1A1A;">Cow Milk</div><div style="font-size:10px;color:#aaa;margin-bottom:5px;">450 ml</div><div style="display:flex;align-items:center;justify-content:space-between;"><div><span style="font-size:10px;color:#ccc;text-decoration:line-through;">₹48</span> <span style="font-size:12px;font-weight:700;color:#1A1A1A;">₹36</span></div><div style="background:#2D9E6B;color:#fff;font-size:10px;font-weight:700;border-radius:7px;padding:3px 10px;">ADD</div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dahi subscription nudge -->
+      <div style="margin:0 12px 10px;background:#FFF8EE;border:1px solid #F4D580;border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:10px;">
+        <i class="ti ti-repeat" style="font-size:20px;color:#F4A623;flex-shrink:0;"></i>
+        <div style="flex:1;"><div style="font-size:12px;font-weight:600;color:#7A5000;">Add Dahi to your daily delivery</div><div style="font-size:11px;color:#B8860B;margin-top:1px;">Just ₹55/day extra with your milk</div></div>
+        <div style="background:#F4A623;color:#fff;font-size:10px;font-weight:700;border-radius:8px;padding:5px 10px;cursor:pointer;flex-shrink:0;">ADD</div>
+      </div>
+
+      <!-- Free veggies -->
+      <div style="margin:0 12px 12px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+          <div><div style="font-size:13px;font-weight:700;color:#1A1A1A;">Free with your first order</div><div style="font-size:11px;color:#888;margin-top:1px;">Fresh from the farm, ₹0 for you</div></div>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <!-- Okra - empty -->
+          <div style="flex:1;background:#fff;border-radius:14px;border:0.5px solid #E0E0D8;overflow:hidden;">
+            <div style="height:72px;background:#F0FBF4;position:relative;"><div style="position:absolute;top:6px;left:6px;background:#2D9E6B;color:#fff;font-size:9px;font-weight:800;border-radius:5px;padding:2px 6px;">FREE</div></div>
+            <div style="padding:7px 9px 9px;"><div style="font-size:11px;font-weight:600;color:#1A1A1A;">Okra</div><div style="font-size:10px;color:#aaa;margin-bottom:5px;">225 gm</div><div style="display:flex;align-items:center;justify-content:space-between;"><div><span style="font-size:10px;color:#ccc;text-decoration:line-through;">₹18</span> <span style="font-size:12px;font-weight:700;color:#2D9E6B;">₹0</span></div><div style="background:#2D9E6B;color:#fff;font-size:10px;font-weight:700;border-radius:7px;padding:3px 10px;">ADD</div></div></div>
+          </div>
+          <!-- Potato - confirmed -->
+          <div style="flex:1;background:#fff;border-radius:14px;border:0.5px solid #E0E0D8;overflow:hidden;">
+            <div style="height:72px;position:relative;overflow:hidden;"><img src="https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=200&h=144&fit=crop&crop=center" style="width:100%;height:100%;object-fit:cover;"/><div style="position:absolute;top:6px;left:6px;background:#2D9E6B;color:#fff;font-size:9px;font-weight:800;border-radius:5px;padding:2px 6px;">FREE</div></div>
+            <div style="padding:7px 9px 9px;"><div style="font-size:11px;font-weight:600;color:#1A1A1A;">Potato</div><div style="font-size:10px;color:#aaa;margin-bottom:5px;">450 gm</div><div style="display:flex;align-items:center;justify-content:space-between;"><div><span style="font-size:10px;color:#ccc;text-decoration:line-through;">₹22</span> <span style="font-size:12px;font-weight:700;color:#2D9E6B;">₹0</span></div><div style="background:#2D9E6B;color:#fff;font-size:10px;font-weight:700;border-radius:7px;padding:3px 10px;">ADD</div></div></div>
+          </div>
+          <!-- Tomato - confirmed -->
+          <div style="flex:1;background:#fff;border-radius:14px;border:0.5px solid #E0E0D8;overflow:hidden;">
+            <div style="height:72px;position:relative;overflow:hidden;"><img src="https://images.unsplash.com/photo-1546094096-0df4bcaaa337?w=200&h=144&fit=crop&crop=center" style="width:100%;height:100%;object-fit:cover;"/><div style="position:absolute;top:6px;left:6px;background:#2D9E6B;color:#fff;font-size:9px;font-weight:800;border-radius:5px;padding:2px 6px;">FREE</div></div>
+            <div style="padding:7px 9px 9px;"><div style="font-size:11px;font-weight:600;color:#1A1A1A;">Tomato</div><div style="font-size:10px;color:#aaa;margin-bottom:5px;">500 gm</div><div style="display:flex;align-items:center;justify-content:space-between;"><div><span style="font-size:10px;color:#ccc;text-decoration:line-through;">₹24</span> <span style="font-size:12px;font-weight:700;color:#2D9E6B;">₹0</span></div><div style="background:#2D9E6B;color:#fff;font-size:10px;font-weight:700;border-radius:7px;padding:3px 10px;">ADD</div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Social proof -->
+      <div style="margin:0 12px 16px;background:#F5F5F0;border-radius:16px;padding:12px 14px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="font-size:26px;font-weight:800;color:#1A1A1A;line-height:1;">4.8</div>
+            <div>
+              <div style="display:flex;gap:2px;margin-bottom:2px;"><i class="ti ti-star-filled" style="font-size:12px;color:#F4A623;"></i><i class="ti ti-star-filled" style="font-size:12px;color:#F4A623;"></i><i class="ti ti-star-filled" style="font-size:12px;color:#F4A623;"></i><i class="ti ti-star-filled" style="font-size:12px;color:#F4A623;"></i><i class="ti ti-star-filled" style="font-size:12px;color:#F4A623;"></i></div>
+              <div style="font-size:10px;color:#888;">12,400+ reviews</div>
+            </div>
+          </div>
+          <div style="font-size:11px;color:#2D9E6B;font-weight:600;cursor:pointer;">See all →</div>
+        </div>
+        <div style="height:0.5px;background:#E0E0D8;margin-bottom:10px;"></div>
+        <div style="margin-bottom:9px;">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
+            <div style="width:22px;height:22px;background:#2D9E6B;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><span style="font-size:10px;color:#fff;font-weight:700;">A</span></div>
+            <div style="font-size:11px;font-weight:600;color:#1A1A1A;">Anjali M.</div>
+            <div style="display:flex;gap:1px;margin-left:2px;"><i class="ti ti-star-filled" style="font-size:9px;color:#F4A623;"></i><i class="ti ti-star-filled" style="font-size:9px;color:#F4A623;"></i><i class="ti ti-star-filled" style="font-size:9px;color:#F4A623;"></i><i class="ti ti-star-filled" style="font-size:9px;color:#F4A623;"></i><i class="ti ti-star-filled" style="font-size:9px;color:#F4A623;"></i></div>
+            <div style="font-size:10px;color:#bbb;margin-left:auto;">2d ago</div>
+          </div>
+          <div style="font-size:11px;color:#555;line-height:1.5;padding-left:28px;">Fresh every morning without fail. Never missed a single delivery.</div>
+        </div>
+        <div style="margin-bottom:9px;">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
+            <div style="width:22px;height:22px;background:#F4A623;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><span style="font-size:10px;color:#fff;font-weight:700;">S</span></div>
+            <div style="font-size:11px;font-weight:600;color:#1A1A1A;">Sneha R.</div>
+            <div style="display:flex;gap:1px;margin-left:2px;"><i class="ti ti-star-filled" style="font-size:9px;color:#F4A623;"></i><i class="ti ti-star-filled" style="font-size:9px;color:#F4A623;"></i><i class="ti ti-star-filled" style="font-size:9px;color:#F4A623;"></i><i class="ti ti-star-filled" style="font-size:9px;color:#F4A623;"></i><i class="ti ti-star-half-filled" style="font-size:9px;color:#F4A623;"></i></div>
+            <div style="font-size:10px;color:#bbb;margin-left:auto;">5d ago</div>
+          </div>
+          <div style="font-size:11px;color:#555;line-height:1.5;padding-left:28px;">Switched from packet milk. The difference in taste is real.</div>
+        </div>
+        <div>
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
+            <div style="width:22px;height:22px;background:#7B61FF;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><span style="font-size:10px;color:#fff;font-weight:700;">R</span></div>
+            <div style="font-size:11px;font-weight:600;color:#1A1A1A;">Rohan K.</div>
+            <div style="display:flex;gap:1px;margin-left:2px;"><i class="ti ti-star-filled" style="font-size:9px;color:#F4A623;"></i><i class="ti ti-star-filled" style="font-size:9px;color:#F4A623;"></i><i class="ti ti-star-filled" style="font-size:9px;color:#F4A623;"></i><i class="ti ti-star-filled" style="font-size:9px;color:#F4A623;"></i><i class="ti ti-star-filled" style="font-size:9px;color:#F4A623;"></i></div>
+            <div style="font-size:10px;color:#bbb;margin-left:auto;">1w ago</div>
+          </div>
+          <div style="font-size:11px;color:#555;line-height:1.5;padding-left:28px;">Lab report link builds trust. You know exactly what you're drinking.</div>
+        </div>
+      </div>
+    </div>
+    <div class="phone-bottom">
+      <div class="bottom-nav">
+        <div class="nav-item act"><i class="ti ti-home"></i><span>Home</span></div>
+        <div class="nav-item"><i class="ti ti-layout-grid"></i><span>Products</span></div>
+        <div class="nav-item"><div class="nav-orange"><i class="ti ti-percentage"></i><span>4+4</span></div></div>
+        <div class="nav-item"><i class="ti ti-users"></i><span>Refer</span></div>
+        <div class="nav-item"><i class="ti ti-star"></i><span>Favourites</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SCREEN 2 · HOME
+══════════════════════════════════════ -->
+<div class="screen-wrap" id="screen-home">
+  <div class="screen-label">Home · 360×780px</div>
+  <div class="phone">
+    <div class="phone-top">
+      <div class="status-bar"><span class="time">9:41</span><div class="status-icons"><i class="ti ti-wifi"></i><i class="ti ti-signal-4g"></i><i class="ti ti-battery"></i></div></div>
+      <div style="background:#fff;padding:12px 16px 10px;border-bottom:0.5px solid #E0E0D8;">
+        <div style="display:flex;gap:8px;margin-bottom:12px;">
+          <div style="flex:1;padding:10px 8px;border-radius:14px;font-size:13px;font-weight:500;text-align:center;cursor:pointer;background:#fff;border:1.5px solid #2D9E6B;color:#1A7A50;"><small style="display:block;font-size:18px;line-height:1.2;">☀️</small>Morning</div>
+          <div style="flex:1;padding:10px 8px;border-radius:14px;font-size:13px;font-weight:500;background:#1A1A1A;color:#fff;border:none;display:flex;flex-direction:column;align-items:center;gap:3px;"><span style="background:#F4A623;color:#1A1A1A;font-size:9px;font-weight:800;border-radius:6px;padding:1px 6px;">MINS</span>Instant</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div class="avatar"><i class="ti ti-user"></i></div>
+            <div><p style="font-size:11px;color:#888;">Morning 5am – 7:30am</p><h3 style="font-size:15px;font-weight:600;color:#1A1A1A;">Hi Priya 👋</h3></div>
+          </div>
+          <div class="wallet"><i class="ti ti-wallet" style="font-size:14px;"></i> ₹292</div>
+        </div>
+      </div>
+      <div style="background:#fff;padding:8px 14px;display:flex;gap:2px;border-bottom:0.5px solid #E0E0D8;align-items:stretch;">
+        <div style="flex:1;text-align:center;padding:5px 3px;border-radius:10px;"><div style="font-size:10px;color:#aaa;">Wed</div><div style="font-size:17px;font-weight:500;color:#1A1A1A;">06</div></div>
+        <div style="flex:1;text-align:center;padding:5px 3px;border-radius:10px;border:1.5px solid #2D9E6B;"><div style="font-size:10px;color:#aaa;">Thu</div><div style="font-size:17px;font-weight:500;color:#2D9E6B;">07</div></div>
+        <div style="background:#1A1A1A;border-radius:10px;padding:5px 8px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:80px;"><div style="font-size:9px;color:#aaa;text-align:center;line-height:1.3;">Fri 08<br>No order yet</div><div style="background:#fff;color:#1A1A1A;font-size:10px;font-weight:700;border-radius:6px;padding:2px 10px;margin-top:4px;">+ Add</div></div>
+        <div style="flex:1;text-align:center;padding:5px 3px;border-radius:10px;"><div style="font-size:10px;color:#aaa;">Sat</div><div style="font-size:17px;font-weight:500;color:#1A1A1A;">09</div></div>
+        <div style="flex:1;text-align:center;padding:5px 3px;border-radius:10px;"><div style="font-size:10px;color:#aaa;">Sun</div><div style="font-size:17px;font-weight:500;color:#1A1A1A;">10</div></div>
+      </div>
+      <div class="cat-strip">
+        <div class="cat-item act"><div class="cat-icon"><i class="ti ti-layout-grid" style="font-size:18px;color:#2D9E6B;"></i></div><div class="cat-lbl">All</div></div>
+        <div class="cat-item"><div class="cat-icon">🥦</div><div class="cat-lbl">Fruits &amp; Veggies</div></div>
+        <div class="cat-item"><div class="cat-icon">🥛</div><div class="cat-lbl">Groceries</div></div>
+        <div class="cat-item"><div class="cat-icon">🧈</div><div class="cat-lbl">Ghee &amp; Oils</div></div>
+        <div class="cat-item"><div class="cat-icon">🍞</div><div class="cat-lbl">Breads &amp; Eggs</div></div>
+      </div>
+      <div style="background:#fff;padding:8px 14px 10px;border-bottom:0.5px solid #E0E0D8;">
+        <div class="white-search"><i class="ti ti-search"></i><span>Search milk, paneer, ghee…</span></div>
+      </div>
+    </div>
+    <div class="phone-body">
+      <div class="content">
+        <div class="promo-strip"><i class="ti ti-gift"></i><p>4+4 on milk subscription — Pay 4 days, get 4 days free!</p></div>
+        <div class="banner">
+          <div class="banner-text">
+            <span class="offer-tag">PAYDAY SALE · UP TO 50% OFF</span>
+            <h2>Live Better.<br><span>Pay Less.</span></h2>
+            <div class="shop-btn">Shop now →</div>
+          </div>
+          <div class="banner-visual"><i class="ti ti-discount-2"></i></div>
+        </div>
+        <div class="sec-hdr"><h3>Top picks for you</h3><a>See all</a></div>
+        <div class="prod-grid">
+          <!-- Cow Milk - confirmed -->
+          <div class="prod-card"><div class="prod-img" style="padding:0;overflow:hidden;"><img src="https://images.unsplash.com/photo-1563636619-e9143da7973b?w=200&h=176&fit=crop&crop=center" style="width:100%;height:100%;object-fit:cover;"/><span class="off-badge">25% off</span></div><div class="prod-info"><h4>Cow Milk</h4><div class="qty">450 ml · Daily</div><div class="price-row"><div><span class="old">₹48</span> <span class="nw">₹36</span></div><div class="add-sm">ADD</div></div></div></div>
+          <!-- Desi Ghee - empty -->
+          <div class="prod-card"><div class="prod-img" style="background:#FFFBF0;"><span class="off-badge">29% off</span></div><div class="prod-info"><h4>Desi Ghee</h4><div class="qty">850 ml × 4</div><div class="price-row"><div><span class="old">₹899</span> <span class="nw">₹639</span></div><div class="add-sm">ADD</div></div></div></div>
+          <!-- Okra - empty -->
+          <div class="prod-card"><div class="prod-img" style="background:#F0FBF4;"><span class="off-badge">FREE</span></div><div class="prod-info"><h4>Okra</h4><div class="qty">225 gm</div><div class="price-row"><div><span class="old">₹18</span> <span class="nw">₹0</span></div><div class="add-sm">ADD</div></div></div></div>
+          <!-- Paneer - empty -->
+          <div class="prod-card"><div class="prod-img" style="background:#FFFBF0;"><span class="off-badge" style="background:#FFF8EE;color:#F4A623;border:0.5px solid #F4D580;">FRESH</span></div><div class="prod-info"><h4>Taaza Paneer</h4><div class="qty">180 gm</div><div class="price-row"><div><span class="nw">₹65</span></div><div class="add-sm">ADD</div></div></div></div>
+          <!-- Dahi - empty -->
+          <div class="prod-card"><div class="prod-img" style="background:#F0F8FF;"><span class="off-badge" style="background:#FFF8EE;color:#F4A623;border:0.5px solid #F4D580;">FRESH</span></div><div class="prod-info"><h4>Ghar Jaisa Dahi</h4><div class="qty">400 gm</div><div class="price-row"><div><span class="nw">₹55</span></div><div class="add-sm">ADD</div></div></div></div>
+          <!-- Potato - confirmed -->
+          <div class="prod-card"><div class="prod-img" style="padding:0;overflow:hidden;"><img src="https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=200&h=176&fit=crop&crop=center" style="width:100%;height:100%;object-fit:cover;"/><span class="off-badge">FREE</span></div><div class="prod-info"><h4>Potato</h4><div class="qty">450 gm</div><div class="price-row"><div><span class="old">₹22</span> <span class="nw">₹0</span></div><div class="add-sm">ADD</div></div></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="phone-bottom">
+      <div class="bottom-nav">
+        <div class="nav-item act"><i class="ti ti-home"></i><span>Home</span></div>
+        <div class="nav-item"><i class="ti ti-layout-grid"></i><span>Products</span></div>
+        <div class="nav-item"><div class="nav-special"><i class="ti ti-percentage"></i><span>4+4</span></div></div>
+        <div class="nav-item"><i class="ti ti-users"></i><span>Refer</span></div>
+        <div class="nav-item"><i class="ti ti-star"></i><span>Favourites</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SCREEN 3 · YUMMY BITES (NEW USER)
+══════════════════════════════════════ -->
+<div class="screen-wrap" id="screen-yummy">
+  <div class="screen-label">Yummy Bites · New User View · 360×780px</div>
+  <div class="phone">
+    <div class="phone-top">
+      <div class="status-bar"><span class="time">9:41</span><div class="status-icons"><i class="ti ti-wifi"></i><i class="ti ti-battery"></i></div></div>
+      <div class="page-header">
+        <i class="ti ti-arrow-left" style="font-size:20px;color:#1A1A1A;"></i>
+        <div><h2>Yummy Bites</h2><div class="sub">Deliver on Fri, 8th May</div></div>
+      </div>
+      <div class="filter-row">
+        <div class="fpill act">No palm oil</div>
+        <div class="fpill">High protein</div>
+        <div class="fpill">Roasted</div>
+      </div>
+    </div>
+    <div class="split">
+      <div class="side-cats">
+        <div class="ce act"><div class="cei" style="background:#FFF3EC;font-size:16px;">🥜</div>Nuts &amp; Seeds</div>
+        <div class="ce"><div class="cei" style="font-size:16px;">🌾</div>Makhana</div>
+        <div class="ce"><div class="cei" style="font-size:16px;">🫓</div>Khakra</div>
+        <div class="ce"><div class="cei" style="font-size:16px;">🍬</div>Chikki</div>
+        <div class="ce"><div class="cei" style="font-size:16px;">🌰</div>Ladoo</div>
+        <div class="ce"><div class="cei" style="font-size:16px;">🍫</div>All Snacks</div>
+      </div>
+      <div class="prod-list">
+        <!-- Section label -->
+        <div style="font-size:11px;font-weight:700;color:#E8621A;letter-spacing:.04em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:5px;"><i class="ti ti-sparkles" style="font-size:12px;"></i> Snacks of the week</div>
+
+        <!-- Roasted Peanuts single -->
+        <div class="pcard">
+          <div class="pcard-inner">
+            <div class="pthumb" style="background:#FFF8EE;"></div>
+            <div class="pdetails">
+              <div class="ptag" style="color:#E8621A;">No palm oil · Roasted</div>
+              <h4>Roasted Peanuts</h4>
+              <div class="pwt">70 gm · 1 pack</div>
+              <div class="pa"><div><span class="pnew">₹30</span></div><div class="btn-add" style="background:#E8621A;">ADD</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Makhana single -->
+        <div class="pcard">
+          <div class="pcard-inner">
+            <div class="pthumb" style="background:#F5F5F0;"></div>
+            <div class="pdetails">
+              <div class="ptag" style="color:#E8621A;">Light · High protein</div>
+              <h4>Roasted Makhana</h4>
+              <div class="pwt">25 gm · 1 pack</div>
+              <div class="pa"><div><span class="pnew">₹35</span></div><div class="btn-add" style="background:#E8621A;">ADD</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Khakra single -->
+        <div class="pcard">
+          <div class="pcard-inner">
+            <div class="pthumb" style="background:#FFF8EE;">
+              <div style="width:78px;height:78px;background:#F5EED8;border-radius:10px;display:flex;align-items:center;justify-content:center;"><i class="ti ti-cookie" style="font-size:30px;color:#C8A84A;"></i></div>
+            </div>
+            <div class="pdetails">
+              <div class="ptag" style="color:#E8621A;">Maida free · Gujarati</div>
+              <h4>Multigrain Mini Khakra</h4>
+              <div class="pwt">100 gm · 1 pack</div>
+              <div class="pa"><div><span class="pold">₹90</span> <span class="pnew">₹69</span></div><div class="btn-add" style="background:#E8621A;">ADD</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Divider -->
+        <div style="display:flex;align-items:center;gap:8px;margin:4px 0 10px;">
+          <div style="flex:1;height:0.5px;background:#E0E0D8;"></div>
+          <div style="font-size:10px;color:#aaa;white-space:nowrap;">Buy more, save more</div>
+          <div style="flex:1;height:0.5px;background:#E0E0D8;"></div>
+        </div>
+
+        <!-- Khakra 3-pack bulk -->
+        <div class="pcard">
+          <div class="pcard-inner">
+            <div class="pthumb" style="background:#FFF3EC;">
+              <div style="width:78px;height:78px;background:#F5EED8;border-radius:10px;display:flex;align-items:center;justify-content:center;"><i class="ti ti-cookie" style="font-size:30px;color:#C8A84A;"></i></div>
+              <span class="pack-badge">3 PACK</span>
+            </div>
+            <div class="pdetails">
+              <div class="ptag" style="color:#E8621A;">51% off · Bulk</div>
+              <h4>Multigrain Mini Khakra</h4>
+              <div class="pwt">100 gm × 3</div>
+              <div class="pa"><div><span class="pold">₹90</span> <span class="pnew">₹44/pack</span></div><div style="display:flex;gap:5px;"><div class="btn-sub">Subscribe</div><div class="btn-add" style="background:#E8621A;">ADD</div></div></div>
+            </div>
+          </div>
+          <div class="size-row">
+            <div class="sopt sel" style="border-color:#E8621A;background:#FFF3EC;"><div class="so" style="color:#E8621A;">51% off</div><div class="sn">3 Packs</div><div class="sp">₹44/pack</div></div>
+            <div class="sopt"><div class="so" style="color:#E8621A;">47% off</div><div class="sn">2 Packs</div><div class="sp">₹47.5/pack</div></div>
+            <div class="sopt"><div class="so" style="color:#E8621A;">23% off</div><div class="sn">1 Pack</div><div class="sp">₹69/pack</div></div>
+          </div>
+          <div class="vip-bar"><i class="ti ti-crown"></i><p>Saving ₹46 (51% OFF) with <strong>🎖 VIP</strong></p></div>
+        </div>
+
+        <!-- Peanut Chikki 4-pack bulk -->
+        <div class="pcard">
+          <div class="pcard-inner">
+            <div class="pthumb" style="background:#FFF3EC;">
+              <div style="width:78px;height:78px;background:#F5EED8;border-radius:10px;display:flex;align-items:center;justify-content:center;"><i class="ti ti-circles" style="font-size:30px;color:#C8A84A;"></i></div>
+              <span class="pack-badge">4 PACK</span>
+            </div>
+            <div class="pdetails">
+              <div class="ptag" style="color:#E8621A;">44% off · Bulk</div>
+              <h4>Peanut Chikki: Gud Patti</h4>
+              <div class="pwt">90 gm × 4</div>
+              <div class="pa"><div><span class="pold">₹59</span> <span class="pnew">₹33/pack</span></div><div style="display:flex;gap:5px;"><div class="btn-sub">Subscribe</div><div class="btn-add" style="background:#E8621A;">ADD</div></div></div>
+            </div>
+          </div>
+          <div class="size-row">
+            <div class="sopt sel" style="border-color:#E8621A;background:#FFF3EC;"><div class="so" style="color:#E8621A;">44% off</div><div class="sn">4 Packs</div><div class="sp">₹33/pack</div></div>
+            <div class="sopt"><div class="so" style="color:#E8621A;">36% off</div><div class="sn">2 Packs</div><div class="sp">₹37.5/pack</div></div>
+            <div class="sopt"><div class="so" style="color:#E8621A;">22% off</div><div class="sn">1 Pack</div><div class="sp">₹46/pack</div></div>
+          </div>
+          <div class="vip-bar"><i class="ti ti-crown"></i><p>Saving ₹26 (44% OFF) with <strong>🎖 VIP</strong></p></div>
+        </div>
+      </div>
+    </div>
+    <div class="phone-bottom">
+      <div class="upsell-strip"><div style="width:32px;height:32px;background:rgba(255,255,255,.2);border-radius:7px;flex-shrink:0;"></div><p>Shop for ₹1 more to avail Assam Tea (Premium | Fine Aroma) AT ₹9</p></div>
+      <div class="bottom-nav">
+        <div class="nav-item"><i class="ti ti-home"></i><span>Home</span></div>
+        <div class="nav-item act"><i class="ti ti-layout-grid"></i><span>Products</span></div>
+        <div class="nav-item"><i class="ti ti-percentage"></i><span>4+4</span></div>
+        <div class="nav-item"><i class="ti ti-users"></i><span>Refer</span></div>
+        <div class="nav-item"><i class="ti ti-star"></i><span>Favourites</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SCREEN 4 · PRODUCT LISTING
+══════════════════════════════════════ -->
+<div class="screen-wrap" id="screen-listing">
+  <div class="screen-label">Product Listing · 360×780px</div>
+  <div class="phone">
+    <div class="phone-top">
+      <div class="status-bar"><span class="time">9:41</span><div class="status-icons"><i class="ti ti-wifi"></i><i class="ti ti-battery"></i></div></div>
+      <div class="page-header"><i class="ti ti-arrow-left" style="font-size:20px;color:#1A1A1A;"></i><div><h2>Morning Delivery</h2><div class="sub">Deliver on Fri, 9th May</div></div></div>
+      <div class="filter-row">
+        <div class="fpill act">🎁 Buy 1 Get 1</div><div class="fpill">Starting ₹0</div><div class="fpill">🧈 Ghee Offer</div><div class="fpill">Easy Combos</div><div class="fpill">Save More</div>
+      </div>
+    </div>
+    <div class="split">
+      <div class="side-cats">
+        <div class="ce"><div class="cei">🌟</div>Hot Deals</div>
+        <div class="ce act"><div class="cei" style="background:#E8F7F0;">🧈</div>Dairy Delight</div>
+        <div class="ce"><div class="cei">🥛</div>Milk</div>
+        <div class="ce"><div class="cei">🥚</div>Eggs &amp; Bread</div>
+        <div class="ce"><div class="cei">🌾</div>Sugar &amp; Spices</div>
+        <div class="ce"><div class="cei">🥬</div>Fresh Veggies</div>
+        <div class="ce"><div class="cei">🍌</div>Fruits</div>
+        <div class="ce"><div class="cei">🥜</div>Snacks</div>
+      </div>
+      <div class="prod-list">
+        <div class="pcard">
+          <div class="pcard-inner">
+            <div class="pthumb"><i class="ti ti-droplet"></i><span class="pack-badge">4 PACK</span></div>
+            <div class="pdetails"><div class="ptag">Processing video</div><h4>Buffalo Ghee</h4><div class="pwt">850 ml</div><div class="pa"><div><span class="pold">₹899</span> <span class="pnew">₹639/jar</span></div><div style="display:flex;gap:5px;"><div class="btn-sub">Subscribe</div><div class="btn-add">ADD</div></div></div></div>
+          </div>
+          <div class="size-row">
+            <div class="sopt sel"><div class="so">29% off</div><div class="sn">850ml×4</div><div class="sp">₹639/jar</div></div>
+            <div class="sopt"><div class="so">24% off</div><div class="sn">850ml×2</div><div class="sp">₹649/jar</div></div>
+            <div class="sopt"><div class="so">—</div><div class="sn">850ml</div><div class="sp">₹679/jar</div></div>
+          </div>
+          <div class="vip-bar"><i class="ti ti-crown"></i><p>Save ₹260 (28% off) with <strong>VIP</strong></p></div>
+        </div>
+        <div class="pcard">
+          <div class="pcard-inner">
+            <div class="pthumb"><i class="ti ti-bottle"></i></div>
+            <div class="pdetails"><div class="ptag">4+4 Offer</div><h4>Cow Milk</h4><div class="pwt">450 ml</div><div class="pa"><div><span class="pold">₹48</span> <span class="pnew">₹36</span></div><div class="btn-add">ADD</div></div></div>
+          </div>
+          <div class="quality-link"><span>Tap to view Quality Report</span><i class="ti ti-external-link"></i></div>
+          <div class="vip-bar"><i class="ti ti-crown"></i><p>Save ₹12 (25% off) with <strong>VIP</strong></p></div>
+        </div>
+        <div class="pcard">
+          <div class="pcard-inner">
+            <div class="pthumb"><i class="ti ti-bottle"></i></div>
+            <div class="pdetails"><div class="ptag">4+4 Offer · Naturally Creamy</div><h4>Buffalo Milk</h4><div class="pwt">450 ml</div><div class="pa"><div><span class="pold">₹59</span> <span class="pnew">₹45</span></div><div class="btn-add">ADD</div></div></div>
+          </div>
+          <div class="quality-link"><span>Lab Report</span><i class="ti ti-external-link"></i></div>
+          <div class="vip-bar"><i class="ti ti-crown"></i><p>Save ₹14 (23% off) with <strong>VIP</strong></p></div>
+        </div>
+      </div>
+    </div>
+    <div class="phone-bottom">
+      <div class="search-fab-wrap"><div class="search-fab"><i class="ti ti-search"></i> Search products</div></div>
+      <div class="bottom-nav">
+        <div class="nav-item"><i class="ti ti-home"></i><span>Home</span></div>
+        <div class="nav-item act"><i class="ti ti-layout-grid"></i><span>Products</span></div>
+        <div class="nav-item"><i class="ti ti-percentage"></i><span>4+4</span></div>
+        <div class="nav-item"><i class="ti ti-users"></i><span>Refer</span></div>
+        <div class="nav-item"><i class="ti ti-star"></i><span>Favourites</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SCREEN 5 · ORDER CONFIRMED
+══════════════════════════════════════ -->
+<div class="screen-wrap" id="screen-order">
+  <div class="screen-label">Order Confirmed · 360×780px</div>
+  <div class="phone">
+    <div class="phone-top">
+      <div class="status-bar"><span class="time">9:41</span><div class="status-icons"><i class="ti ti-wifi"></i><i class="ti ti-battery"></i></div></div>
+      <div class="page-header"><i class="ti ti-x" style="font-size:20px;color:#1A1A1A;"></i><h2>Order Confirmed!</h2></div>
+      <div class="savings-strip">Yay! you are saving ₹14 on this order</div>
+    </div>
+    <div class="phone-body">
+      <div class="content">
+        <div class="vip-save"><i class="ti ti-crown"></i><p>You have saved <strong>₹14</strong> extra on this order as a VIP member.</p></div>
+        <div class="ocard">
+          <div class="ocard-hdr">Deliver on Fri, 8th May</div>
+          <div class="oitem">
+            <div class="othumb"><i class="ti ti-bottle"></i></div>
+            <div class="oinfo"><h4>Buffalo Milk</h4><p>450 ml × 1</p></div>
+            <div><div class="oprice" style="display:flex;gap:5px;align-items:center;"><span style="font-size:11px;color:#ccc;text-decoration:line-through;">₹59</span><span>₹45</span></div><div class="otag">One Time</div></div>
+          </div>
+        </div>
+        <div class="bill-card">
+          <div class="brow"><span>Items Total (MRP)</span><span>₹59</span></div>
+          <div class="brow vip"><span>VIP Benefit Availed</span><span>–₹14</span></div>
+          <div class="brow"><span>Packaging charge</span><span>₹0</span></div>
+          <div class="brow"><span>Convenience Fee</span><span>₹1</span></div>
+          <div class="brow total"><span>To Pay</span><span><span class="striked">₹60</span>₹46</span></div>
+          <div class="note">Amount will only be charged after the products are delivered.</div>
+        </div>
+        <div class="bill-card">
+          <div class="brow" style="font-weight:600;color:#1A1A1A;font-size:13px;margin-bottom:6px;">Delivery Details</div>
+          <div class="brow"><span>Delivery Date</span><span>Fri, 8th May</span></div>
+        </div>
+        <div class="bill-card" style="background:#F8F8F4;border:none;">
+          <div class="brow" style="font-weight:600;color:#1A1A1A;font-size:13px;margin-bottom:6px;">Disclaimer</div>
+          <p style="font-size:11px;color:#aaa;line-height:1.6;">Weights shown are indicative. You will be billed as per actual weight delivered.</p>
+        </div>
+      </div>
+    </div>
+    <div class="phone-bottom">
+      <div class="bottom-nav">
+        <div class="nav-item act"><i class="ti ti-home"></i><span>Home</span></div>
+        <div class="nav-item"><i class="ti ti-layout-grid"></i><span>Products</span></div>
+        <div class="nav-item"><i class="ti ti-percentage"></i><span>4+4</span></div>
+        <div class="nav-item"><i class="ti ti-users"></i><span>Refer</span></div>
+        <div class="nav-item"><i class="ti ti-star"></i><span>Favourites</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SCREEN 6 · SUBSCRIPTIONS
+══════════════════════════════════════ -->
+<div class="screen-wrap" id="screen-subs">
+  <div class="screen-label">My Subscriptions · 360×780px</div>
+  <div class="phone">
+    <div class="phone-top">
+      <div class="status-bar"><span class="time">9:41</span><div class="status-icons"><i class="ti ti-wifi"></i><i class="ti ti-battery"></i></div></div>
+      <div class="page-header"><i class="ti ti-arrow-left" style="font-size:20px;color:#1A1A1A;"></i><h2>My Subscriptions</h2></div>
+    </div>
+    <div class="phone-body">
+      <div class="content">
+        <div class="sub-card">
+          <div class="sub-inner">
+            <div class="sthumb"><i class="ti ti-bottle"></i><span class="s44">4+4</span></div>
+            <div class="sinfo"><h4>Cow Milk</h4><div class="swt">450 ml</div><span class="freq-pill">Daily · Qty 2</span><div class="sprice"><span class="sold">₹48</span><span class="snew">₹36</span></div></div>
+            <div class="edit-btn">Edit</div>
+          </div>
+          <div class="vip-bar"><i class="ti ti-crown"></i><p>Save ₹12 (25% off) with <strong>VIP</strong></p></div>
+        </div>
+        <div class="progress-wrap"><i class="ti ti-percentage"></i><p>Take <strong>4 more deliveries</strong> and get 4 deliveries completely free!</p><a>Know more</a></div>
+        <div class="sec-hdr"><h3>Add More Subscriptions</h3><a>View All</a></div>
+        <div class="upsell-row">
+          <div class="ucard"><div class="uimg"><i class="ti ti-droplet"></i></div><div class="uinfo"><h5>Desi Ghee</h5><div class="uwt">850 ml</div><div class="uprice"><span style="text-decoration:line-through;color:#ccc;">₹899</span> ₹679</div><div class="uadd">ADD</div></div></div>
+          <div class="ucard"><div class="uimg"><i class="ti ti-leaf"></i></div><div class="uinfo"><h5>Groundnut Oil</h5><div class="uwt">700ml × 2</div><div class="uprice"><span style="text-decoration:line-through;color:#ccc;">₹398</span> ₹199</div><div class="uadd">ADD</div></div></div>
+          <div class="ucard"><div class="uimg"><i class="ti ti-plant"></i></div><div class="uinfo"><h5>Mustard Oil</h5><div class="uwt">700ml × 2</div><div class="uprice"><span style="text-decoration:line-through;color:#ccc;">₹370</span> ₹179</div><div class="uadd">ADD</div></div></div>
+          <div class="ucard"><div class="uimg"><i class="ti ti-cookie"></i></div><div class="uinfo"><h5>Peanut Chikki</h5><div class="uwt">90gm × 4</div><div class="uprice"><span style="text-decoration:line-through;color:#ccc;">₹59</span> ₹33</div><div class="uadd">ADD</div></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="phone-bottom">
+      <div class="bottom-nav">
+        <div class="nav-item"><i class="ti ti-home"></i><span>Home</span></div>
+        <div class="nav-item act"><i class="ti ti-layout-grid"></i><span>Products</span></div>
+        <div class="nav-item"><i class="ti ti-percentage"></i><span>4+4</span></div>
+        <div class="nav-item"><i class="ti ti-users"></i><span>Refer</span></div>
+        <div class="nav-item"><i class="ti ti-star"></i><span>Favourites</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SCREEN 7 · CATEGORY FILTER
+══════════════════════════════════════ -->
+<div class="screen-wrap" id="screen-catfilter">
+  <div class="screen-label">Category Filter Pills · 360×780px</div>
+  <div class="phone">
+    <div class="phone-top">
+      <div class="status-bar"><span class="time">11:16</span><div class="status-icons"><i class="ti ti-wifi"></i><i class="ti ti-signal-4g"></i><i class="ti ti-battery"></i></div></div>
+      <div class="page-header"><i class="ti ti-arrow-left" style="font-size:20px;color:#1A1A1A;"></i><div><h2>Morning Delivery</h2><div class="sub">Deliver on Fri, 8th May</div></div></div>
+      <div class="filter-row">
+        <div class="fpill act">Buy 1 Get 1 Free 🎁</div><div class="fpill">Starting @ ₹0 🍊</div><div class="fpill">Sample Packs 🎁</div><div class="fpill">Ghee &amp; Oil Spl Offer</div><div class="fpill">Easy Combos 🥦🥕</div><div class="fpill">Buy More, Save More</div>
+      </div>
+    </div>
+    <div class="split">
+      <div class="side-cats">
+        <div class="ce act"><div class="cei" style="background:#E8F7F0;font-size:14px;">🧈</div>Dairy Delight</div>
+        <div class="ce"><div class="cei">🥩</div>Ghee, Oils</div>
+        <div class="ce"><div class="cei">🥛</div>Milk &amp; Coconut</div>
+        <div class="ce"><div class="cei">🍚</div>Dairy, Poha</div>
+        <div class="ce"><div class="cei">🥚</div>Breads, Eggs</div>
+        <div class="ce"><div class="cei">🌶</div>Sugar &amp; Spices</div>
+        <div class="ce"><div class="cei">🥬</div>Fresh Veggies</div>
+        <div class="ce"><div class="cei">🍌</div>Fruits</div>
+      </div>
+      <div class="prod-list">
+        <div class="pcard" style="border-color:#E0D8C0;">
+          <div style="background:#3D2B1A;height:130px;display:flex;align-items:center;justify-content:center;position:relative;">
+            <i class="ti ti-droplet" style="font-size:52px;color:#F4A623;"></i>
+            <div style="position:absolute;bottom:8px;left:8px;right:8px;color:#fff;"><div style="font-size:16px;font-weight:700;">Desi Danedar Ghee</div><div style="font-size:11px;color:rgba(255,255,255,.7);">850ml × 4</div></div>
+          </div>
+          <div style="padding:10px 12px;display:flex;align-items:center;justify-content:space-between;"><div><span style="font-size:11px;color:#ccc;text-decoration:line-through;">₹899</span> <span style="font-size:16px;font-weight:700;color:#1A1A1A;">₹639/Jar</span></div><div class="btn-add" style="font-size:13px;padding:8px 20px;">ADD</div></div>
+          <div class="size-row">
+            <div class="sopt sel"><div class="so">850ml × 4</div><div class="sn">₹639/Jar</div></div>
+            <div class="sopt"><div class="so">850ml × 2</div><div class="sn">₹649/Jar</div></div>
+            <div class="sopt"><div class="so">850ml</div><div class="sn">₹679/Jar</div></div>
+          </div>
+          <div class="vip-bar"><i class="ti ti-crown"></i><p>Saving ₹12 (25% OFF) with <strong>🎖 VIP</strong></p></div>
+        </div>
+        <div class="pcard">
+          <div class="pcard-inner">
+            <div class="pthumb"><i class="ti ti-droplet"></i><span class="pack-badge">4 PACK</span></div>
+            <div class="pdetails"><div class="ptag">Processing Video</div><h4>Buffalo Ghee</h4><div class="pwt">850 ml</div><div class="pa"><div><span class="pold">₹899</span> <span class="pnew">₹639/jar</span></div><div style="display:flex;gap:5px;"><div class="btn-sub">Subscribe</div><div class="btn-add">ADD</div></div></div></div>
+          </div>
+          <div class="vip-bar"><i class="ti ti-crown"></i><p>Saving ₹12 (25% OFF) with <strong>🎖 VIP</strong></p></div>
+        </div>
+      </div>
+    </div>
+    <div class="phone-bottom">
+      <div class="search-fab-wrap"><div class="search-fab"><i class="ti ti-search"></i> Search products</div></div>
+      <div class="upsell-strip"><div style="width:32px;height:32px;background:rgba(255,255,255,.2);border-radius:7px;flex-shrink:0;"></div><p>Shop for ₹1 more to avail Assam Tea (Premium | Fine Aroma) AT ₹9</p></div>
+      <div class="bottom-nav">
+        <div class="nav-item"><i class="ti ti-home"></i><span>Home</span></div>
+        <div class="nav-item act"><i class="ti ti-layout-grid"></i><span>Products</span></div>
+        <div class="nav-item"><i class="ti ti-percentage"></i><span>4+4</span></div>
+        <div class="nav-item"><i class="ti ti-users"></i><span>Refer</span></div>
+        <div class="nav-item"><i class="ti ti-star"></i><span>Favourites</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SCREEN 8 · FAVOURITES
+══════════════════════════════════════ -->
+<div class="screen-wrap" id="screen-favourites">
+  <div class="screen-label">Favourites · Morning Delivery · 360×780px</div>
+  <div class="phone">
+    <div class="phone-top">
+      <div class="status-bar"><span class="time">12:00</span><div class="status-icons"><i class="ti ti-wifi"></i><i class="ti ti-battery"></i></div></div>
+      <div class="page-header"><i class="ti ti-arrow-left" style="font-size:20px;color:#1A1A1A;"></i><div><h2>Morning Delivery</h2><div class="sub">Deliver on Fri, 8th May</div></div></div>
+      <div class="filter-row">
+        <div class="fpill act">Buy 1 Get 1 Free 🎁</div><div class="fpill">Starting @ ₹0 🍊</div><div class="fpill">Sample Packs 🎁</div><div class="fpill">Ghee &amp; Oil Spl Offer</div>
+      </div>
+    </div>
+    <div class="split">
+      <div class="side-cats">
+        <div class="ce"><div class="cei">🥩</div>Ghee, Oils</div>
+        <div class="ce act"><div class="cei" style="background:#E8F7F0;">🥛</div>Milk &amp; Coconut</div>
+        <div class="ce"><div class="cei">🍚</div>Dairy, Poha</div>
+        <div class="ce"><div class="cei">🥚</div>Breads, Eggs</div>
+        <div class="ce"><div class="cei">🌶</div>Sugar &amp; Spices</div>
+        <div class="ce"><div class="cei">🥬</div>Fresh Veggies</div>
+        <div class="ce"><div class="cei">🍌</div>Fruits</div>
+      </div>
+      <div class="prod-list">
+        <div style="padding:4px 0 10px;font-size:12px;font-weight:600;color:#1A1A1A;">⭐ Your Favourites</div>
+        <div class="pcard">
+          <div class="pcard-inner">
+            <div class="pthumb"><i class="ti ti-bottle"></i></div>
+            <div class="pdetails"><div class="ptag">4+4 Offer</div><h4>Cow Milk</h4><div class="pwt">450 ml</div><div class="pa"><div><span class="pold">₹48</span> <span class="pnew">₹36</span></div><div class="btn-add">ADD</div></div></div>
+          </div>
+          <div class="quality-link"><span>Tap to view Quality Report</span><i class="ti ti-external-link"></i></div>
+          <div class="vip-bar"><i class="ti ti-crown"></i><p>Saving ₹12 (25% OFF) with <strong>🎖 VIP</strong></p></div>
+        </div>
+        <div class="pcard">
+          <div class="pcard-inner">
+            <div class="pthumb"><i class="ti ti-bottle"></i></div>
+            <div class="pdetails"><div class="ptag">4+4 Offer · Naturally Creamy</div><h4>Buffalo Milk</h4><div class="pwt">450 ml</div><div class="pa"><div><span class="pold">₹59</span> <span class="pnew">₹45</span></div><div class="btn-add">ADD</div></div></div>
+          </div>
+          <div class="quality-link"><span>Lab Report</span><i class="ti ti-external-link"></i></div>
+          <div class="vip-bar"><i class="ti ti-crown"></i><p>Saving ₹14 (23% OFF) with <strong>🎖 VIP</strong></p></div>
+        </div>
+        <div class="pcard">
+          <div class="pcard-inner">
+            <div class="pthumb"><i class="ti ti-bottle"></i></div>
+            <div class="pdetails"><div class="ptag">4+4 Offer</div><h4>Low Fat Cow Milk</h4><div class="pwt">450 ml</div><div class="pa"><div><span class="pold">₹44</span> <span class="pnew">₹34</span></div><div class="btn-add">ADD</div></div></div>
+          </div>
+          <div class="vip-bar"><i class="ti ti-crown"></i><p>Saving ₹10 (22% OFF) with <strong>🎖 VIP</strong></p></div>
+        </div>
+      </div>
+    </div>
+    <div class="phone-bottom">
+      <div class="upsell-strip"><div style="width:32px;height:32px;background:rgba(255,255,255,.2);border-radius:7px;flex-shrink:0;"></div><p>Shop for ₹1 more to avail Assam Tea (Premium | Fine Aroma) AT ₹9</p></div>
+      <div class="bottom-nav">
+        <div class="nav-item"><i class="ti ti-home"></i><span>Home</span></div>
+        <div class="nav-item act"><i class="ti ti-layout-grid"></i><span>Products</span></div>
+        <div class="nav-item"><i class="ti ti-percentage"></i><span>4+4</span></div>
+        <div class="nav-item"><i class="ti ti-users"></i><span>Refer</span></div>
+        <div class="nav-item act"><i class="ti ti-star"></i><span>Favourites</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SCREEN 9 · HOMEPAGE BANNER
+══════════════════════════════════════ -->
+<div class="screen-wrap" id="screen-homebanner">
+  <div class="screen-label">Homepage Banner · 360×780px</div>
+  <div class="phone">
+    <div class="phone-top">
+      <div class="status-bar"><span class="time">12:00</span><div class="status-icons"><i class="ti ti-wifi"></i><i class="ti ti-battery"></i></div></div>
+      <div style="background:#fff;padding:12px 16px 10px;border-bottom:0.5px solid #E0E0D8;">
+        <div style="display:flex;gap:8px;margin-bottom:12px;">
+          <div style="flex:1;padding:10px 8px;border-radius:14px;font-size:13px;font-weight:500;text-align:center;background:#fff;border:1.5px solid #2D9E6B;color:#1A7A50;"><small style="display:block;font-size:18px;line-height:1.2;">☀️</small>Morning</div>
+          <div style="flex:1;padding:10px 8px;border-radius:14px;font-size:13px;font-weight:500;background:#1A1A1A;color:#fff;border:none;display:flex;flex-direction:column;align-items:center;gap:3px;"><span style="background:#F4A623;color:#1A1A1A;font-size:9px;font-weight:800;border-radius:6px;padding:1px 6px;">⚡</span>Instant</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div style="display:flex;align-items:center;gap:8px;"><div class="avatar"><i class="ti ti-user"></i></div><div><p style="font-size:11px;color:#888;">Morning 5am – 7:30am</p><h3 style="font-size:15px;font-weight:600;color:#1A1A1A;">Hi Keerthana 👋</h3></div></div>
+          <div class="wallet"><i class="ti ti-wallet" style="font-size:14px;"></i> ₹292</div>
+        </div>
+      </div>
+      <div class="cat-strip">
+        <div class="cat-item act"><div class="cat-icon"><i class="ti ti-layout-grid" style="font-size:18px;color:#2D9E6B;"></i></div><div class="cat-lbl">All</div></div>
+        <div class="cat-item"><div class="cat-icon">🥦</div><div class="cat-lbl">Fruits &amp; Veggies</div></div>
+        <div class="cat-item"><div class="cat-icon">🥛</div><div class="cat-lbl">Groceries</div></div>
+        <div class="cat-item"><div class="cat-icon">🧈</div><div class="cat-lbl">Ghee &amp; Oils</div></div>
+        <div class="cat-item"><div class="cat-icon">🍪</div><div class="cat-lbl">Yummy Bites</div></div>
+      </div>
+    </div>
+    <div class="phone-body">
+      <div style="background:#F0EBE0;margin:12px;border-radius:20px;overflow:hidden;">
+        <div style="padding:18px 18px 0;">
+          <div style="font-size:10px;font-weight:700;color:#E8621A;letter-spacing:.08em;margin-bottom:4px;">PAYDAY SALE</div>
+          <div style="font-size:28px;font-weight:900;color:#1A1A1A;line-height:1.1;margin-bottom:2px;">Live Better</div>
+          <div style="font-size:28px;font-weight:900;color:#1A1A1A;line-height:1.1;">PayDay <span style="color:#E8621A;">Sale</span></div>
+          <div style="font-size:36px;font-weight:900;color:#E8621A;line-height:1;">UPTO 50%</div>
+          <div style="font-size:20px;font-weight:700;color:#1A1A1A;margin-bottom:12px;">OFF</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;padding:0 10px 12px;">
+          <div style="background:#fff;border-radius:10px;height:80px;display:flex;align-items:center;justify-content:center;"><i class="ti ti-droplet" style="font-size:32px;color:#F4A623;"></i></div>
+          <div style="background:#fff;border-radius:10px;height:80px;display:flex;align-items:center;justify-content:center;"><i class="ti ti-bottle" style="font-size:32px;color:#2D9E6B;"></i></div>
+          <div style="background:#fff;border-radius:10px;height:80px;display:flex;align-items:center;justify-content:center;"><i class="ti ti-cookie" style="font-size:32px;color:#E8621A;"></i></div>
+          <div style="background:#fff;border-radius:10px;height:80px;display:flex;align-items:center;justify-content:center;"><i class="ti ti-leaf" style="font-size:32px;color:#2D9E6B;"></i></div>
+          <div style="background:#fff;border-radius:10px;height:80px;display:flex;align-items:center;justify-content:center;"><i class="ti ti-wheat" style="font-size:32px;color:#F4A623;"></i></div>
+          <div style="background:#fff;border-radius:10px;height:80px;display:flex;align-items:center;justify-content:center;"><i class="ti ti-egg" style="font-size:32px;color:#888;"></i></div>
+        </div>
+      </div>
+      <div style="padding:0 12px 12px;"><div class="search-fab"><i class="ti ti-search"></i> Search</div></div>
+      <div style="background:#FFF8EE;border:1px solid #F4D580;margin:0 12px 12px;border-radius:14px;padding:14px;display:flex;align-items:center;gap:12px;">
+        <div style="flex:1;"><div style="font-size:14px;font-weight:700;color:#7A5000;">4 DAYS FREE MILK FOR YOU!</div><div style="font-size:11px;color:#888;margin-top:2px;">Pay For 4 Days, Get 4 Days Free</div></div>
+        <div style="font-size:28px;font-weight:900;color:#F4A623;">4+4</div>
+      </div>
+      <div style="padding:0 12px;">
+        <div style="font-size:14px;font-weight:700;color:#1A1A1A;margin-bottom:8px;">Exclusive deal!</div>
+        <div class="prod-grid">
+          <div class="prod-card"><div class="prod-img" style="background:#E8F7F0;"><i class="ti ti-salad" style="color:#2D9E6B;"></i><span style="position:absolute;top:7px;left:7px;background:#2D9E6B;color:#fff;font-size:10px;font-weight:800;border-radius:6px;padding:2px 7px;">FREE</span></div><div class="prod-info"><h4>Okra</h4><div class="qty">225 gm</div><div class="price-row"><div><span class="old">₹18</span> <span class="nw">₹0</span></div><div class="add-sm">ADD</div></div></div></div>
+          <div class="prod-card"><div class="prod-img" style="background:#E8F7F0;"><i class="ti ti-plant" style="color:#2D9E6B;"></i><span style="position:absolute;top:7px;left:7px;background:#2D9E6B;color:#fff;font-size:10px;font-weight:800;border-radius:6px;padding:2px 7px;">FREE</span></div><div class="prod-info"><h4>Potato</h4><div class="qty">450 gm</div><div class="price-row"><div><span class="old">₹22</span> <span class="nw">₹0</span></div><div class="add-sm">ADD</div></div></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="phone-bottom">
+      <div class="bottom-nav">
+        <div class="nav-item act"><i class="ti ti-home"></i><span>Home</span></div>
+        <div class="nav-item"><i class="ti ti-layout-grid"></i><span>Products</span></div>
+        <div class="nav-item"><div class="nav-orange"><i class="ti ti-percentage"></i><span>4+4</span></div></div>
+        <div class="nav-item"><i class="ti ti-users"></i><span>Refer</span></div>
+        <div class="nav-item"><i class="ti ti-star" style="color:#F4A623;"></i><span style="color:#F4A623;">Favourites</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /screens -->
+
+<script>
+function show(id, el) {
+  document.querySelectorAll('.screen-wrap').forEach(s => s.classList.remove('visible'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('screen-' + id).classList.add('visible');
+  el.classList.add('active');
+}
+</script>
+</body>
+</html>
