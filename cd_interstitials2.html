@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Country Delight — Campaign Interstitials</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=DM+Serif+Display:ital@0;1&family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#dedad6;font-family:sans-serif;padding:20px 12px 48px}
+h1{text-align:center;font-size:10px;font-weight:700;color:#999;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:16px}
+.tab-bar{display:flex;gap:6px;justify-content:center;margin-bottom:18px;flex-wrap:wrap}
+.tab-btn{font-size:10px;font-weight:700;padding:6px 12px;border-radius:20px;border:1.5px solid rgba(0,0,0,0.15);background:#fff;cursor:pointer;color:#666;transition:all 0.15s;white-space:nowrap}
+.tab-btn.active{background:#111;color:#fff;border-color:#111}
+.phone{width:100%;max-width:360px;margin:0 auto;border-radius:34px;overflow:hidden;border:2px solid rgba(0,0,0,0.1);box-shadow:0 16px 48px rgba(0,0,0,0.18);position:relative}
+.campaign-pane{display:none}
+
+/* ── SHARED PRODUCT PRIMITIVES ─────────────────────────────── */
+.popular-badge{position:absolute;top:-1px;left:-1px;font-size:7px;font-weight:800;padding:3px 8px;border-radius:10px 0 10px 0;letter-spacing:0.05em;z-index:4;text-transform:uppercase}
+.prod-img-box{border-radius:10px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.prod-img-txt{font-size:7.5px;font-weight:600;text-align:center;line-height:1.4;text-transform:uppercase;padding:6px}
+.qty-ctrl{width:100%;display:flex;align-items:center;justify-content:space-between;border-radius:8px;overflow:hidden}
+.qty-ctrl.hidden{display:none}
+.qty-btn{flex:1;border:none;font-size:15px;font-weight:700;cursor:pointer;padding:5px 0;line-height:1}
+.qty-num{flex:1;text-align:center;font-size:12px;font-weight:800}
+.add-btn{border:none;border-radius:8px;cursor:pointer;font-weight:700;transition:all 0.18s}
+.add-btn.added{display:none}
+
+
+/* ══════════════════════════════════════════════════════════════
+   C1 — BREAKFAST SOLVED
+   Layout: Split screen — mood zone top, drawer bottom
+══════════════════════════════════════════════════════════════ */
+.c1-wrap{width:100%;position:relative;overflow:hidden;background:linear-gradient(175deg,#fff7ed 0%,#ffedcc 100%)}
+.c1-top{width:100%;height:240px;position:relative;display:flex;flex-direction:column;justify-content:flex-end;padding:0 24px 20px;background:linear-gradient(175deg,#1a0800 0%,#3a1800 60%,#5a2800 100%)}
+.c1-close{position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;z-index:20;cursor:pointer}
+.c1-eyebrow{font-family:'Outfit',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,180,80,0.75);margin-bottom:6px}
+.c1-headline{font-family:'DM Serif Display',serif;font-size:36px;font-weight:400;line-height:1.05;color:#fff}
+.c1-headline em{font-style:italic;color:#f5a840}
+.c1-pill-row{display:flex;align-items:center;gap:8px;margin-top:12px}
+.c1-offer{background:#f5a840;color:#1a0800;font-family:'Outfit',sans-serif;font-size:10.5px;font-weight:800;padding:5px 14px;border-radius:20px;white-space:nowrap}
+.c1-offer-txt{font-family:'Outfit',sans-serif;font-size:10px;color:rgba(255,255,255,0.55);line-height:1.4}
+.c1-bottom{width:100%;background:#fff7ed;padding:16px 0 0}
+.c1-drawer-label{font-family:'Outfit',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(200,100,10,0.5);padding:0 24px;margin-bottom:8px}
+.c1-scroll{width:100%;display:flex;gap:10px;overflow-x:auto;padding:4px 24px 10px;scrollbar-width:none}
+.c1-scroll::-webkit-scrollbar{display:none}
+.c1-card{flex-shrink:0;width:90px;background:#fff;border:1px solid rgba(200,100,10,0.1);border-radius:14px;padding:10px 8px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;position:relative}
+.c1-card .prod-img-box{width:100%;aspect-ratio:1;background:#fff5e8;border:1px dashed rgba(200,100,10,0.2)}
+.c1-card .prod-img-txt{color:#d4905a}
+.c1-card .prod-name{font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;color:#1a0800;text-align:center;width:100%}
+.c1-card .prod-rating{font-family:'Outfit',sans-serif;font-size:8.5px;color:#c8650a;text-align:center;width:100%}
+.c1-card .prod-price-row{display:flex;gap:4px;align-items:baseline;justify-content:center}
+.c1-card .prod-price{font-family:'Outfit',sans-serif;font-size:12px;font-weight:800;color:#c8650a}
+.c1-card .prod-mrp{font-size:9px;text-decoration:line-through;color:rgba(0,0,0,0.28)}
+.c1-card .qty-ctrl{background:#c8650a}
+.c1-card .qty-btn{background:#c8650a;color:#fff}
+.c1-card .qty-num{color:#fff;font-family:'Outfit',sans-serif}
+.c1-card .add-btn{width:100%;background:#c8650a;color:#fff;font-family:'Outfit',sans-serif;font-size:11px;padding:6px 0}
+.c1-card .popular-badge{background:#c8650a;color:#fff}
+.c1-social{display:flex;align-items:center;gap:6px;padding:0 24px;margin-top:2px;font-family:'Outfit',sans-serif;font-size:10px;font-weight:600;color:#c8650a}
+.c1-social span{font-weight:400;opacity:0.65}
+.c1-cta{margin:12px 24px 0;width:calc(100% - 48px);background:#1a0800;color:#fff7ed;border:none;border-radius:12px;padding:13px 0;font-family:'Outfit',sans-serif;font-size:13.5px;font-weight:700;cursor:pointer;letter-spacing:0.03em}
+.c1-trust{display:flex;justify-content:center;flex-wrap:wrap;gap:5px;padding:8px 14px 10px;font-family:'Outfit',sans-serif;font-size:9px;font-weight:600;color:rgba(200,100,10,0.42);text-align:center}
+.c1-cart{width:100%;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:rgba(200,100,10,0.95);transition:all 0.2s}
+.c1-cart.hidden{opacity:0;pointer-events:none;height:0;padding:0;overflow:hidden}
+.c1-cart-count{font-family:'Outfit',sans-serif;font-size:10px;font-weight:600;color:rgba(255,255,255,0.65)}
+.c1-cart-total{font-family:'Outfit',sans-serif;font-size:14px;font-weight:800;color:#fff}
+.c1-cart-btn{background:#fff;color:#c8650a;font-family:'Outfit',sans-serif;font-size:12px;font-weight:800;padding:7px 14px;border-radius:9px;border:none;cursor:pointer}
+
+
+/* ══════════════════════════════════════════════════════════════
+   C2 — TEA-TIME PICKS
+   Layout: Editorial — large featured hero card + horizontal scroll
+══════════════════════════════════════════════════════════════ */
+.c2-wrap{width:100%;background:linear-gradient(160deg,#fdf0f5 0%,#f8e8f0 50%,#f0dcea 100%);padding-bottom:0;position:relative}
+.c2-close{position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:50%;background:rgba(160,60,100,0.1);border:1px solid rgba(160,60,100,0.2);display:flex;align-items:center;justify-content:center;z-index:20;cursor:pointer}
+.c2-header{padding:46px 24px 0}
+.c2-eyebrow{font-family:'Outfit',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#a03c64;margin-bottom:6px}
+.c2-headline{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:700;line-height:1.05;color:#2a0a18}
+.c2-headline em{font-style:italic;color:#a03c64}
+.c2-sub{font-family:'Outfit',sans-serif;font-size:11px;color:#7a3050;margin-top:5px;line-height:1.5}
+.c2-offer-row{display:flex;align-items:center;gap:8px;margin-top:10px}
+.c2-offer{background:#a03c64;color:#fff;font-family:'Outfit',sans-serif;font-size:10.5px;font-weight:800;padding:5px 14px;border-radius:20px;white-space:nowrap}
+.c2-offer-txt{font-family:'Outfit',sans-serif;font-size:10px;color:#7a3050;line-height:1.4}
+/* Featured hero card */
+.c2-featured{margin:16px 24px 0;border-radius:18px;overflow:hidden;position:relative;background:linear-gradient(135deg,#a03c64 0%,#c05080 50%,#d070a0 100%);padding:20px;display:flex;flex-direction:column;gap:8px}
+.c2-featured-label{font-family:'Outfit',sans-serif;font-size:8px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.6)}
+.c2-featured-name{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:#fff;line-height:1.1}
+.c2-featured-sub{font-family:'Outfit',sans-serif;font-size:10px;color:rgba(255,255,255,0.7)}
+.c2-featured-row{display:flex;align-items:center;justify-content:space-between;margin-top:4px}
+.c2-featured-price{font-family:'Outfit',sans-serif;font-size:18px;font-weight:800;color:#fff}
+.c2-featured-mrp{font-family:'Outfit',sans-serif;font-size:11px;text-decoration:line-through;color:rgba(255,255,255,0.45);margin-left:5px}
+.c2-featured-add{background:#fff;color:#a03c64;border:none;border-radius:10px;padding:8px 18px;font-family:'Outfit',sans-serif;font-size:12px;font-weight:800;cursor:pointer}
+.c2-featured-qty{background:rgba(255,255,255,0.2);border-radius:10px;display:flex;align-items:center;overflow:hidden}
+.c2-featured-qty .qty-btn{background:transparent;color:#fff;font-size:18px;padding:6px 10px}
+.c2-featured-qty .qty-num{color:#fff;font-family:'Outfit',sans-serif;font-size:14px;min-width:24px}
+.c2-featured-qty.hidden{display:none}
+.c2-scroll-label{font-family:'Outfit',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(160,60,100,0.5);padding:12px 24px 6px}
+.c2-scroll{width:100%;display:flex;gap:10px;overflow-x:auto;padding:4px 24px 10px;scrollbar-width:none}
+.c2-scroll::-webkit-scrollbar{display:none}
+.c2-card{flex-shrink:0;width:88px;background:rgba(255,255,255,0.75);border:1px solid rgba(160,60,100,0.1);border-radius:14px;padding:10px 8px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;position:relative}
+.c2-card .prod-img-box{width:100%;aspect-ratio:1;background:#fce8f2;border:1px dashed rgba(160,60,100,0.18)}
+.c2-card .prod-img-txt{color:#c080a0}
+.c2-card .prod-name{font-family:'Outfit',sans-serif;font-size:10.5px;font-weight:700;color:#2a0a18;text-align:center;width:100%}
+.c2-card .prod-rating{font-family:'Outfit',sans-serif;font-size:8.5px;color:#a03c64;text-align:center}
+.c2-card .prod-price-row{display:flex;gap:3px;align-items:baseline;justify-content:center}
+.c2-card .prod-price{font-family:'Outfit',sans-serif;font-size:11.5px;font-weight:800;color:#a03c64}
+.c2-card .prod-mrp{font-size:8.5px;text-decoration:line-through;color:rgba(0,0,0,0.28)}
+.c2-card .qty-ctrl{background:#a03c64}
+.c2-card .qty-btn{background:#a03c64;color:#fff}
+.c2-card .qty-num{color:#fff;font-family:'Outfit',sans-serif}
+.c2-card .add-btn{width:100%;background:#a03c64;color:#fff;font-family:'Outfit',sans-serif;font-size:10.5px;padding:5px 0}
+.c2-card .popular-badge{background:#a03c64;color:#fff}
+.c2-social{display:flex;align-items:center;gap:6px;padding:0 24px;font-family:'Outfit',sans-serif;font-size:10px;font-weight:600;color:#a03c64}
+.c2-social span{font-weight:400;opacity:0.65}
+.c2-cta{margin:10px 24px 0;width:calc(100% - 48px);background:#2a0a18;color:#fdf0f5;border:none;border-radius:12px;padding:13px 0;font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;cursor:pointer}
+.c2-trust{display:flex;justify-content:center;flex-wrap:wrap;gap:5px;padding:8px 14px 10px;font-family:'Outfit',sans-serif;font-size:9px;font-weight:600;color:rgba(160,60,100,0.42);text-align:center}
+.c2-cart{width:100%;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:rgba(160,60,100,0.96);transition:all 0.2s}
+.c2-cart.hidden{opacity:0;pointer-events:none;height:0;padding:0;overflow:hidden}
+.c2-cart-count{font-family:'Outfit',sans-serif;font-size:10px;font-weight:600;color:rgba(255,255,255,0.65)}
+.c2-cart-total{font-family:'Outfit',sans-serif;font-size:14px;font-weight:800;color:#fff}
+.c2-cart-btn{background:#fff;color:#a03c64;font-family:'Outfit',sans-serif;font-size:12px;font-weight:800;padding:7px 14px;border-radius:9px;border:none;cursor:pointer}
+
+
+/* ══════════════════════════════════════════════════════════════
+   C3 — MOST-LOVED
+   Layout: Leaderboard / ranked list
+══════════════════════════════════════════════════════════════ */
+.c3-wrap{width:100%;background:linear-gradient(165deg,#f4f9f2 0%,#eaf4e4 50%,#dfeeda 100%);position:relative}
+.c3-close{position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:50%;background:rgba(45,106,63,0.09);border:1px solid rgba(45,106,63,0.16);display:flex;align-items:center;justify-content:center;z-index:20;cursor:pointer}
+.c3-header{padding:46px 24px 0}
+.c3-eyebrow{font-family:'Plus Jakarta Sans',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#2d6a3f;margin-bottom:6px}
+.c3-headline{font-family:'Playfair Display',serif;font-size:28px;font-weight:800;line-height:1.1;color:#0f2414}
+.c3-headline em{font-style:italic;color:#2d6a3f}
+.c3-offer-row{display:flex;align-items:center;gap:8px;margin-top:10px}
+.c3-offer{background:#2d6a3f;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:10.5px;font-weight:800;padding:5px 14px;border-radius:20px;white-space:nowrap}
+.c3-offer-txt{font-family:'Plus Jakarta Sans',sans-serif;font-size:10px;color:#4a7a55;line-height:1.4}
+.c3-social{display:flex;align-items:center;gap:6px;padding:10px 24px 0;font-family:'Plus Jakarta Sans',sans-serif;font-size:10px;font-weight:600;color:#2d6a3f}
+.c3-social span{font-weight:400;opacity:0.65}
+.c3-divider{width:calc(100% - 48px);height:1px;background:rgba(45,106,63,0.1);margin:12px 0 8px}
+.c3-list-label{font-family:'Plus Jakarta Sans',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(45,106,63,0.5);padding:0 24px;margin-bottom:8px}
+/* Ranked list rows */
+.c3-list{width:100%;padding:0 24px;display:flex;flex-direction:column;gap:6px;max-height:340px;overflow-y:auto;scrollbar-width:none}
+.c3-list::-webkit-scrollbar{display:none}
+.c3-row{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid rgba(45,106,63,0.09);border-radius:14px;padding:8px 12px;position:relative}
+.c3-rank{font-family:'Playfair Display',serif;font-size:20px;font-weight:800;color:rgba(45,106,63,0.18);width:22px;flex-shrink:0;text-align:center;line-height:1}
+.c3-row-img{width:44px;height:44px;border-radius:8px;background:#edf5e8;border:1px dashed rgba(45,106,63,0.18);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:6.5px;font-weight:700;text-align:center;color:#7aab80;text-transform:uppercase;line-height:1.3;padding:3px}
+.c3-row-info{flex:1;min-width:0}
+.c3-row-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:700;color:#0f2414;line-height:1.2}
+.c3-row-rating{font-family:'Plus Jakarta Sans',sans-serif;font-size:9px;color:#2d6a3f;margin-top:1px}
+.c3-row-price{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:800;color:#2d6a3f;white-space:nowrap}
+.c3-row-mrp{font-family:'Plus Jakarta Sans',sans-serif;font-size:9px;text-decoration:line-through;color:rgba(0,0,0,0.28);margin-left:3px}
+.c3-row-actions{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0}
+.c3-add-btn{background:#2d6a3f;color:#fff;border:none;border-radius:8px;padding:5px 12px;font-family:'Plus Jakarta Sans',sans-serif;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap}
+.c3-add-btn.added{display:none}
+.c3-qty{display:flex;align-items:center;border-radius:8px;overflow:hidden;background:#2d6a3f}
+.c3-qty.hidden{display:none}
+.c3-qty .qty-btn{background:#2d6a3f;color:#fff;font-size:14px;padding:4px 8px}
+.c3-qty .qty-num{color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:11px;min-width:20px;text-align:center}
+.c3-pop{position:absolute;top:-1px;left:50px;font-size:7px;font-weight:800;padding:2px 7px;border-radius:0 10px 10px 0;background:#2d6a3f;color:#fff;text-transform:uppercase;letter-spacing:0.05em}
+.c3-cta{margin:10px 24px 0;width:calc(100% - 48px);background:#2d6a3f;color:#fff;border:none;border-radius:12px;padding:13px 0;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer}
+.c3-trust{display:flex;justify-content:center;flex-wrap:wrap;gap:5px;padding:8px 14px 10px;font-family:'Plus Jakarta Sans',sans-serif;font-size:9px;font-weight:600;color:rgba(45,106,63,0.42);text-align:center}
+.c3-cart{width:100%;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:rgba(45,106,63,0.96);transition:all 0.2s}
+.c3-cart.hidden{opacity:0;pointer-events:none;height:0;padding:0;overflow:hidden}
+.c3-cart-count{font-family:'Plus Jakarta Sans',sans-serif;font-size:10px;font-weight:600;color:rgba(255,255,255,0.65)}
+.c3-cart-total{font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:800;color:#fff}
+.c3-cart-btn{background:#fff;color:#2d6a3f;font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:800;padding:7px 14px;border-radius:9px;border:none;cursor:pointer}
+
+
+/* ══════════════════════════════════════════════════════════════
+   C4 — BETTER THAN STORE-BOUGHT
+   Layout: Split comparison — "Theirs vs Ours"
+══════════════════════════════════════════════════════════════ */
+.c4-wrap{width:100%;background:linear-gradient(170deg,#f8f8f6 0%,#f0f0ea 100%);position:relative}
+.c4-close{position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:50%;background:rgba(26,58,92,0.08);border:1px solid rgba(26,58,92,0.15);display:flex;align-items:center;justify-content:center;z-index:20;cursor:pointer}
+.c4-header{padding:46px 24px 0}
+.c4-eyebrow{font-family:'Space Grotesk',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#1a3a5c;margin-bottom:6px}
+.c4-headline{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:700;line-height:1.05;color:#0a1628}
+.c4-headline em{font-style:italic;color:#1a3a5c}
+.c4-offer-row{display:flex;align-items:center;gap:8px;margin-top:10px}
+.c4-offer{background:#1a3a5c;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:10.5px;font-weight:700;padding:5px 14px;border-radius:20px;white-space:nowrap}
+.c4-offer-txt{font-family:'Space Grotesk',sans-serif;font-size:10px;color:#4a6a8a;line-height:1.4}
+/* Comparison table */
+.c4-compare{margin:16px 24px 0;border-radius:16px;overflow:hidden;border:1px solid rgba(26,58,92,0.1)}
+.c4-compare-head{display:grid;grid-template-columns:1fr 1fr 1fr;background:#1a3a5c}
+.c4-ch-blank{padding:10px 0}
+.c4-ch-them{font-family:'Space Grotesk',sans-serif;font-size:9.5px;font-weight:600;color:rgba(255,255,255,0.5);text-align:center;padding:10px 4px;border-left:1px solid rgba(255,255,255,0.1)}
+.c4-ch-us{font-family:'Space Grotesk',sans-serif;font-size:9.5px;font-weight:700;color:#fff;text-align:center;padding:10px 4px;border-left:1px solid rgba(255,255,255,0.15)}
+.c4-row{display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid rgba(26,58,92,0.07);background:#fff}
+.c4-row:nth-child(even){background:#f5f7fa}
+.c4-attr{font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:600;color:#1a3a5c;padding:9px 12px;display:flex;align-items:center}
+.c4-them{font-family:'Space Grotesk',sans-serif;font-size:11px;text-align:center;padding:9px 4px;display:flex;align-items:center;justify-content:center;color:#999;border-left:1px solid rgba(26,58,92,0.06)}
+.c4-us{font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;text-align:center;padding:9px 4px;display:flex;align-items:center;justify-content:center;color:#1a3a5c;border-left:1px solid rgba(26,58,92,0.06)}
+/* Product scroll below comparison */
+.c4-scroll-label{font-family:'Space Grotesk',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(26,58,92,0.5);padding:12px 24px 6px}
+.c4-scroll{width:100%;display:flex;gap:10px;overflow-x:auto;padding:4px 24px 10px;scrollbar-width:none}
+.c4-scroll::-webkit-scrollbar{display:none}
+.c4-card{flex-shrink:0;width:90px;background:#fff;border:1px solid rgba(26,58,92,0.08);border-radius:13px;padding:10px 8px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;position:relative}
+.c4-card .prod-img-box{width:100%;aspect-ratio:1;background:#eef2f8;border:1px dashed rgba(26,58,92,0.14)}
+.c4-card .prod-img-txt{color:#7a9ab8}
+.c4-card .prod-name{font-family:'Space Grotesk',sans-serif;font-size:10.5px;font-weight:700;color:#0a1628;text-align:center;width:100%}
+.c4-card .prod-rating{font-family:'Space Grotesk',sans-serif;font-size:8.5px;color:#1a3a5c;text-align:center}
+.c4-card .prod-price-row{display:flex;gap:3px;align-items:baseline;justify-content:center}
+.c4-card .prod-price{font-family:'Space Grotesk',sans-serif;font-size:11.5px;font-weight:800;color:#1a3a5c}
+.c4-card .prod-mrp{font-size:8.5px;text-decoration:line-through;color:rgba(0,0,0,0.28)}
+.c4-card .qty-ctrl{background:#1a3a5c}
+.c4-card .qty-btn{background:#1a3a5c;color:#fff}
+.c4-card .qty-num{color:#fff;font-family:'Space Grotesk',sans-serif}
+.c4-card .add-btn{width:100%;background:#1a3a5c;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:10.5px;padding:5px 0}
+.c4-card .popular-badge{background:#1a3a5c;color:#fff}
+.c4-social{display:flex;align-items:center;gap:6px;padding:0 24px;font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:600;color:#1a3a5c}
+.c4-social span{font-weight:400;opacity:0.65}
+.c4-cta{margin:10px 24px 0;width:calc(100% - 48px);background:#1a3a5c;color:#fff;border:none;border-radius:12px;padding:13px 0;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;cursor:pointer}
+.c4-trust{display:flex;justify-content:center;flex-wrap:wrap;gap:5px;padding:8px 14px 10px;font-family:'Space Grotesk',sans-serif;font-size:9px;font-weight:600;color:rgba(26,58,92,0.4);text-align:center}
+.c4-cart{width:100%;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:rgba(26,58,92,0.96);transition:all 0.2s}
+.c4-cart.hidden{opacity:0;pointer-events:none;height:0;padding:0;overflow:hidden}
+.c4-cart-count{font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:600;color:rgba(255,255,255,0.65)}
+.c4-cart-total{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:800;color:#fff}
+.c4-cart-btn{background:#fff;color:#1a3a5c;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:800;padding:7px 14px;border-radius:9px;border:none;cursor:pointer}
+
+
+/* ══════════════════════════════════════════════════════════════
+   C5 — MOM-APPROVED
+   Layout: Full-bleed emotional hero + large gentle product cards
+══════════════════════════════════════════════════════════════ */
+.c5-wrap{width:100%;background:linear-gradient(165deg,#fff5f7 0%,#ffeef2 50%,#ffe4ea 100%);position:relative}
+.c5-close{position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:50%;background:rgba(192,64,90,0.09);border:1px solid rgba(192,64,90,0.15);display:flex;align-items:center;justify-content:center;z-index:20;cursor:pointer}
+.c5-hero{width:100%;padding:50px 24px 20px;text-align:center;background:linear-gradient(175deg,#fff5f7 0%,#ffeef2 100%)}
+.c5-eyebrow{font-family:'Plus Jakarta Sans',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#c0405a;margin-bottom:10px}
+.c5-headline{font-family:'DM Serif Display',serif;font-size:36px;font-weight:400;line-height:1.1;color:#2a0a10}
+.c5-headline em{font-style:italic;color:#c0405a}
+.c5-quote{font-family:'DM Serif Display',serif;font-size:13px;font-style:italic;color:rgba(192,64,90,0.55);margin-top:8px;line-height:1.5}
+.c5-offer-row{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px}
+.c5-offer{background:#c0405a;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:10.5px;font-weight:800;padding:6px 16px;border-radius:20px;white-space:nowrap}
+.c5-offer-txt{font-family:'Plus Jakarta Sans',sans-serif;font-size:10px;color:#8a3040;line-height:1.4}
+.c5-social{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:10px;font-family:'Plus Jakarta Sans',sans-serif;font-size:10px;font-weight:600;color:#c0405a}
+.c5-social span{font-weight:400;opacity:0.65}
+/* Large gentle product cards */
+.c5-grid-label{font-family:'Plus Jakarta Sans',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(192,64,90,0.48);padding:4px 24px 8px;text-align:left}
+.c5-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 24px;max-height:290px;overflow-y:auto;scrollbar-width:none}
+.c5-grid::-webkit-scrollbar{display:none}
+.c5-card{background:rgba(255,255,255,0.9);border:1px solid rgba(192,64,90,0.08);border-radius:16px;padding:12px 10px 10px;display:flex;flex-direction:column;align-items:center;gap:5px;position:relative}
+.c5-card .prod-img-box{width:100%;aspect-ratio:1;background:#fff0f3;border:1px dashed rgba(192,64,90,0.14)}
+.c5-card .prod-img-txt{color:#d490a0}
+.c5-card .prod-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:700;color:#2a0a10;text-align:center;width:100%}
+.c5-card .prod-rating{font-family:'Plus Jakarta Sans',sans-serif;font-size:9px;color:#c0405a;text-align:center}
+.c5-card .prod-price-row{display:flex;gap:4px;align-items:baseline;justify-content:center}
+.c5-card .prod-price{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:800;color:#c0405a}
+.c5-card .prod-mrp{font-size:9.5px;text-decoration:line-through;color:rgba(0,0,0,0.25)}
+.c5-card .qty-ctrl{background:#c0405a}
+.c5-card .qty-btn{background:#c0405a;color:#fff}
+.c5-card .qty-num{color:#fff;font-family:'Plus Jakarta Sans',sans-serif}
+.c5-card .add-btn{width:100%;background:#c0405a;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:11.5px;padding:7px 0;border-radius:9px}
+.c5-card .popular-badge{background:#c0405a;color:#fff}
+.c5-cta{margin:12px 24px 0;width:calc(100% - 48px);background:#2a0a10;color:#fff5f7;border:none;border-radius:14px;padding:14px 0;font-family:'Plus Jakarta Sans',sans-serif;font-size:13.5px;font-weight:700;cursor:pointer}
+.c5-trust{display:flex;justify-content:center;flex-wrap:wrap;gap:5px;padding:8px 14px 10px;font-family:'Plus Jakarta Sans',sans-serif;font-size:9px;font-weight:600;color:rgba(192,64,90,0.4);text-align:center}
+.c5-cart{width:100%;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:rgba(192,64,90,0.96);transition:all 0.2s}
+.c5-cart.hidden{opacity:0;pointer-events:none;height:0;padding:0;overflow:hidden}
+.c5-cart-count{font-family:'Plus Jakarta Sans',sans-serif;font-size:10px;font-weight:600;color:rgba(255,255,255,0.65)}
+.c5-cart-total{font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:800;color:#fff}
+.c5-cart-btn{background:#fff;color:#c0405a;font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:800;padding:7px 14px;border-radius:9px;border:none;cursor:pointer}
+</style>
+</head>
+<body>
+<h1>Country Delight · Campaign Interstitials</h1>
+<div class="tab-bar">
+  <button class="tab-btn active" data-id="1">Breakfast Solved</button>
+  <button class="tab-btn" data-id="2">Tea-time Picks</button>
+  <button class="tab-btn" data-id="3">Most-loved</button>
+  <button class="tab-btn" data-id="4">Better Than Store-bought</button>
+  <button class="tab-btn" data-id="5">Mom-approved</button>
+</div>
+<div class="phone">
+
+<!-- C1 BREAKFAST SOLVED -->
+<div class="campaign-pane" id="pane-1">
+<div class="c1-wrap">
+  <div class="c1-top">
+    <div class="c1-close"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+    <div class="c1-eyebrow">Breakfast Solved</div>
+    <div class="c1-headline">Morning<br><em>starts here.</em></div>
+    <div class="c1-pill-row">
+      <span class="c1-offer">Buy 1 Get 1 Free</span>
+      <span class="c1-offer-txt">Order any product,<br>get the next one free</span>
+    </div>
+  </div>
+  <div class="c1-bottom">
+    <div class="c1-social" style="padding:12px 24px 0">⭐⭐⭐⭐⭐&nbsp;<b>4.8</b>&nbsp;<span>· 5L+ families trust us</span></div>
+    <div class="c1-drawer-label" style="margin-top:12px">Pick your daily essentials</div>
+    <div class="c1-scroll">
+      <div class="c1-card" data-price="99"><div class="prod-img-box" style="width:100%;aspect-ratio:1"><span class="prod-img-txt" style="color:#d4905a">Eggs<br>image</span></div><div class="prod-name">Eggs</div><div class="prod-rating">⭐ 4.9 <span style="opacity:.55">(6k+)</span></div><div class="prod-price-row"><span class="prod-price">₹99</span><span class="prod-mrp">₹180</span></div><div class="qty-ctrl hidden"><button class="qty-btn" onclick="changeQtyC('c1',this,-1)">−</button><span class="qty-num">1</span><button class="qty-btn" onclick="changeQtyC('c1',this,1)">+</button></div><button class="add-btn" onclick="addItemC('c1',this,99)">Add</button></div>
+      <div class="c1-card" data-price="45"><div class="prod-img-box" style="width:100%;aspect-ratio:1"><span class="prod-img-txt" style="color:#d4905a">Bread<br>image</span></div><div class="prod-name">Bread</div><div class="prod-rating">⭐ 4.5 <span style="opacity:.55">(5k+)</span></div><div class="prod-price-row"><span class="prod-price">₹45</span><span class="prod-mrp">₹90</span></div><div class="qty-ctrl hidden"><button class="qty-btn" onclick="changeQtyC('c1',this,-1)">−</button><span class="qty-num">1</span><button class="qty-btn" onclick="changeQtyC('c1',this,1)">+</button></div><button class="add-btn" onclick="addItemC('c1',this,45)">Add</button></div>
+      <div class="c1-card" data-price="89" style="position:relative"><div class="popular-badge" style="background:#c8650a;color:#fff">Popular pick</div><div class="prod-img-box" style="width:100%;aspect-ratio:1"><span class="prod-img-txt" style="color:#d4905a">Milk<br>image</span></div><div class="prod-name">Milk</div><div class="prod-rating">⭐ 4.7 <span style="opacity:.55">(8k+)</span></div><div class="prod-price-row"><span class="prod-price">₹55</span><span class="prod-mrp">₹110</span></div><div class="qty-ctrl hidden"><button class="qty-btn" onclick="changeQtyC('c1',this,-1)">−</button><span class="qty-num">1</span><button class="qty-btn" onclick="changeQtyC('c1',this,1)">+</button></div><button class="add-btn" onclick="addItemC('c1',this,55)">Add</button></div>
+      <div class="c1-card" data-price="89"><div class="prod-img-box" style="width:100%;aspect-ratio:1"><span class="prod-img-txt" style="color:#d4905a">Butter<br>image</span></div><div class="prod-name">Butter</div><div class="prod-rating">⭐ 4.6 <span style="opacity:.55">(3k+)</span></div><div class="prod-price-row"><span class="prod-price">₹89</span><span class="prod-mrp">₹160</span></div><div class="qty-ctrl hidden"><button class="qty-btn" onclick="changeQtyC('c1',this,-1)">−</button><span class="qty-num">1</span><button class="qty-btn" onclick="changeQtyC('c1',this,1)">+</button></div><button class="add-btn" onclick="addItemC('c1',this,89)">Add</button></div>
+      <div class="c1-card" data-price="79"><div class="prod-img-box" style="width:100%;aspect-ratio:1"><span class="prod-img-txt" style="color:#d4905a">Idli Batter<br>image</span></div><div class="prod-name">Idli Batter</div><div class="prod-rating">⭐ 4.6 <span style="opacity:.55">(2.1k+)</span></div><div class="prod-price-row"><span class="prod-price">₹79</span><span class="prod-mrp">₹158</span></div><div class="qty-ctrl hidden"><button class="qty-btn" onclick="changeQtyC('c1',this,-1)">−</button><span class="qty-num">1</span><button class="qty-btn" onclick="changeQtyC('c1',this,1)">+</button></div><button class="add-btn" onclick="addItemC('c1',this,79)">Add</button></div>
+      <div class="c1-card" data-price="149"><div class="prod-img-box" style="width:100%;aspect-ratio:1"><span class="prod-img-txt" style="color:#d4905a">Assam Tea<br>image</span></div><div class="prod-name">Assam Tea</div><div class="prod-rating">⭐ 4.8 <span style="opacity:.55">(2.8k+)</span></div><div class="prod-price-row"><span class="prod-price">₹149</span><span class="prod-mrp">₹280</span></div><div class="qty-ctrl hidden"><button class="qty-btn" onclick="changeQtyC('c1',this,-1)">−</button><span class="qty-num">1</span><button class="qty-btn" onclick="changeQtyC('c1',this,1)">+</button></div><button class="add-btn" onclick="addItemC('c1',this,149)">Add</button></div>
+    </div>
+    <button class="c1-cta">Build Your Morning Basket →</button>
+    <div class="c1-trust"><span>✓ Delivered before 7 AM</span><span>✓ Farm-fresh dairy</span><span>✓ No minimum order</span></div>
+    <div class="c1-cart hidden" id="cart-1">
+      <div><div class="c1-cart-count" id="cc-1">0 items in cart</div><div class="c1-cart-total" id="ct-1">₹0</div></div>
+      <button class="c1-cart-btn">Checkout →</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- C2 TEA-TIME PICKS -->
+<div class="campaign-pane" id="pane-2">
+<div class="c2-wrap">
+  <div class="c2-close"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="#a03c64" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+  <div class="c2-header">
+    <div class="c2-eyebrow">Tea-time Picks</div>
+    <div class="c2-headline">Your 4 PM,<br><em>sorted.</em></div>
+    <div class="c2-sub">The perfect spread for your favourite break.</div>
+    <div class="c2-offer-row">
+      <span class="c2-offer">Buy 1 Get 1 Free</span>
+      <span class="c2-offer-txt">Order any product,<br>get the next one free</span>
+    </div>
+  </div>
+  <!-- Featured hero card -->
+  <div class="c2-featured" id="c2-featured-card" data-price="149">
+    <div class="c2-featured-label">⭐ 4.8 · Most-ordered this week</div>
+    <div class="c2-featured-name">Assam Tea<br>Powder</div>
+    <div class="c2-featured-sub">Rich, malty, full-bodied — the real deal</div>
+    <div class="c2-featured-row">
+      <div style="display:flex;align-items:baseline;gap:6px">
+        <span class="c2-featured-price">₹149</span>
+        <span class="c2-featured-mrp">₹280</span>
+      </div>
+      <div>
+        <div class="c2-featured-qty hidden" id="c2-feat-qty">
+          <button class="qty-btn" onclick="changeFeatQty(-1)">−</button>
+          <span class="qty-num" id="c2-feat-num">1</span>
+          <button class="qty-btn" onclick="changeFeatQty(1)">+</button>
+        </div>
+        <button class="c2-featured-add" id="c2-feat-add" onclick="addFeatured()">Add</button>
+      </div>
+    </div>
+  </div>
+  <div class="c2-social" style="margin-top:12px">⭐⭐⭐⭐⭐&nbsp;<b>4.8</b>&nbsp;<span>· 5L+ families trust us</span></div>
+  <div class="c2-scroll-label">More picks for you</div>
+  <div class="c2-scroll">
+    <div class="c2-card" data-price="45"><div class="prod-img-box" style="width:100%;aspect-ratio:1;background:#fce8f2;border:1px dashed rgba(160,60,100,0.18)"><span class="prod-img-txt" style="color:#c080a0">Bread<br>image</span></div><div class="prod-name">Bread</div><div class="prod-rating">⭐ 4.5 <span style="opacity:.55">(5k+)</span></div><div class="prod-price-row"><span class="prod-price">₹45</span><span class="prod-mrp">₹90</span></div><div class="qty-ctrl hidden"><button class="qty-btn" onclick="changeQtyC('c2',this,-1)">−</button><span class="qty-num">1</span><button class="qty-btn" onclick="changeQtyC('c2',this,1)">+</button></div><button class="add-btn" onclick="addItemC('c2',this,45)">Add</button></div>
+    <div class="c2-card" data-price="89"><div class="prod-img-box" style="width:100%;aspect-ratio:1;background:#fce8f2;border:1px dashed rgba(160,60,100,0.18)"><span class="prod-img-txt" style="color:#c080a0">Butter<br>image</span></div><div class="prod-name">Butter</div><div class="prod-rating">⭐ 4.6 <span style="opacity:.55">(3k+)</span></div><div class="prod-price-row"><span class="prod-price">₹89</span><span class="prod-mrp">₹160</span></div><div class="qty-ctrl hidden"><button class="qty-btn" onclick="changeQtyC('c2',this,-1)">−</button><span class="qty-num">1</span><button class="qty-btn" onclick="changeQtyC('c2',this,1)">+</button></div><button class="add-btn" onclick="addItemC('c2',this,89)">Add</button></div>
+    <div class="c2-card" data-price="35"><div class="prod-img-box" style="width:100%;aspect-ratio:1;background:#fce8f2;border:1px dashed rgba(160,60,100,0.18)"><span class="prod-img-txt" style="color:#c080a0">Chaach<br>image</span></div><div class="prod-name">Chaach</div><div class="prod-rating">⭐ 4.7 <span style="opacity:.55">(4.1k+)</span></div><div class="prod-price-row"><span class="prod-price">₹35</span><span class="prod-mrp">₹70</span></div><div class="qty-ctrl hidden"><button class="qty-btn" onclick="changeQtyC('c2',this,-1)">−</button><span class="qty-num">1</span><button class="qty-btn" onclick="changeQtyC('c2',this,1)">+</button></div><button class="add-btn" onclick="addItemC('c2',this,35)">Add</button></div>
+    <div class="c2-card" data-price="65"><div class="prod-img-box" style="width:100%;aspect-ratio:1;background:#fce8f2;border:1px dashed rgba(160,60,100,0.18)"><span class="prod-img-txt" style="color:#c080a0">Lassi<br>image</span></div><div class="prod-name">Lassi</div><div class="prod-rating">⭐ 4.6 <span style="opacity:.55">(2.5k+)</span></div><div class="prod-price-row"><span class="prod-price">₹65</span><span class="prod-mrp">₹120</span></div><div class="qty-ctrl hidden"><button class="qty-btn" onclick="changeQtyC('c2',this,-1)">−</button><span class="qty-num">1</span><button class="qty-btn" onclick="changeQtyC('c2',this,1)">+</button></div><button class="add-btn" onclick="addItemC('c2',this,65)">Add</button></div>
+    <div class="c2-card" data-price="99"><div class="prod-img-box" style="width:100%;aspect-ratio:1;background:#fce8f2;border:1px dashed rgba(160,60,100,0.18)"><span class="prod-img-txt" style="color:#c080a0">Eggs<br>image</span></div><div class="prod-name">Eggs</div><div class="prod-rating">⭐ 4.9 <span style="opacity:.55">(6k+)</span></div><div class="prod-price-row"><span class="prod-price">₹99</span><span class="prod-mrp">₹180</span></div><div class="qty-ctrl hidden"><button class="qty-btn" onclick="changeQtyC('c2',this,-1)">−</button><span class="qty-num">1</span><button class="qty-btn" onclick="changeQtyC('c2',this,1)">+</button></div><button class="add-btn" onclick="addItemC('c2',this,99)">Add</button></div>
+  </div>
+  <button class="c2-cta">Set Up Your Tea-time →</button>
+  <div class="c2-trust"><span>✓ Delivered before 7 AM</span><span>✓ Farm-fresh dairy</span><span>✓ No minimum order</span></div>
+  <div class="c2-cart hidden" id="cart-2">
+    <div><div class="c2-cart-count" id="cc-2">0 items in cart</div><div class="c2-cart-total" id="ct-2">₹0</div></div>
+    <button class="c2-cart-btn">Checkout →</button>
+  </div>
+</div>
+</div>
+
+<!-- C3 MOST-LOVED -->
+<div class="campaign-pane" id="pane-3">
+<div class="c3-wrap">
+  <div class="c3-close"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="#2d6a3f" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+  <div class="c3-header">
+    <div class="c3-eyebrow">Most-loved</div>
+    <div class="c3-headline">The ones<br><em>everyone loves.</em></div>
+    <div class="c3-offer-row">
+      <span class="c3-offer">Buy 1 Get 1 Free</span>
+      <span class="c3-offer-txt">Order any product,<br>get the next one free</span>
+    </div>
+  </div>
+  <div class="c3-social">⭐⭐⭐⭐⭐&nbsp;<b>4.8</b>&nbsp;<span>· 5L+ families trust us</span></div>
+  <div class="c3-divider"></div>
+  <div class="c3-list-label">Most-loved picks</div>
+  <div class="c3-list">
+    <div class="c3-row" data-price="89"><span class="c3-rank">1</span><div class="c3-row-img">Paneer<br>image</div><div class="c3-row-info"><div class="c3-row-name">Taaza Paneer</div><div class="c3-row-rating">⭐ 4.8 · (4k+)</div></div><div style="display:flex;align-items:center;gap:4px"><span class="c3-row-price">₹89</span><span class="c3-row-mrp">₹178</span></div><div class="c3-row-actions"><button class="c3-add-btn" onclick="addRowItem(this,89,'3')">Add</button><div class="c3-qty hidden"><button class="qty-btn" onclick="changeRowQty(this,-1,'3')">−</button><span class="qty-num">1</span><button class="qty-btn" onclick="changeRowQty(this,1,'3')">+</button></div></div><div class="c3-pop">Popular pick</div></div>
+    <div class="c3-row" data-price="55"><span class="c3-rank">2</span><div class="c3-row-img">Dahi<br>image</div><div class="c3-row-info"><div class="c3-row-name">Ghar Jaisa Dahi</div><div class="c3-row-rating">⭐ 4.7 · (3.2k+)</div></div><div style="display:flex;align-items:center;gap:4px"><span class="c3-row-price">₹55</span><span class="c3-row-mrp">₹110</span></div><div class="c3-row-actions"><button class="c3-add-btn" onclick="addRowItem(this,55,'3')">Add</button><div class="c3-qty hidden"><button class="qty-btn" onclick="changeRowQty(this,-1,'3')">−</button><span class="qty-num">1</span><button class="qty-btn" onclick="changeRowQty(this,1,'3')">+</button></div></div><div class="c3-pop">Popular pick</div></div>
+    <div class="c3-row" data-price="55"><span class="c3-rank">3</span><div class="c3-row-img">Milk<br>image</div><div class="c3-row-info"><div class="c3-row-name">Fresh Milk</div><div class="c3-row-rating">⭐ 4.7 · (8k+)</div></div><div style="display:flex;align-items:center;gap:4px"><span class="c3-row-price">₹55</span><span class="c3-row-mrp">₹110</span></div><div class="c3-row-actions"><button class="c3-add-btn" onclick="addRowItem(this,55,'3')">Add</button><div class="c3-qty hidden"><button class="qty-btn" onclick="changeRowQty(this,-1,'3')">−</button><span class="qty-num">1</span><button class="qty-btn" onclick="changeRowQty(this,1,'3')">+</button></div></div></div>
+    <div class="c3-row" data-price="99"><span class="c3-rank">4</span><div class="c3-row-img">Eggs<br>image</div><div class="c3-row-info"><div class="c3-row-name">Farm Eggs</div><div class="c3-row-rating">⭐ 4.9 · (6k+)</div></div><div style="display:flex;align-items:center;gap:4px"><span class="c3-row-price">₹99</span><span class="c3-row-mrp">₹180</span></div><div class="c3-row-actions"><button class="c3-add-btn" onclick="addRowItem(this,99,'3')">Add</button><div class="c3-qty hidden"><button class="qty-btn" onclick="changeRowQty(this,-1,'3')">−</button><span class="qty-num">1</span><button class="qty-btn" onclick="changeRowQty(this,1,'3')">+</button></div></div></div>
+    <div class="c3-row" data-price="35"><span class="c3-rank">5</span><div class="c3-row-img">Chaach<br>image</div><div class="c3-row-info"><div class="c3-row-name">Fresh Chaach</div><div class="c3-row-rating">⭐ 4.7 · (4.1k+)</div></div><div style="display:flex;align-items:center;gap:4px"><span class="c3-row-price">₹35</span><span class="c3-row-mrp">₹70</span></div><div class="c3-row-actions"><button class="c3-add-btn" onclick="addRowItem(this,35,'3')">Add</button><div class="c3-qty hidden"><button class="qty-btn" onclick="changeRowQty(this,-1,'3')">−</button><span class="qty-num">1</span><button class="qty-btn" onclick="changeRowQty(this,1,'3')">+</button></div></div></div>
+    <div class="c3-row" data-price="65"><span class="c3-rank">6</span><div class="c3-row-img">Lassi<br>image</div><div class="c3-row-info"><div class="c3-row-name">Sweet Lassi</div><div class="c3-row-rating">⭐ 4.6 · (2.5k+)</div></div><div style="display:flex;align-items:center;gap:4px"><span class="c3-row-price">₹65</span><span class="c3-row-mrp">₹120</span></div><div class="c3-row-actions"><button class="c3-add-btn" onclick="addRowItem(this,65,'3')">Add</button><div class="c3-qty hidden"><button class="qty-btn" onclick="changeRowQty(this,-1,'3')">−</button><span class="qty-num">1</span><button class="qty-btn" onclick="changeRowQty(this,1,'3')">+</button></div></div></div>
+    <div class="c3-row" data-price="45"><span class="c3-rank">7</span><div class="c3-row-img">Bread<br>image</div><div class="c3-row-info"><div class="c3-row-name">Soft Bread</div><div class="c3-row-rating">⭐ 4.5 · (5k+)</div></div><div style="display:flex;align-items:center;gap:4px"><span class="c3-row-price">₹45</span><span class="c3-row-mrp">₹90</span></div><div class="c3-row-actions"><button class="c3-add-btn" onclick="addRowItem(this,45,'3')">Add</button><div class="c3-qty hidden"><button class="qty-btn" onclick="changeRowQty(this,-1,'3')">−</button><span class="qty-num">1</span><button class="qty-btn" onclick="changeRowQty(this,1,'3')">+</button></div></div></div>
+    <div class="c3-row" data-price="79"><span class="c3-rank">8</span><div class="c3-row-img">Batter<br>image</div><div class="c3-row-info"><div class="c3-row-name">Idli Batter</div><div class="c3-row-rating">⭐ 4.6 · (2.1k+)</div></div><div style="display:flex;align-items:center;gap:4px"><span class="c3-row-price">₹79</span><span class="c3-row-mrp">₹158</span></div><div class="c3-row-actions"><button class="c3-add-btn" onclick="addRowItem(this,79,'3')">Add</button><div class="c3-qty hidden"><button class="qty-btn" onclick="changeRowQty(this,-1,'3')">−</button><span class="qty-num">1</span><button class="qty-btn" onclick="changeRowQty(this,1,'3')">+</button></div></div></div>
+  </div>
+  <button class="c3-cta">Shop Fan Favourites →</button>
+  <div class="c3-trust"><span>✓ Delivered before 7 AM</span><span>✓ Farm-fresh dairy</span><span>✓ No minimum order</span></div>
+  <div class="c3-cart hidden" id="cart-3">
+    <div><div class="c3-cart-count" id="cc-3">0 items in cart</div><div class="c3-cart-total" id="ct-3">₹0</div></div>
+    <button class="c3-cart-btn">Checkout →</button>
+  </div>
+</div>
+</div>
+
+<!-- C4 BETTER THAN STORE-BOUGHT -->
+<div class="campaign-pane" id="pane-4">
+<div class="c4-wrap">
+  <div class="c4-close"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="#1a3a5c" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+  <div class="c4-header">
+    <div class="c4-eyebrow">Better Than Store-bought</div>
+    <div class="c4-headline">Freshness<br><em>you can taste.</em></div>
+    <div class="c4-offer-row">
+      <span class="c4-offer">Buy 1 Get 1 Free</span>
+      <span class="c4-offer-txt">Order any product,<br>get the next one free</span>
+    </div>
+  </div>
+  <div class="c4-compare">
+    <div class="c4-compare-head">
+      <div class="c4-ch-blank"></div>
+      <div class="c4-ch-them">Other brands</div>
+      <div class="c4-ch-us">Country Delight</div>
+    </div>
+    <div class="c4-row"><div class="c4-attr">Sourcing</div><div class="c4-them">❌ Unknown</div><div class="c4-us">✅ Farm-direct</div></div>
+    <div class="c4-row"><div class="c4-attr">Freshness</div><div class="c4-them">❌ Days old</div><div class="c4-us">✅ Daily</div></div>
+    <div class="c4-row"><div class="c4-attr">Preservatives</div><div class="c4-them">❌ Added</div><div class="c4-us">✅ None</div></div>
+    <div class="c4-row"><div class="c4-attr">Delivery</div><div class="c4-them">❌ Store visit</div><div class="c4-us">✅ By 7 AM</div></div>
+    <div class="c4-row"><div class="c4-attr">Trust</div><div class="c4-them">⚠️ 3.8★</div><div class="c4-us">✅ 4.8★</div></div>
+  </div>
+  <div class="c4-social" style="margin-top:12px">⭐⭐⭐⭐⭐&nbsp;<b>4.8</b>&nbsp;<span>· 5L+ families trust us</span></div>
+  <div class="c4-scroll-label">Try the difference</div>
+  <div class="c4-scroll">
+    <div class="c4-card" data-price="89" style="position:relative"><div class="popular-badge" style="background:#1a3a5c;color:#fff">Popular pick</div><div class="prod-img-box" style="width:100%;aspect-ratio:1"><span class="prod-img-txt" style="color:#7a9ab8">Paneer<br>image</span></div><div class="prod-name">Paneer</div><div class="prod-rating">⭐ 4.8</div><div class="prod-price-row"><span class="prod-price">₹89</span><span class="prod-mrp">₹178</span></div><div class="qty-ctrl hidden"><button class="qty-btn" onclick="changeQtyC('c4',this,-1)">−</button><span class="qty-num">1</span><button class="qty-btn" onclick="changeQtyC('c4',this,1)">+</button></div><button class="add-btn" onclick="addItemC('c4',this,89)">Add</button></div>
+    <div class="c4-card" data-price="55" style="position:relative"><div class="popular-badge" style="background:#1a3a5c;color:#fff">Popular pick</div><div class="prod-img-box" style="width:100%;aspect-ratio:1"><span class="prod-img-txt" style="color:#7a9ab8">Dahi<br>image</span></div><div class="prod-name">Dahi</div><div class="prod-rating">⭐ 4.7</div><div class="prod-price-row"><span class="prod-price">₹55</span><span class="prod-mrp">₹110</span></div><div class="qty-ctrl hidden"><button class="qty-btn" onclick="changeQtyC('c4',this,-1)">−</button><span class="qty-num">1</span><button class="qty-btn" onclick="changeQtyC('c4',this,1)">+</button></div><button class="add-btn" onclick="addItemC('c4',this,55)">Add</button></div>
+    <div class="c4-card" data-price="79"><div class="prod-img-box" style="width:100%;aspect-ratio:1"><span class="prod-img-txt" style="color:#7a9ab8">Idli Batter<br>image</span></div><div class="prod-name">Idli Batter</div><div class="prod-rating">⭐ 4.6</div><div class="prod-price-row"><span class="prod-price">₹79</span><span class="prod-mrp">₹158</span></div><div class="qty-ctrl hidden"><button class="qty-btn" onclick="changeQtyC('c4',this,-1)">−</button><span class="qty-num">1</span><button class="qty-btn" onclick="changeQtyC('c4',this,1)">+</button></div><button class="add-btn" onclick="addItemC('c4',this,79)">Add</button></div>
+    <div class="c4-card" data-price="35"><div class="prod-img-box" style="width:100%;aspect-ratio:1"><span class="prod-img-txt" style="color:#7a9ab8">Chaach<br>image</span></div><div class="prod-name">Chaach</div><div class="prod-rating">⭐ 4.7</div><div class="prod-price-row"><span class="prod-price">₹35</span><span class="prod-mrp">₹70</span></div><div class="qty-ctrl hidden"><button class="qty-btn" onclick="changeQtyC('c4',this,-1)">−</button><span class="qty-num">1</span><button class="qty-btn" onclick="changeQtyC('c4',this,1)">+</button></div><button class="add-btn" onclick="addItemC('c4',this,35)">Add</button></div>
+    <div class="c4-card" data-price="55"><div class="prod-img-box" style="width:100%;aspect-ratio:1"><span class="prod-img-txt" style="color:#7a9ab8">Milk<br>image</span></div><div class="prod-name">Milk</div><div class="prod-rating">⭐ 4.7</div><div class="prod-price-row"><span class="prod-price">₹55</span><span class="prod-mrp">₹110</span></div><div class="qty-ctrl hidden"><button class="qty-btn" onclick="changeQtyC('c4',this,-1)">−</button><span class="qty-num">1</span><button class="qty-btn" onclick="changeQtyC('c4',this,1)">+</button></div><button class="add-btn" onclick="addItemC('c4',this,55)">Add</button></div>
+    <div class="c4-card" data-price="99"><div class="prod-img-box" style="width:100%;aspect-ratio:1"><span class="prod-img-txt" style="color:#7a9ab8">Eggs<br>image</span></div><div class="prod-name">Eggs</div><div class="prod-rating">⭐ 4.9</div><div class="prod-price-row"><span class="prod-price">₹99</span><span class="prod-mrp">₹180</span></div><div class="qty-ctrl hidden"><button class="qty-btn" onclick="changeQtyC('c4',this,-1)">−</button><span class="qty-num">1</span><button class="qty-btn" onclick="changeQtyC('c4',this,1)">+</button></div><button class="add-btn" onclick="addItemC('c4',this,99)">Add</button></div>
+  </div>
+  <button class="c4-cta">Try the Difference →</button>
+  <div class="c4-trust"><span>✓ Delivered before 7 AM</span><span>✓ Farm-fresh dairy</span><span>✓ No minimum order</span></div>
+  <div class="c4-cart hidden" id="cart-4">
+    <div><div class="c4-cart-count" id="cc-4">0 items in cart</div><div class="c4-cart-total" id="ct-4">₹0</div></div>
+    <button class="c4-cart-btn">Checkout →</button>
+  </div>
+</div>
+</div>
+
+<!-- C5 MOM-APPROVED -->
+<div class="campaign-pane" id="pane-5">
+<div class="c5-wrap">
+  <div class="c5-close"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="#c0405a" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+  <div class="c5-hero">
+    <div class="c5-eyebrow">Mom-approved</div>
+    <div class="c5-headline">Made with<br><em>love & care.</em></div>
+    <div class="c5-quote">"Because my family deserves<br>only the freshest."</div>
+    <div class="c5-offer-row">
+      <span class="c5-offer">Buy 1 Get 1 Free</span>
+      <span class="c5-offer-txt">Order any,<br>next one free</span>
+    </div>
+    <div class="c5-social">⭐⭐⭐⭐⭐&nbsp;<b>4.8</b>&nbsp;<span>· 5L+ families trust us</span></div>
+  </div>
+  <div class="c5-grid-label">Pick your daily essentials</div>
+  <div class="c5-grid">
+    <div class="c5-card" data-price="89" style="position:relative"><div class="popular-badge" style="background:#c0405a;color:#fff">Popular pick</div><div class="prod-img-box" style="width:100%;aspect-ratio:1"><span class="prod-img-txt" style="color:#d490a0">Paneer<br>image</span></div><div class="prod-name">Paneer</div><div class="prod-rating">⭐ 4.8 <span style="opacity:.55">(4k+)</span></div><div class="prod-price-row"><span class="prod-price">₹89</span><span class="prod-mrp">₹178</span></div><div class="qty-ctrl hidden"><button class="qty-btn" onclick="changeQtyC('c5',this,-1)">−</button><span class="qty-num">1</span><button class="qty-btn" onclick="changeQtyC('c5',this,1)">+</button></div><button class="add-btn" onclick="addItemC('c5',this,89)">Add</button></div>
+    <div class="c5-card" data-price="55" style="position:relative"><div class="popular-badge" style="background:#c0405a;color:#fff">Popular pick</div><div class="prod-img-box" style="width:100%;aspect-ratio:1"><span class="prod-img-txt" style="color:#d490a0">Dahi<br>image</span></div><div class="prod-name">Dahi</div><div class="prod-rating">⭐ 4.7 <span style="opacity:.55">(3.2k+)</span></div><div class="prod-price-row"><span class="prod-price">₹55</span><span class="prod-mrp">₹110</span></div><div class="qty-ctrl hidden"><button class="qty-btn" onclick="changeQtyC('c5',this,-1)">−</button><span class="qty-num">1</span><button class="qty-btn" onclick="changeQtyC('c5',this,1)">+</button></div><button class="add-btn" onclick="addItemC('c5',this,55)">Add</button></div>
+    <div class="c5-card" data-price="55"><div class="prod-img-box" style="width:100%;aspect-ratio:1"><span class="prod-img-txt" style="color:#d490a0">Milk<br>image</span></div><div class="prod-name">Milk</div><div class="prod-rating">⭐ 4.7 <span style="opacity:.55">(8k+)</span></div><div class="prod-price-row"><span class="prod-price">₹55</span><span class="prod-mrp">₹110</span></div><div class="qty-ctrl hidden"><button class="qty-btn" onclick="changeQtyC('c5',this,-1)">−</button><span class="qty-num">1</span><button class="qty-btn" onclick="changeQtyC('c5',this,1)">+</button></div><button class="add-btn" onclick="addItemC('c5',this,55)">Add</button></div>
+    <div class="c5-card" data-price="99"><div class="prod-img-box" style="width:100%;aspect-ratio:1"><span class="prod-img-txt" style="color:#d490a0">Eggs<br>image</span></div><div class="prod-name">Eggs</div><div class="prod-rating">⭐ 4.9 <span style="opacity:.55">(6k+)</span></div><div class="prod-price-row"><span class="prod-price">₹99</span><span class="prod-mrp">₹180</span></div><div class="qty-ctrl hidden"><button class="qty-btn" onclick="changeQtyC('c5',this,-1)">−</button><span class="qty-num">1</span><button class="qty-btn" onclick="changeQtyC('c5',this,1)">+</button></div><button class="add-btn" onclick="addItemC('c5',this,99)">Add</button></div>
+    <div class="c5-card" data-price="45"><div class="prod-img-box" style="width:100%;aspect-ratio:1"><span class="prod-img-txt" style="color:#d490a0">Bread<br>image</span></div><div class="prod-name">Bread</div><div class="prod-rating">⭐ 4.5 <span style="opacity:.55">(5k+)</span></div><div class="prod-price-row"><span class="prod-price">₹45</span><span class="prod-mrp">₹90</span></div><div class="qty-ctrl hidden"><button class="qty-btn" onclick="changeQtyC('c5',this,-1)">−</button><span class="qty-num">1</span><button class="qty-btn" onclick="changeQtyC('c5',this,1)">+</button></div><button class="add-btn" onclick="addItemC('c5',this,45)">Add</button></div>
+    <div class="c5-card" data-price="35"><div class="prod-img-box" style="width:100%;aspect-ratio:1"><span class="prod-img-txt" style="color:#d490a0">Chaach<br>image</span></div><div class="prod-name">Chaach</div><div class="prod-rating">⭐ 4.7 <span style="opacity:.55">(4.1k+)</span></div><div class="prod-price-row"><span class="prod-price">₹35</span><span class="prod-mrp">₹70</span></div><div class="qty-ctrl hidden"><button class="qty-btn" onclick="changeQtyC('c5',this,-1)">−</button><span class="qty-num">1</span><button class="qty-btn" onclick="changeQtyC('c5',this,1)">+</button></div><button class="add-btn" onclick="addItemC('c5',this,35)">Add</button></div>
+    <div class="c5-card" data-price="79"><div class="prod-img-box" style="width:100%;aspect-ratio:1"><span class="prod-img-txt" style="color:#d490a0">Idli Batter<br>image</span></div><div class="prod-name">Idli Batter</div><div class="prod-rating">⭐ 4.6 <span style="opacity:.55">(2.1k+)</span></div><div class="prod-price-row"><span class="prod-price">₹79</span><span class="prod-mrp">₹158</span></div><div class="qty-ctrl hidden"><button class="qty-btn" onclick="changeQtyC('c5',this,-1)">−</button><span class="qty-num">1</span><button class="qty-btn" onclick="changeQtyC('c5',this,1)">+</button></div><button class="add-btn" onclick="addItemC('c5',this,79)">Add</button></div>
+    <div class="c5-card" data-price="89"><div class="prod-img-box" style="width:100%;aspect-ratio:1"><span class="prod-img-txt" style="color:#d490a0">Butter<br>image</span></div><div class="prod-name">Butter</div><div class="prod-rating">⭐ 4.6 <span style="opacity:.55">(3k+)</span></div><div class="prod-price-row"><span class="prod-price">₹89</span><span class="prod-mrp">₹160</span></div><div class="qty-ctrl hidden"><button class="qty-btn" onclick="changeQtyC('c5',this,-1)">−</button><span class="qty-num">1</span><button class="qty-btn" onclick="changeQtyC('c5',this,1)">+</button></div><button class="add-btn" onclick="addItemC('c5',this,89)">Add</button></div>
+  </div>
+  <button class="c5-cta">Shop for Your Family →</button>
+  <div class="c5-trust"><span>✓ Delivered before 7 AM</span><span>✓ Farm-fresh dairy</span><span>✓ No minimum order</span></div>
+  <div class="c5-cart hidden" id="cart-5">
+    <div><div class="c5-cart-count" id="cc-5">0 items in cart</div><div class="c5-cart-total" id="ct-5">₹0</div></div>
+    <button class="c5-cart-btn">Checkout →</button>
+  </div>
+</div>
+</div>
+
+</div><!-- /phone -->
+
+<script>
+// TABS
+var tabs=document.querySelectorAll('.tab-btn');
+var panes=document.querySelectorAll('.campaign-pane');
+var phoneBg={'1':'#fff7ed','2':'#fdf0f5','3':'#f4f9f2','4':'#f8f8f6','5':'#fff5f7'};
+function show(id){
+  tabs.forEach(function(t){t.classList.toggle('active',t.dataset.id===id)});
+  panes.forEach(function(p){p.style.display=p.id==='pane-'+id?'block':'none'});
+  document.querySelector('.phone').style.background=phoneBg[id]||'#fff';
+}
+tabs.forEach(function(t){t.addEventListener('click',function(){show(t.dataset.id)})});
+show('1');
+document.querySelector('.phone').style.background=phoneBg['1'];
+
+// CART STATE
+var carts={};
+['1','2','3','4','5'].forEach(function(v){carts[v]={count:0,total:0}});
+
+// GENERIC scroll/grid add+qty (c1,c2,c4,c5)
+function addItemC(cid,btn,price){
+  var card=btn.closest('[data-price]');
+  btn.classList.add('added');
+  var ctrl=card.querySelector('.qty-ctrl');
+  ctrl.classList.remove('hidden');
+  ctrl.querySelector('.qty-num').textContent='1';
+  var vid=cid.replace('c','');
+  carts[vid].count++;carts[vid].total+=price;updateCart(vid);
+}
+function changeQtyC(cid,btn,delta){
+  var ctrl=btn.closest('.qty-ctrl');
+  var card=ctrl.closest('[data-price]');
+  var price=parseInt(card.dataset.price);
+  var qtyEl=ctrl.querySelector('.qty-num');
+  var newQty=parseInt(qtyEl.textContent)+delta;
+  var vid=cid.replace('c','');
+  if(newQty<1){ctrl.classList.add('hidden');card.querySelector('.add-btn').classList.remove('added');carts[vid].count--;carts[vid].total-=price;updateCart(vid);return;}
+  qtyEl.textContent=newQty;carts[vid].total+=delta*price;updateCart(vid);
+}
+
+// C2 FEATURED CARD
+var c2FeatQty=0;
+function addFeatured(){
+  document.getElementById('c2-feat-add').style.display='none';
+  var q=document.getElementById('c2-feat-qty');
+  q.classList.remove('hidden');
+  document.getElementById('c2-feat-num').textContent='1';
+  c2FeatQty=1;carts['2'].count++;carts['2'].total+=149;updateCart('2');
+}
+function changeFeatQty(delta){
+  var newQ=c2FeatQty+delta;
+  if(newQ<1){c2FeatQty=0;document.getElementById('c2-feat-qty').classList.add('hidden');document.getElementById('c2-feat-add').style.display='';carts['2'].count--;carts['2'].total-=149;updateCart('2');return;}
+  document.getElementById('c2-feat-num').textContent=newQ;carts['2'].total+=delta*149;c2FeatQty=newQ;updateCart('2');
+}
+
+// C3 RANKED LIST add+qty
+function addRowItem(btn,price,vid){
+  var row=btn.closest('.c3-row');
+  btn.classList.add('added');
+  var qty=row.querySelector('.c3-qty');
+  qty.classList.remove('hidden');
+  qty.querySelector('.qty-num').textContent='1';
+  carts[vid].count++;carts[vid].total+=price;updateCart(vid);
+}
+function changeRowQty(btn,delta,vid){
+  var qty=btn.closest('.c3-qty');
+  var row=qty.closest('.c3-row');
+  var price=parseInt(row.dataset.price);
+  var qtyEl=qty.querySelector('.qty-num');
+  var newQ=parseInt(qtyEl.textContent)+delta;
+  if(newQ<1){qty.classList.add('hidden');row.querySelector('.c3-add-btn').classList.remove('added');carts[vid].count--;carts[vid].total-=price;updateCart(vid);return;}
+  qtyEl.textContent=newQ;carts[vid].total+=delta*price;updateCart(vid);
+}
+
+function updateCart(vid){
+  var bar=document.getElementById('cart-'+vid);
+  var cc=document.getElementById('cc-'+vid);
+  var ct=document.getElementById('ct-'+vid);
+  if(!bar)return;
+  if(carts[vid].count<=0){bar.classList.add('hidden');return;}
+  bar.classList.remove('hidden');
+  cc.textContent=carts[vid].count+' item'+(carts[vid].count>1?'s':'')+' in cart';
+  ct.textContent='\u20b9'+carts[vid].total;
+}
+</script>
+</body>
+</html>
