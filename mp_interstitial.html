@@ -523,6 +523,8 @@ h1{text-align:center;font-size:10px;font-weight:700;color:#999;letter-spacing:0.
   font-family:'Plus Jakarta Sans',sans-serif;
   font-size:13px;font-weight:800;color:#0a0a0a;margin-bottom:8px;
 }
+.s3-free-row{background:#f0fbf5;border:1px dashed rgba(26,122,79,0.2)}
+.s3-free-row .s3-prod-name{font-size:11px}
 .s3-disclaimer-text{
   font-family:'Plus Jakarta Sans',sans-serif;
   font-size:10.5px;color:#888;line-height:1.55;
@@ -679,6 +681,7 @@ h1{text-align:center;font-size:10px;font-weight:700;color:#999;letter-spacing:0.
       <div class="s3-bill">
         <div class="s3-bill-row"><span>Items Total (MRP)</span><span id="s3-mrp-total">₹0</span></div>
         <div class="s3-bill-row green"><span>VIP Benefit Availed</span><span id="s3-vip-discount">-₹0</span></div>
+        <div class="s3-bill-row green" id="s3-offer-row" style="display:none"><span>1+1 Welcome Offer</span><span id="s3-offer-saving">-₹0</span></div>
         <div class="s3-bill-row muted"><span>Packaging charge</span><span>₹0</span></div>
         <div class="s3-bill-row"><span>Convenience Fee</span><span>₹1</span></div>
         <div class="s3-bill-divider"></div>
@@ -843,15 +846,24 @@ function openScreen3() {
 
   var totalSP = 0, totalMRP = 0;
 
+  var totalFreeValue = 0;
+
   cartItems.forEach(function(item) {
-    var mrp = (productMRPs[item.name] || item.price) * item.qty;
-    var sp = item.price * item.qty;
-    totalSP += sp;
-    totalMRP += mrp;
+    // 1+1: total qty = ordered * 2, free qty = ordered qty
+    var totalQty = item.qty * 2;
+    var freeQty  = item.qty;
+    var mrpUnit  = productMRPs[item.name] || item.price;
+    var mrp      = mrpUnit * totalQty;        // MRP for total qty
+    var sp       = item.price * item.qty;     // customer pays for ordered qty only
+    var freeVal  = item.price * freeQty;      // value of free items (at SP)
+    totalSP     += sp;
+    totalMRP    += mrp;
+    totalFreeValue += freeVal;
 
     var imgSrc = productImages[item.name] || '';
-    var size = productSizes[item.name] || '';
+    var size   = productSizes[item.name] || '';
 
+    // Main row — paid items
     var row = document.createElement('div');
     row.className = 's3-product-row';
     row.innerHTML =
@@ -860,7 +872,7 @@ function openScreen3() {
       '</div>' +
       '<div class="s3-prod-info">' +
         '<div class="s3-prod-name">' + item.name + '</div>' +
-        '<div class="s3-prod-qty">' + size + ' x ' + item.qty + '</div>' +
+        '<div class="s3-prod-qty">' + size + ' x ' + totalQty + '</div>' +
         '<div class="s3-one-time">One Time</div>' +
       '</div>' +
       '<div class="s3-prod-price-col">' +
@@ -868,20 +880,42 @@ function openScreen3() {
         '<div class="s3-prod-sp">₹' + sp.toFixed(1).replace(/\.0$/,'') + '</div>' +
       '</div>';
     list.appendChild(row);
+
+    // Free item row
+    var freeRow = document.createElement('div');
+    freeRow.className = 's3-product-row s3-free-row';
+    freeRow.innerHTML =
+      '<div class="s3-prod-img">' +
+        (imgSrc ? '<img src="' + imgSrc + '" alt="' + item.name + '"/>' : '') +
+      '</div>' +
+      '<div class="s3-prod-info">' +
+        '<div class="s3-prod-name" style="color:#1a7a4f">' + item.name + ' <span style="font-size:9px;background:#e8f8f0;color:#1a7a4f;padding:1px 6px;border-radius:5px;font-weight:700">FREE</span></div>' +
+        '<div class="s3-prod-qty">' + size + ' x ' + freeQty + '</div>' +
+        '<div class="s3-one-time" style="color:#1a7a4f;background:#e8f8f0">1+1 Offer</div>' +
+      '</div>' +
+      '<div class="s3-prod-price-col">' +
+        '<div class="s3-prod-mrp-s3">₹' + (mrpUnit * freeQty).toFixed(1).replace(/\.0$/,'') + '</div>' +
+        '<div class="s3-prod-sp" style="color:#1a7a4f">FREE</div>' +
+      '</div>';
+    list.appendChild(freeRow);
   });
 
-  // VIP discount = MRP - SP (actual saving)
-  var vipDiscount = Math.round(totalMRP - totalSP);
-  var convFee = 1;
-  var toPay = totalSP + convFee;  // customer pays SP + convenience fee
+  // Bill calculations
+  var vipDiscount  = Math.round(totalMRP - totalSP - totalFreeValue); // MRP minus what they pay minus free items
+  var offerSaving  = Math.round(totalFreeValue);
+  var totalSaving  = vipDiscount + offerSaving;
+  var convFee      = 1;
+  var toPay        = totalSP + convFee;
 
   // Update bill
   document.getElementById('s3-mrp-total').textContent = '₹' + totalMRP.toFixed(1).replace(/\.0$/,'');
   document.getElementById('s3-vip-discount').textContent = '-₹' + vipDiscount;
   document.getElementById('s3-vip-amount').textContent = '₹' + vipDiscount;
-  document.getElementById('s3-total-mrp-strike').textContent = '₹' + (totalMRP + convFee).toFixed(1).replace(/\.0$/,'');
+  document.getElementById('s3-offer-row').style.display = 'flex';
+  document.getElementById('s3-offer-saving').textContent = '-₹' + offerSaving;
+  document.getElementById('s3-total-mrp-strike').textContent = '₹' + (totalSP + convFee + totalFreeValue).toFixed(1).replace(/\.0$/,'');
   document.getElementById('s3-to-pay').textContent = '₹' + toPay.toFixed(1).replace(/\.0$/,'');
-  document.getElementById('s3-savings-bar').textContent = 'Yay! you are saving ₹' + vipDiscount + ' on this order';
+  document.getElementById('s3-savings-bar').textContent = 'Yay! you are saving ₹' + totalSaving + ' on this order';
 
   // Delivery date
   var del = getDeliveryDate();
