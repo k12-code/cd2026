@@ -252,33 +252,7 @@
   <p class="fn">Total complaints = ticket count (one user may raise multiple). Complaining users = distinct users from Retention Matrix. Churn = dx=7 daily avg.</p>
 
   <!-- Bar chart: complaints vs deliveries -->
-  <div class="chart-wrap">
-    <div class="chart-title">Complaint volume vs delivery volume — Dec 2025 to Feb 2026</div>
-    <div class="chart-sub">Both declining — complaint rate stable at 0.64–0.71%</div>
-    <svg viewBox="0 0 620 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
-      <text x="0" y="18" font-family="IBM Plex Mono,monospace" font-size="10" fill="#858b9c" font-weight="600">AVG DAILY DELIVERIES</text>
-      <rect x="130" y="26" width="377" height="28" rx="3" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/>
-      <text x="125" y="45" text-anchor="end" font-family="IBM Plex Mono,monospace" font-size="10" fill="#3d4150">Dec 2025</text>
-      <text x="515" y="45" font-family="IBM Plex Mono,monospace" font-size="10" fill="#166534" font-weight="600">339,467</text>
-      <rect x="130" y="62" width="365" height="28" rx="3" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/>
-      <text x="125" y="81" text-anchor="end" font-family="IBM Plex Mono,monospace" font-size="10" fill="#3d4150">Jan 2026</text>
-      <text x="502" y="81" font-family="IBM Plex Mono,monospace" font-size="10" fill="#166534" font-weight="600">328,525</text>
-      <rect x="130" y="98" width="361" height="28" rx="3" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/>
-      <text x="125" y="117" text-anchor="end" font-family="IBM Plex Mono,monospace" font-size="10" fill="#3d4150">Feb 2026</text>
-      <text x="498" y="117" font-family="IBM Plex Mono,monospace" font-size="10" fill="#166534" font-weight="600">325,133</text>
-      <line x1="0" y1="142" x2="620" y2="142" stroke="#e4e2db" stroke-width="1" stroke-dasharray="4,3"/>
-      <text x="0" y="160" font-family="IBM Plex Mono,monospace" font-size="10" fill="#858b9c" font-weight="600">TOTAL COMPLAINTS</text>
-      <rect x="130" y="168" width="355" height="28" rx="3" fill="#eaedfc" stroke="#c5cffa" stroke-width="1"/>
-      <text x="125" y="187" text-anchor="end" font-family="IBM Plex Mono,monospace" font-size="10" fill="#3d4150">Dec 2025</text>
-      <text x="493" y="187" font-family="IBM Plex Mono,monospace" font-size="10" fill="#1a3fcc" font-weight="600">97,711</text>
-      <rect x="130" y="204" width="308" height="28" rx="3" fill="#eaedfc" stroke="#c5cffa" stroke-width="1"/>
-      <text x="125" y="223" text-anchor="end" font-family="IBM Plex Mono,monospace" font-size="10" fill="#3d4150">Jan 2026</text>
-      <text x="446" y="223" font-family="IBM Plex Mono,monospace" font-size="10" fill="#1a3fcc" font-weight="600">84,607</text>
-      <rect x="130" y="240" width="269" height="28" rx="3" fill="#eaedfc" stroke="#c5cffa" stroke-width="1"/>
-      <text x="125" y="259" text-anchor="end" font-family="IBM Plex Mono,monospace" font-size="10" fill="#3d4150">Feb 2026</text>
-      <text x="407" y="259" font-family="IBM Plex Mono,monospace" font-size="10" fill="#1a3fcc" font-weight="600">73,922</text>
-    </svg>
-  </div>
+
 </div>
 
 <!-- 04 CAUSALITY -->
@@ -287,27 +261,32 @@
   <div class="sec-title">Do complaints drive churn?</div>
   <div class="sec-sub">Complainers vs non-complainers — same period, same base</div>
 
-  <div class="cg cg3" style="margin-bottom:20px;">
-    <div class="card rl"><div class="card-lbl">Complainer Churn Rate (dx=7)</div><div class="card-val r">14.6%</div><div class="card-note">Stable across all 3 months.</div></div>
-    <div class="card gl"><div class="card-lbl">Non-Complainer Churn Rate</div><div class="card-val g">7.9%</div><div class="card-note">Baseline churn for non-complainers.</div></div>
-    <div class="card aml"><div class="card-lbl">Churn Delta</div><div class="card-val a">+6.7pp</div><div class="card-note">Complainers churn ~1.9× more. Consistent every month.</div></div>
-  </div>
+
 
   <!-- Dot chart -->
   <div class="chart-wrap">
     <div class="chart-title">Out of every 100 users — who churns?</div>
     <div class="chart-sub">Churn = dx=7. Full period average. Complainers churn at 1.9× the rate of non-complainers.</div>
-    <svg viewBox="0 0 680 230" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
-      <text x="170" y="18" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" fill="#858b9c" font-weight="500">COMPLAINERS  (per 100)</text>
-      <g><circle cx="20" cy="30" r="6" fill="#c0392b" stroke="#a93226" stroke-width="1"/><circle cx="53" cy="30" r="6" fill="#c0392b" stroke="#a93226" stroke-width="1"/><circle cx="86" cy="30" r="6" fill="#c0392b" stroke="#a93226" stroke-width="1"/><circle cx="119" cy="30" r="6" fill="#c0392b" stroke="#a93226" stroke-width="1"/><circle cx="152" cy="30" r="6" fill="#c0392b" stroke="#a93226" stroke-width="1"/><circle cx="185" cy="30" r="6" fill="#c0392b" stroke="#a93226" stroke-width="1"/><circle cx="218" cy="30" r="6" fill="#c0392b" stroke="#a93226" stroke-width="1"/><circle cx="251" cy="30" r="6" fill="#c0392b" stroke="#a93226" stroke-width="1"/><circle cx="284" cy="30" r="6" fill="#c0392b" stroke="#a93226" stroke-width="1"/><circle cx="317" cy="30" r="6" fill="#c0392b" stroke="#a93226" stroke-width="1"/><circle cx="20" cy="46" r="6" fill="#c0392b" stroke="#a93226" stroke-width="1"/><circle cx="53" cy="46" r="6" fill="#c0392b" stroke="#a93226" stroke-width="1"/><circle cx="86" cy="46" r="6" fill="#c0392b" stroke="#a93226" stroke-width="1"/><circle cx="119" cy="46" r="6" fill="#c0392b" stroke="#a93226" stroke-width="1"/><circle cx="152" cy="46" r="6" fill="#c0392b" stroke="#a93226" stroke-width="1"/><circle cx="185" cy="46" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="218" cy="46" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="251" cy="46" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="284" cy="46" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="317" cy="46" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="20" cy="62" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="53" cy="62" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="86" cy="62" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="119" cy="62" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="152" cy="62" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="185" cy="62" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="218" cy="62" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="251" cy="62" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="284" cy="62" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="317" cy="62" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="20" cy="78" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="53" cy="78" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="86" cy="78" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="119" cy="78" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="152" cy="78" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="185" cy="78" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="218" cy="78" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="251" cy="78" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="284" cy="78" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="317" cy="78" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="20" cy="94" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="53" cy="94" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="86" cy="94" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="119" cy="94" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="152" cy="94" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="185" cy="94" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="218" cy="94" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="251" cy="94" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="284" cy="94" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="317" cy="94" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="20" cy="110" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="53" cy="110" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="86" cy="110" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="119" cy="110" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="152" cy="110" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="185" cy="110" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="218" cy="110" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="251" cy="110" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="284" cy="110" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="317" cy="110" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="20" cy="126" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="53" cy="126" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="86" cy="126" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="119" cy="126" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="152" cy="126" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="185" cy="126" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="218" cy="126" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="251" cy="126" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="284" cy="126" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="317" cy="126" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="20" cy="142" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="53" cy="142" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="86" cy="142" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="119" cy="142" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="152" cy="142" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="185" cy="142" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="218" cy="142" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="251" cy="142" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="284" cy="142" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="317" cy="142" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="20" cy="158" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="53" cy="158" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="86" cy="158" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="119" cy="158" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="152" cy="158" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="185" cy="158" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="218" cy="158" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="251" cy="158" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="284" cy="158" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="317" cy="158" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="20" cy="174" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="53" cy="174" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="86" cy="174" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="119" cy="174" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="152" cy="174" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="185" cy="174" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="218" cy="174" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="251" cy="174" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="284" cy="174" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="317" cy="174" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/></g>
-      <text x="510" y="18" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" fill="#858b9c" font-weight="500">NON-COMPLAINERS  (per 100)</text>
-      <g><circle cx="360" cy="30" r="6" fill="#c0392b" stroke="#a93226" stroke-width="1"/><circle cx="393" cy="30" r="6" fill="#c0392b" stroke="#a93226" stroke-width="1"/><circle cx="426" cy="30" r="6" fill="#c0392b" stroke="#a93226" stroke-width="1"/><circle cx="459" cy="30" r="6" fill="#c0392b" stroke="#a93226" stroke-width="1"/><circle cx="492" cy="30" r="6" fill="#c0392b" stroke="#a93226" stroke-width="1"/><circle cx="525" cy="30" r="6" fill="#c0392b" stroke="#a93226" stroke-width="1"/><circle cx="558" cy="30" r="6" fill="#c0392b" stroke="#a93226" stroke-width="1"/><circle cx="591" cy="30" r="6" fill="#c0392b" stroke="#a93226" stroke-width="1"/><circle cx="624" cy="30" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="657" cy="30" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="360" cy="46" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="393" cy="46" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="426" cy="46" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="459" cy="46" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="492" cy="46" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="525" cy="46" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="558" cy="46" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="591" cy="46" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="624" cy="46" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="657" cy="46" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="360" cy="62" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="393" cy="62" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="426" cy="62" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="459" cy="62" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="492" cy="62" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="525" cy="62" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="558" cy="62" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="591" cy="62" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="624" cy="62" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="657" cy="62" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="360" cy="78" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="393" cy="78" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="426" cy="78" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="459" cy="78" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="492" cy="78" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="525" cy="78" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="558" cy="78" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="591" cy="78" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="624" cy="78" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="657" cy="78" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="360" cy="94" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="393" cy="94" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="426" cy="94" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="459" cy="94" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="492" cy="94" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="525" cy="94" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="558" cy="94" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="591" cy="94" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="624" cy="94" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="657" cy="94" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="360" cy="110" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="393" cy="110" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="426" cy="110" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="459" cy="110" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="492" cy="110" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="525" cy="110" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="558" cy="110" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="591" cy="110" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="624" cy="110" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="657" cy="110" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="360" cy="126" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="393" cy="126" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="426" cy="126" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="459" cy="126" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="492" cy="126" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="525" cy="126" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="558" cy="126" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="591" cy="126" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="624" cy="126" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="657" cy="126" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="360" cy="142" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="393" cy="142" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="426" cy="142" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="459" cy="142" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="492" cy="142" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="525" cy="142" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="558" cy="142" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="591" cy="142" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="624" cy="142" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="657" cy="142" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="360" cy="158" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="393" cy="158" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="426" cy="158" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="459" cy="158" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="492" cy="158" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="525" cy="158" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="558" cy="158" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="591" cy="158" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="624" cy="158" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="657" cy="158" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="360" cy="174" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="393" cy="174" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="426" cy="174" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="459" cy="174" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="492" cy="174" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="525" cy="174" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="558" cy="174" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="591" cy="174" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="624" cy="174" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/><circle cx="657" cy="174" r="6" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/></g>
-      <text x="170" y="192" text-anchor="middle" font-family="Inter,sans-serif" font-size="20" font-weight="700" fill="#c0392b">15 churn</text>
-      <text x="510" y="192" text-anchor="middle" font-family="Inter,sans-serif" font-size="20" font-weight="700" fill="#166534">8 churn</text>
-      <rect x="20" y="210" width="10" height="10" rx="2" fill="#c0392b"/>
-      <text x="38" y="219" font-family="IBM Plex Mono,monospace" font-size="10" fill="#3d4150">Churned within 7 days</text>
-      <rect x="185" y="210" width="10" height="10" rx="2" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/>
-      <text x="203" y="219" font-family="IBM Plex Mono,monospace" font-size="10" fill="#3d4150">Retained</text>
+    <svg viewBox="0 0 620 140" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <!-- Left: Complainers -->
+      <text x="155" y="28" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10" fill="#858b9c" font-weight="600" letter-spacing="2">COMPLAINERS</text>
+      <!-- Big number -->
+      <text x="155" y="90" text-anchor="middle" font-family="Inter,sans-serif" font-size="64" font-weight="700" fill="#c0392b">15</text>
+      <text x="155" y="110" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10" fill="#858b9c">out of 100 churn</text>
+      <!-- Bar -->
+      <rect x="30" y="122" width="250" height="8" rx="4" fill="#e4e2db"/>
+      <rect x="30" y="122" width="37" height="8" rx="4" fill="#c0392b"/>
+
+      <!-- Divider -->
+      <line x1="310" y1="20" x2="310" y2="130" stroke="#e4e2db" stroke-width="1"/>
+
+      <!-- Right: Non-complainers -->
+      <text x="465" y="28" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10" fill="#858b9c" font-weight="600" letter-spacing="2">NON-COMPLAINERS</text>
+      <text x="465" y="90" text-anchor="middle" font-family="Inter,sans-serif" font-size="64" font-weight="700" fill="#166534">8</text>
+      <text x="465" y="110" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10" fill="#858b9c">out of 100 churn</text>
+      <!-- Bar -->
+      <rect x="340" y="122" width="250" height="8" rx="4" fill="#e4e2db"/>
+      <rect x="340" y="122" width="20" height="8" rx="4" fill="#166534"/>
     </svg>
   </div>
 
@@ -342,19 +321,19 @@
 
   <div class="tw" style="margin-bottom:22px;">
     <table>
-      <thead><tr><th>Age Bucket</th><th>Total Users</th><th>Comp Users</th><th>Comp %</th><th>Comp Churn%</th><th>NC Churn%</th><th>Comp D45</th><th>NC D45</th><th>D45 Gap</th><th>Risk</th></tr></thead>
+      <thead><tr><th>Age Bucket</th><th>Comp %</th><th>Comp Churn%</th><th>NC Churn%</th><th>Comp D45</th><th>NC D45</th><th>D45 Gap</th><th>Risk</th></tr></thead>
       <tbody>
-        <tr><td>0–30 days</td><td>4,962,683</td><td>68,725</td><td>1.4%</td><td><span class="pill pr">27.2%</span></td><td><span class="pill pr">30.2%</span></td><td>11.3%</td><td>16.3%</td><td><span class="pill pgr">+5.0pp</span></td><td><span class="pill pa">Lifecycle</span></td></tr>
-        <tr><td>31–60 days</td><td>1,835,740</td><td>17,052</td><td>0.9%</td><td><span class="pill pr">21.2%</span></td><td><span class="pill pa">16.3%</span></td><td>23.8%</td><td>35.9%</td><td><span class="pill pr">+12.1pp</span></td><td><span class="pill pr">High</span></td></tr>
-        <tr><td>61–90 days</td><td>1,340,955</td><td>10,909</td><td>0.8%</td><td><span class="pill pr">18.1%</span></td><td><span class="pill pa">10.9%</span></td><td>29.1%</td><td>44.6%</td><td><span class="pill pr">+15.5pp</span></td><td><span class="pill pr">High</span></td></tr>
-        <tr class="tr-hl"><td><strong>91–120 days</strong></td><td>1,161,323</td><td>8,071</td><td>0.7%</td><td><span class="pill pa">15.0%</span></td><td><span class="pill pg">8.0%</span></td><td>36.2%</td><td>51.1%</td><td><span class="pill pr"><strong>+14.9pp ↑</strong></span></td><td><span class="pill pr">Priority</span></td></tr>
-        <tr class="tr-hl"><td><strong>121–150 days</strong></td><td>1,047,237</td><td>6,213</td><td>0.6%</td><td><span class="pill pa">12.4%</span></td><td><span class="pill pg">5.9%</span></td><td>42.0%</td><td>56.7%</td><td><span class="pill pr"><strong>+14.7pp</strong></span></td><td><span class="pill pr">Priority</span></td></tr>
-        <tr class="tr-hl"><td><strong>151–180 days</strong></td><td>1,022,620</td><td>5,569</td><td>0.5%</td><td><span class="pill pa">10.0%</span></td><td><span class="pill pg">4.5%</span></td><td>46.0%</td><td>60.0%</td><td><span class="pill pa">+14.0pp</span></td><td><span class="pill pa">Elevated</span></td></tr>
-        <tr><td>181–210 days</td><td>933,249</td><td>4,857</td><td>0.5%</td><td>7.7%</td><td>3.6%</td><td>49.7%</td><td>62.4%</td><td><span class="pill pa">+12.7pp</span></td><td><span class="pill pa">Moderate</span></td></tr>
-        <tr><td>211–270 days</td><td>1,576,533</td><td>7,897</td><td>0.5%</td><td>6.5%</td><td>2.7%</td><td>52–54%</td><td>64–66%</td><td><span class="pill pgr">~12pp</span></td><td><span class="pill pgr">Monitor</span></td></tr>
-        <tr><td>271–360 days</td><td>1,737,611</td><td>7,978</td><td>0.5%</td><td>5.2%</td><td>2.0%</td><td>56–57%</td><td>67–68%</td><td><span class="pill pgr">~11pp</span></td><td><span class="pill pgr">Stable</span></td></tr>
-        <tr><td>361–720 days</td><td>5,847,662</td><td>24,601</td><td>0.4%</td><td>3.1%</td><td>1.3%</td><td>61.2%</td><td>72.0%</td><td><span class="pill pgr">+10.8pp</span></td><td><span class="pill pgr">Low risk</span></td></tr>
-        <tr><td>720+ days</td><td>8,345,855</td><td>37,538</td><td>0.4%</td><td>1.4%</td><td>0.5%</td><td>69.7%</td><td>76.6%</td><td><span class="pill pg">+6.8pp</span></td><td><span class="pill pg">Anchored</span></td></tr>
+        <tr><td>0–30 days</td><td>1.4%</td><td><span class="pill pr">27.2%</span></td><td><span class="pill pr">30.2%</span></td><td>11.3%</td><td>16.3%</td><td><span class="pill pgr">+5.0pp</span></td><td><span class="pill pa">Lifecycle</span></td></tr>
+        <tr><td>31–60 days</td><td>0.9%</td><td><span class="pill pr">21.2%</span></td><td><span class="pill pa">16.3%</span></td><td>23.8%</td><td>35.9%</td><td><span class="pill pr">+12.1pp</span></td><td><span class="pill pr">High</span></td></tr>
+        <tr><td>61–90 days</td><td>0.8%</td><td><span class="pill pr">18.1%</span></td><td><span class="pill pa">10.9%</span></td><td>29.1%</td><td>44.6%</td><td><span class="pill pr">+15.5pp</span></td><td><span class="pill pr">High</span></td></tr>
+        <tr class="tr-hl"><td><strong>91–120 days</strong></td><td>0.7%</td><td><span class="pill pa">15.0%</span></td><td><span class="pill pg">8.0%</span></td><td>36.2%</td><td>51.1%</td><td><span class="pill pr"><strong>+14.9pp ↑</strong></span></td><td><span class="pill pr">Priority</span></td></tr>
+        <tr class="tr-hl"><td><strong>121–150 days</strong></td><td>0.6%</td><td><span class="pill pa">12.4%</span></td><td><span class="pill pg">5.9%</span></td><td>42.0%</td><td>56.7%</td><td><span class="pill pr"><strong>+14.7pp</strong></span></td><td><span class="pill pr">Priority</span></td></tr>
+        <tr class="tr-hl"><td><strong>151–180 days</strong></td><td>0.5%</td><td><span class="pill pa">10.0%</span></td><td><span class="pill pg">4.5%</span></td><td>46.0%</td><td>60.0%</td><td><span class="pill pa">+14.0pp</span></td><td><span class="pill pa">Elevated</span></td></tr>
+        <tr><td>181–210 days</td><td>0.5%</td><td>7.7%</td><td>3.6%</td><td>49.7%</td><td>62.4%</td><td><span class="pill pa">+12.7pp</span></td><td><span class="pill pa">Moderate</span></td></tr>
+        <tr><td>211–270 days</td><td>0.5%</td><td>6.5%</td><td>2.7%</td><td>52–54%</td><td>64–66%</td><td><span class="pill pgr">~12pp</span></td><td><span class="pill pgr">Monitor</span></td></tr>
+        <tr><td>271–360 days</td><td>0.5%</td><td>5.2%</td><td>2.0%</td><td>56–57%</td><td>67–68%</td><td><span class="pill pgr">~11pp</span></td><td><span class="pill pgr">Stable</span></td></tr>
+        <tr><td>361–720 days</td><td>0.4%</td><td>3.1%</td><td>1.3%</td><td>61.2%</td><td>72.0%</td><td><span class="pill pgr">+10.8pp</span></td><td><span class="pill pgr">Low risk</span></td></tr>
+        <tr><td>720+ days</td><td>0.4%</td><td>1.4%</td><td>0.5%</td><td>69.7%</td><td>76.6%</td><td><span class="pill pg">+6.8pp</span></td><td><span class="pill pg">Anchored</span></td></tr>
       </tbody>
     </table>
   </div>
@@ -446,27 +425,7 @@
     <p>The 91–120 day bucket has the worst mid-tenure avg rating (2.48), the highest 1★ share among mid-tenure users (55%), and the widest D45 retention gap (14.9pp). The 120+ bucket has the lowest avg rating overall (2.19) and 62.5% 1★ — long-tenure users who are still complaining are the most dissatisfied cohort in both datasets. Feb was the worst month across all buckets — avg rating fell from 3.09 (Dec, 0–30 days) to 2.48 (91–120 days) and 2.19 (120+).</p>
   </div>
 
-  <!-- Monthly by bucket table -->
-  <div class="tw" style="margin-top:16px;">
-    <table>
-      <thead>
-        <tr>
-          <th>Age Bucket</th>
-          <th>Dec Total</th><th>Dec Avg</th><th>Dec 1★%</th>
-          <th>Jan Total</th><th>Jan Avg</th><th>Jan 1★%</th>
-          <th>Feb Total</th><th>Feb Avg</th><th>Feb 1★%</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td>0–30 days</td><td>13,258</td><td>3.19</td><td>36.5%</td><td>10,338</td><td>3.09</td><td>39.7%</td><td>8,837</td><td>2.93</td><td>43.1%</td></tr>
-        <tr><td>31–60 days</td><td>2,848</td><td>2.67</td><td>50.6%</td><td>2,754</td><td>2.80</td><td>47.5%</td><td>2,086</td><td>2.59</td><td>52.2%</td></tr>
-        <tr><td>61–90 days</td><td>1,638</td><td>2.74</td><td>48.1%</td><td>1,482</td><td>2.64</td><td>50.7%</td><td>1,420</td><td>2.56</td><td>54.3%</td></tr>
-        <tr class="tr-hl"><td><strong>91–120 days</strong></td><td>1,364</td><td>2.53</td><td>54.0%</td><td>985</td><td>2.62</td><td>51.3%</td><td>878</td><td><span class="pill pr">2.25</span></td><td><span class="pill pr">60.9%</span></td></tr>
-        <tr><td>120+ days</td><td>11,528</td><td>2.20</td><td>62.0%</td><td>10,615</td><td>2.24</td><td>60.4%</td><td>9,397</td><td><span class="pill pr">2.11</span></td><td><span class="pill pr">64.2%</span></td></tr>
-      </tbody>
-    </table>
-  </div>
-  <p class="fn">Source: Product Feedback export. Note: 120+ bucket here maps to 121-150 through 720+ in churn analysis (rolled up). Feb 28 has no rating data.</p>
+
 </div>
 
 <!-- 07 RESOLUTION & TAT -->
@@ -475,11 +434,8 @@
   <div class="sec-title">How complaints are resolved — and where the gaps are</div>
   <div class="sec-sub">Refund rate = refunded ÷ total complaints. Reopen rate = re-opened ÷ total complaints.</div>
 
-  <div class="cg cg3" style="margin-bottom:20px;">
-    <div class="card al"><div class="card-lbl">Delivery</div><div class="card-val">154,932</div><div class="card-note">60.5% of complaints · 75,183 refunded · 11,154 reopened · Avg TAT 7.4h</div></div>
-    <div class="card al"><div class="card-lbl">Quality</div><div class="card-val">47,990</div><div class="card-note">18.7% of complaints · 28,551 refunded · 4,857 reopened · Avg TAT 18.2h</div></div>
-    <div class="card al"><div class="card-lbl">Billing &amp; Collection</div><div class="card-val">53,097</div><div class="card-note">20.7% of complaints · 10,088 refunded · 4,853 reopened · Avg TAT 12.9h</div></div>
-  </div>
+
+
 
   <div class="tw" style="margin-bottom:20px;">
     <table>
@@ -507,7 +463,7 @@
       <rect x="77" y="76" width="87" height="28" rx="4" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/>
       <text x="120" y="94" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10" fill="#166534" font-weight="500">48.5% Refunded</text>
       <line x1="120" y1="104" x2="120" y2="116" stroke="#d1d5db" stroke-width="1.5"/>
-      <rect x="84" y="118" width="72" height="22" rx="4" fill="#fcecea" stroke="#f5c6c2" stroke-width="1"/>
+      <rect x="65" y="118" width="110" height="22" rx="4" fill="#fcecea" stroke="#f5c6c2" stroke-width="1"/>
       <text x="120" y="133" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10" fill="#c0392b">7.2% Reopened</text>
       <text x="340" y="16" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" fill="#166534" font-weight="600">QUALITY</text>
       <text x="340" y="28" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10" fill="#858b9c">47,990 complaints</text>
@@ -517,7 +473,7 @@
       <rect x="287" y="76" width="107" height="28" rx="4" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/>
       <text x="340" y="94" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10" fill="#166534" font-weight="500">59.5% Refunded</text>
       <line x1="340" y1="104" x2="340" y2="116" stroke="#d1d5db" stroke-width="1.5"/>
-      <rect x="304" y="118" width="72" height="22" rx="4" fill="#fcecea" stroke="#f5c6c2" stroke-width="1"/>
+      <rect x="285" y="118" width="110" height="22" rx="4" fill="#fcecea" stroke="#f5c6c2" stroke-width="1"/>
       <text x="340" y="133" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10" fill="#c0392b">10.1% Reopened</text>
       <text x="560" y="16" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" fill="#c0392b" font-weight="600">B&amp;C</text>
       <text x="560" y="28" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10" fill="#858b9c">53,097 complaints</text>
@@ -527,7 +483,7 @@
       <rect x="543" y="76" width="34" height="28" rx="4" fill="#dcfce7" stroke="#bbf7d0" stroke-width="1"/>
       <text x="560" y="90" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="9" fill="#166534" font-weight="600">19%</text>
       <line x1="560" y1="104" x2="560" y2="116" stroke="#d1d5db" stroke-width="1.5"/>
-      <rect x="524" y="118" width="72" height="22" rx="4" fill="#fcecea" stroke="#f5c6c2" stroke-width="1"/>
+      <rect x="505" y="118" width="110" height="22" rx="4" fill="#fcecea" stroke="#f5c6c2" stroke-width="1"/>
       <text x="560" y="133" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10" fill="#c0392b">9.1% Reopened</text>
       <rect x="30" y="158" width="12" height="12" rx="2" fill="#fef3e0" stroke="#fde9b8" stroke-width="1"/>
       <text x="48" y="168" font-family="IBM Plex Mono,monospace" font-size="10" fill="#3d4150">All Complaints</text>
