@@ -276,7 +276,7 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:'IBM Ple
     <div class="s2-top">
       <div class="pblock ph-problem">
         <div class="pb-head">Problem</div>
-        <div class="pb-body"> A consistent framework was required to track Category-level retention — a standardised way to compare buyer vs non-buyer behaviour across categories or understand which signals were reliable vs noise.</div>
+        <div class="pb-body"> A consistent framework was required to track Category-level retention — a standardised way to compare buyer vs non-buyer behaviour across categories and understand which signals were reliable vs noise.</div>
       </div>
       <div class="pblock ph-analysis">
         <div class="pb-head">Approach</div>
@@ -324,7 +324,7 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:'IBM Ple
       </div>
       <div class="pblock ph-analysis">
         <div class="pb-head">Approach</div>
-        <div class="pb-body">Pre/post analysis for 23 inflection points across all 7 categories. For each event: identified the date, the magnitude of the delta shift, and traced it to a specific pricing change, SKU discontinuation, assortment event, or seasonal factor using order-level data.</div>
+        <div class="pb-body">Pre/post analysis for inflection points across all 7 categories. For each event: identified the date, the magnitude of the delta shift, and traced it to a specific pricing change, SKU discontinuation, assortment event, or seasonal factor using order-level data.</div>
       </div>
     </div>
     <div class="tab-row">
@@ -366,7 +366,7 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:'IBM Ple
     <div style="display:grid;grid-template-columns:1fr 1fr 1.6fr;gap:0.55rem;align-items:start">
       <div class="pblock ph-problem" style="margin-bottom:0">
         <div class="pb-head">Problem</div>
-        <div class="pb-body">No framework existed to quantify how complaints linked to churn — or at which point in the user lifecycle complaint resolution had the most retention impact.</div>
+        <div class="pb-body">To quantify how complaints linked to churn — or at which point in the user lifecycle complaint resolution had the most retention impact.</div>
       </div>
       <div class="pblock ph-analysis" style="margin-bottom:0">
         <div class="pb-head">Approach</div>
@@ -411,7 +411,7 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:'IBM Ple
     <div class="pset pset-4" style="margin-bottom:0.7rem">
       <div class="pblock ph-problem">
         <div class="pb-head">Problem</div>
-        <div class="pb-body">MP has the most stable retention signal in the portfolio but only reaches 5.3% of week-1 users. Early journey comms were not converting MP non-buyers effectively.</div>
+        <div class="pb-body">MP has the most stable retention signal in the portfolio but only reaches 5.3% of week-1 users. Effective Early journey comms were required to convert MP non-buyers. </div>
       </div>
       <div class="pblock ph-hypothesis">
         <div class="pb-head">Hypothesis</div>
@@ -419,7 +419,7 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:'IBM Ple
       </div>
       <div class="pblock ph-analysis">
         <div class="pb-head">Experiment</div>
-        <div class="pb-body">5 RTB-first interstitial variants designed and deployed via MoEngage. 4 production files (Android/iOS × Telugu/non-Telugu). <strong>Test: digits 0,1 · Control: digits 2,3.</strong> Primary metric: MP DCC per digit.</div>
+        <div class="pb-body">RTB-first interstitial variants were designed and deployed via MoEngage (Android/iOS × Telugu/non-Telugu). <strong>Test: digits 0,1 · Control: digits 2,3.</strong> Primary metric: MP DCC per digit.</div>
       </div>
       <div class="pblock ph-conclusion">
         <div class="pb-head">Early Results</div>
@@ -429,7 +429,7 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:'IBM Ple
     <div class="section-tabs">
       <button class="sectab active" onclick="switchSec(this,'s5-ctx')">Context</button>
       <button class="sectab" onclick="switchSec(this,'s5-res')">Results</button>
-      <button class="sectab" onclick="switchSec(this,'s5-inv')">Investigating</button>
+      <button class="sectab" onclick="switchSec(this,'s5-inv')">Note</button>
     </div>
     <div class="sec-panel active" id="s5-ctx">
       <div class="ctx-grid">
@@ -447,8 +447,8 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:'IBM Ple
     </div>
     <div class="sec-panel" id="s5-inv">
       <div class="inv-split">
-        <div class="inv-block neg"><div class="inv-head neg">What's showing negative</div><div class="inv-body"><strong>Combined interstitial</strong> — −1.65pp conv and −1.6pp CTR vs control, despite 94 more VTPs per digit. Initial read: underperforming. But that was the wrong frame.</div></div>
-        <div class="inv-block pos"><div class="inv-head pos">What the data actually shows</div><div class="inv-body">More impressions, lower CTR% — but <strong>absolute buyer count matters more than rate.</strong> Investigating whether combined interstitial generates more total MP buyers despite the lower per-impression rate.</div></div>
+        <div class="inv-block neg"><div class="inv-head neg">What's showing negative</div><div class="inv-body"><strong>Combined interstitial</strong> — −1.65pp conv and −1.6pp CTR vs control, despite 94 more VTPs per digit.</div></div>
+        <div class="inv-block pos"><div class="inv-head pos">What the data actually shows</div><div class="inv-body">More impressions, lower CTR% — but <strong>absolute buyer count matters more than rate.</strong> </div></div>
       </div>
       <div class="inv-conclusion"><strong>SKU signals:</strong> Taaza Paneer 180g (+25.6%) and Ghar Jaisa Dahi 400g (+10.9%) winning with lower discount than decliners. Quality and trust signal stronger than price for MP — consistent with RTB-first design intent.</div>
     </div>
@@ -462,11 +462,11 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:'IBM Ple
     <div class="pset pset-4" style="margin-bottom:0.7rem">
       <div class="pblock ph-problem">
         <div class="pb-head">Problem</div>
-        <div class="pb-body">The current app surfaces Milk prominently but doesn't use the week-1 flow to introduce MP or Snacks — the two highest-signal retention categories that reach only 6.1% of new users combined.</div>
+        <div class="pb-body">The current app surfaces Milk prominently but can further use the week-1 flow to introduce MP or Snacks — the two highest-signal retention categories that reach only 6.1% of new users combined.</div>
       </div>
       <div class="pblock ph-hypothesis">
         <div class="pb-head">Hypothesis</div>
-        <div class="pb-body">Redesigning the first 3 screens to anchor on Milk, cross-sell MP, and introduce Snacks as a discovery trigger — with specific offer constraints (4+4 Milk, ₹0 FnV) — would increase week-1 category breadth without disrupting the Milk-first experience.</div>
+        <div class="pb-body">Redesigning the screens to anchor on Milk, cross-sell MP, and introduce Snacks as a discovery trigger — with specific offer constraints (4+4 Milk, ₹0 FnV) — would increase week-1 category breadth without disrupting the Milk-first experience.</div>
       </div>
       <div class="pblock ph-analysis">
         <div class="pb-head">What was built</div>
@@ -479,7 +479,7 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:'IBM Ple
     </div>
     <div class="pset pset-2">
       <div class="pblock ph-recommendation">
-        <div class="pb-head">Non-negotiable constraints honoured</div>
+        <div class="pb-head">What was kept intact</div>
         <div class="pb-body">
           <ul>
             <li>4+4 Milk offer structure (pay 4 days, get 4 free) — not changed</li>
@@ -491,7 +491,7 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:'IBM Ple
       </div>
       <div class="pblock ph-recommendation" style="background:rgba(234,88,12,0.02)">
         <div class="pb-head">Next step to validate</div>
-        <div class="pb-body">The wireframes are a prototype — not tested with users yet. The key questions the design raises: does the MP cross-sell on Screen 1 cannibalise Milk conversion, or does it complement it? Does Snacks discovery in week 1 move the 0.83% buyer share needle? These need to be answered through an A/B test of the onboarding flow.</div>
+        <div class="pb-body">The wireframes are a prototype — not tested with users yet. The key questions the design raises: does the MP cross-sell on Screen 1 complement Milk conversion? Does Snacks discovery in week 1 move the 0.83% buyer share needle? These need to be answered through an A/B test of the onboarding flow.</div>
       </div>
     </div>
   </div>
@@ -520,8 +520,8 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:'IBM Ple
     </div>
     <div class="ask-byline">
       <div><div class="ask-name">Keerthana K</div><div class="ask-role">Growth / Retention · SIP 2026 · Country Delight</div></div>
-      <div class="ask-sep"></div>
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.57rem;color:var(--muted);line-height:1.7">Aug 2025 – Jun 2026 &nbsp;·&nbsp; 5 work streams</div>
+      <!-- <div class="ask-sep"></div> -->
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.57rem;color:var(--muted);line-height:1.7">Apr 2026 – Jun 2026 &nbsp;·&nbsp; 5 work streams</div>
     </div>
   </div>
 </div>
